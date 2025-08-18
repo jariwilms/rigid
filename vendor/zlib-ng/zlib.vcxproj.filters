@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\adler32_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\adler32_fold_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\chunkset_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\compare256_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\crc32_braid_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\crc32_fold_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\slide_hash_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\adler32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\compress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\crc32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\crc32_braid_comb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_fast.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_huff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_medium.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_quick.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_rle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_slow.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_stored.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\functable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\infback.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inflate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inftrees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\insert_string.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\insert_string_roll.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\trees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\uncompr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zutil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\cpu_features.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\x86_features.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\chunkset_sse2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\compare256_sse2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\slide_hash_sse2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_ssse3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\chunkset_ssse3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_sse42.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\crc32_pclmulqdq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\slide_hash_avx2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\chunkset_avx2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\compare256_avx2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_avx2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_avx512.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\chunkset_avx512.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_avx512_vnni.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\crc32_vpclmulqdq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\gzlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\gzread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\gzwrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\generic_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\x86_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\x86_features.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\fallback_builtins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\x86\adler32_avx512_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zconf-ng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zlib_name_mangling-ng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zlib-ng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\chunk_permute_table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch\generic\compare256_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\adler32_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\chunkset_tpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\compare256_rle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\arch_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\crc32_braid_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\crc32_braid_comb_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\crc32_braid_tbl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\deflate_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\functable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inffast_tpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inffixed_tbl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inflate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inflate_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\inftrees.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\insert_string_tpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\match_tpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\trees.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\trees_emit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\trees_tbl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zbuild.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zendian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\zutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\cpu_features.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\gzguts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\win32\zlib-ng1.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3905A20E-18A2-37ED-AC0A-5AA0B9FE1662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BCDB7D68-9812-34EA-A7E3-F62FCD68E424}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_compress.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_compress_bound.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_cve-2003-0107.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_bound.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_copy.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_dict.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_hash_head_0.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_header.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_params.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_pending.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_prime.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_quick_bi_valid.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_quick_block_open.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_tune.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_dict.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_inflate_adler32.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_inflate_copy.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_large_buffers.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_raw.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_small_buffers.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_small_window.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_gzio.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_adler32.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_compare256.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_compare256_rle.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_crc32.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_inflate_sync.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_version.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\test_deflate_concurrency.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\jariw\Desktop\zlib-ng-2.2.5\test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BCDB7D68-9812-34EA-A7E3-F62FCD68E424}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

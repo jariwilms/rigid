@@ -1,0 +1,3 @@
+C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/ZERO_CHECK.dir

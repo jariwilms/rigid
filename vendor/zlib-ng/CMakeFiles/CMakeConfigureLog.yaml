@@ -1,0 +1,2287 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:37 (project)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:37 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.14.18+a338add32 for .NET Framework
+      Build started 17/08/2025 04:30:47.
+      
+      Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
+      PrepareForBuild:
+        Creating directory "Debug\\".
+        Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+        Creating directory "Debug\\CompilerIdC.tlog\\".
+      InitializeBuildStatus:
+        Creating "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+        Touching "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Deleting file "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+        Touching "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
+      
+      Build succeeded.
+          0 Warning(s)
+          0 Error(s)
+      
+      Time Elapsed 00:00:00.74
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/4.0.1/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:37 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jmbtzn"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jmbtzn"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jmbtzn'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_c621f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:48.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jmbtzn\\cmTC_c621f.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_c621f.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jmbtzn\\Debug\\".
+          Creating directory "cmTC_c621f.dir\\Debug\\cmTC_c621f.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_c621f.dir\\Debug\\cmTC_c621f.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_c621f.dir\\Debug\\cmTC_c621f.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_c621f.dir\\Debug\\\\" /Fd"cmTC_c621f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.0\\Modules\\CMakeCCompilerABI.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_c621f.dir\\Debug\\\\" /Fd"cmTC_c621f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.0\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jmbtzn\\Debug\\cmTC_c621f.exe" /INCREMENTAL /ILK:"cmTC_c621f.dir\\Debug\\cmTC_c621f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jmbtzn/Debug/cmTC_c621f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jmbtzn/Debug/cmTC_c621f.lib" /MACHINE:X64  /machine:x64 cmTC_c621f.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_c621f.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jmbtzn\\Debug\\cmTC_c621f.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_c621f.dir\\Debug\\cmTC_c621f.tlog\\unsuccessfulbuild".
+          Touching "cmTC_c621f.dir\\Debug\\cmTC_c621f.tlog\\cmTC_c621f.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jmbtzn\\cmTC_c621f.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.41
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:37 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'C': C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:264 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:37 (project)"
+    message: |
+      Running the C compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.44.35214.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:56 (enable_language)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.14.18+a338add32 for .NET Framework
+      Build started 17/08/2025 04:30:49.
+      
+      Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
+      PrepareForBuild:
+        Creating directory "Debug\\".
+        Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+        Creating directory "Debug\\CompilerIdCXX.tlog\\".
+      InitializeBuildStatus:
+        Creating "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+        Touching "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Deleting file "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+        Touching "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
+      Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\4.0.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
+      
+      Build succeeded.
+          0 Warning(s)
+          0 Error(s)
+      
+      Time Elapsed 00:00:00.43
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/4.0.1/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:56 (enable_language)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-uvh17k"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-uvh17k"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-uvh17k'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_5443d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:50.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-uvh17k\\cmTC_5443d.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_5443d.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-uvh17k\\Debug\\".
+          Creating directory "cmTC_5443d.dir\\Debug\\cmTC_5443d.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_5443d.dir\\Debug\\cmTC_5443d.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_5443d.dir\\Debug\\cmTC_5443d.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5443d.dir\\Debug\\\\" /Fd"cmTC_5443d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.0\\Modules\\CMakeCXXCompilerABI.cpp"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_5443d.dir\\Debug\\\\" /Fd"cmTC_5443d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.0\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-uvh17k\\Debug\\cmTC_5443d.exe" /INCREMENTAL /ILK:"cmTC_5443d.dir\\Debug\\cmTC_5443d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-uvh17k/Debug/cmTC_5443d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-uvh17k/Debug/cmTC_5443d.lib" /MACHINE:X64  /machine:x64 cmTC_5443d.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_5443d.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-uvh17k\\Debug\\cmTC_5443d.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_5443d.dir\\Debug\\cmTC_5443d.tlog\\unsuccessfulbuild".
+          Touching "cmTC_5443d.dir\\Debug\\cmTC_5443d.tlog\\cmTC_5443d.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-uvh17k\\cmTC_5443d.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.39
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:56 (enable_language)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'CXX': C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake:264 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:56 (enable_language)"
+    message: |
+      Running the CXX compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.44.35214.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "CMakeLists.txt:389 (check_include_file)"
+    checks:
+      - "Looking for arm_acle.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0ow5l"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0ow5l"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_ARM_ACLE_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0ow5l'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3c67b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:50.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\cmTC_3c67b.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_3c67b.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\Debug\\".
+          Creating directory "cmTC_3c67b.dir\\Debug\\cmTC_3c67b.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_3c67b.dir\\Debug\\cmTC_3c67b.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_3c67b.dir\\Debug\\cmTC_3c67b.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3c67b.dir\\Debug\\\\" /Fd"cmTC_3c67b.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3c67b.dir\\Debug\\\\" /Fd"cmTC_3c67b.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'arm_acle.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\cmTC_3c67b.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\cmTC_3c67b.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\cmTC_3c67b.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'arm_acle.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0ow5l\\cmTC_3c67b.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.31
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "CMakeLists.txt:393 (check_include_file)"
+    checks:
+      - "Looking for sys/auxv.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-15qmv1"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-15qmv1"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SYS_AUXV_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-15qmv1'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_c5d2a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:51.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\cmTC_c5d2a.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_c5d2a.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\Debug\\".
+          Creating directory "cmTC_c5d2a.dir\\Debug\\cmTC_c5d2a.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_c5d2a.dir\\Debug\\cmTC_c5d2a.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_c5d2a.dir\\Debug\\cmTC_c5d2a.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_c5d2a.dir\\Debug\\\\" /Fd"cmTC_c5d2a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_c5d2a.dir\\Debug\\\\" /Fd"cmTC_c5d2a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'sys/auxv.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\cmTC_c5d2a.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\cmTC_c5d2a.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\cmTC_c5d2a.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'sys/auxv.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-15qmv1\\cmTC_c5d2a.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "CMakeLists.txt:397 (check_include_file)"
+    checks:
+      - "Looking for sys/sdt.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lsnlsd"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lsnlsd"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SYS_SDT_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lsnlsd'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_cbce0.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:52.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\cmTC_cbce0.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_cbce0.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\Debug\\".
+          Creating directory "cmTC_cbce0.dir\\Debug\\cmTC_cbce0.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_cbce0.dir\\Debug\\cmTC_cbce0.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_cbce0.dir\\Debug\\cmTC_cbce0.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_cbce0.dir\\Debug\\\\" /Fd"cmTC_cbce0.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_cbce0.dir\\Debug\\\\" /Fd"cmTC_cbce0.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'sys/sdt.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\cmTC_cbce0.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\cmTC_cbce0.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\cmTC_cbce0.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'sys/sdt.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lsnlsd\\cmTC_cbce0.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "CMakeLists.txt:401 (check_include_file)"
+    checks:
+      - "Looking for unistd.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9cityl"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9cityl"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9cityl'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_103f6.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:52.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\cmTC_103f6.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_103f6.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\Debug\\".
+          Creating directory "cmTC_103f6.dir\\Debug\\cmTC_103f6.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_103f6.dir\\Debug\\cmTC_103f6.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_103f6.dir\\Debug\\cmTC_103f6.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_103f6.dir\\Debug\\\\" /Fd"cmTC_103f6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_103f6.dir\\Debug\\\\" /Fd"cmTC_103f6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'unistd.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\cmTC_103f6.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\cmTC_103f6.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\cmTC_103f6.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'unistd.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9cityl\\cmTC_103f6.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "CMakeLists.txt:406 (check_include_file)"
+    checks:
+      - "Looking for linux/auxvec.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-kh0ipm"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-kh0ipm"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_LINUX_AUXVEC_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-kh0ipm'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_4ffa1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:53.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\cmTC_4ffa1.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_4ffa1.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\Debug\\".
+          Creating directory "cmTC_4ffa1.dir\\Debug\\cmTC_4ffa1.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_4ffa1.dir\\Debug\\cmTC_4ffa1.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_4ffa1.dir\\Debug\\cmTC_4ffa1.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4ffa1.dir\\Debug\\\\" /Fd"cmTC_4ffa1.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4ffa1.dir\\Debug\\\\" /Fd"cmTC_4ffa1.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'linux/auxvec.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\cmTC_4ffa1.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\cmTC_4ffa1.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\cmTC_4ffa1.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\CheckIncludeFile.c(1,1): error C1083: Cannot open include file: 'linux/auxvec.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-kh0ipm\\cmTC_4ffa1.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:318 (check_include_file)"
+      - "CMakeLists.txt:415 (check_type_size)"
+    checks:
+      - "Looking for sys/types.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-pm15mf"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-pm15mf"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-pm15mf'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d7914.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:53.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\cmTC_d7914.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_d7914.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\Debug\\".
+          Creating directory "cmTC_d7914.dir\\Debug\\cmTC_d7914.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_d7914.dir\\Debug\\cmTC_d7914.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_d7914.dir\\Debug\\cmTC_d7914.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_d7914.dir\\Debug\\\\" /Fd"cmTC_d7914.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_d7914.dir\\Debug\\\\" /Fd"cmTC_d7914.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\Debug\\cmTC_d7914.exe" /INCREMENTAL /ILK:"cmTC_d7914.dir\\Debug\\cmTC_d7914.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-pm15mf/Debug/cmTC_d7914.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-pm15mf/Debug/cmTC_d7914.lib" /MACHINE:X64  /machine:x64 cmTC_d7914.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_d7914.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\Debug\\cmTC_d7914.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_d7914.dir\\Debug\\cmTC_d7914.tlog\\unsuccessfulbuild".
+          Touching "cmTC_d7914.dir\\Debug\\cmTC_d7914.tlog\\cmTC_d7914.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-pm15mf\\cmTC_d7914.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.37
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:319 (check_include_file)"
+      - "CMakeLists.txt:415 (check_type_size)"
+    checks:
+      - "Looking for stdint.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-nxoy2y"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-nxoy2y"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-nxoy2y'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3ffc7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:54.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\cmTC_3ffc7.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_3ffc7.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\Debug\\".
+          Creating directory "cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3ffc7.dir\\Debug\\\\" /Fd"cmTC_3ffc7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3ffc7.dir\\Debug\\\\" /Fd"cmTC_3ffc7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\Debug\\cmTC_3ffc7.exe" /INCREMENTAL /ILK:"cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-nxoy2y/Debug/cmTC_3ffc7.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-nxoy2y/Debug/cmTC_3ffc7.lib" /MACHINE:X64  /machine:x64 cmTC_3ffc7.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_3ffc7.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\Debug\\cmTC_3ffc7.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.tlog\\unsuccessfulbuild".
+          Touching "cmTC_3ffc7.dir\\Debug\\cmTC_3ffc7.tlog\\cmTC_3ffc7.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-nxoy2y\\cmTC_3ffc7.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.36
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:320 (check_include_file)"
+      - "CMakeLists.txt:415 (check_type_size)"
+    checks:
+      - "Looking for stddef.h"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-mq0l8z"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-mq0l8z"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-mq0l8z'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_f45f8.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:54.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\cmTC_f45f8.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_f45f8.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\Debug\\".
+          Creating directory "cmTC_f45f8.dir\\Debug\\cmTC_f45f8.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_f45f8.dir\\Debug\\cmTC_f45f8.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_f45f8.dir\\Debug\\cmTC_f45f8.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_f45f8.dir\\Debug\\\\" /Fd"cmTC_f45f8.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\CheckIncludeFile.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_f45f8.dir\\Debug\\\\" /Fd"cmTC_f45f8.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\CheckIncludeFile.c"
+          CheckIncludeFile.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\Debug\\cmTC_f45f8.exe" /INCREMENTAL /ILK:"cmTC_f45f8.dir\\Debug\\cmTC_f45f8.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-mq0l8z/Debug/cmTC_f45f8.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-mq0l8z/Debug/cmTC_f45f8.lib" /MACHINE:X64  /machine:x64 cmTC_f45f8.dir\\Debug\\CheckIncludeFile.obj
+          cmTC_f45f8.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\Debug\\cmTC_f45f8.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_f45f8.dir\\Debug\\cmTC_f45f8.tlog\\unsuccessfulbuild".
+          Touching "cmTC_f45f8.dir\\Debug\\cmTC_f45f8.tlog\\cmTC_f45f8.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-mq0l8z\\cmTC_f45f8.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.37
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:212 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:339 (__check_type_size_impl)"
+      - "CMakeLists.txt:415 (check_type_size)"
+    checks:
+      - "Check size of off64_t"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-vhijhx"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-vhijhx"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_OFF64_T"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-vhijhx'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1c7fc.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:55.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_1c7fc.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\Debug\\".
+          Creating directory "cmTC_1c7fc.dir\\Debug\\cmTC_1c7fc.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_1c7fc.dir\\Debug\\cmTC_1c7fc.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_1c7fc.dir\\Debug\\cmTC_1c7fc.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1c7fc.dir\\Debug\\\\" /Fd"cmTC_1c7fc.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1c7fc.dir\\Debug\\\\" /Fd"cmTC_1c7fc.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c"
+          OFF64_T.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(29,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(30,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(31,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(32,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(33,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(29,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(30,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(31,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(32,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\OFF64_T.c(33,12): error C2065: 'off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-vhijhx\\cmTC_1c7fc.vcxproj]
+        
+            0 Warning(s)
+            5 Error(s)
+        
+        Time Elapsed 00:00:00.25
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:212 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:339 (__check_type_size_impl)"
+      - "CMakeLists.txt:419 (check_type_size)"
+    checks:
+      - "Check size of _off64_t"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-3151ga"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-3151ga"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE__OFF64_T"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-3151ga'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1c04a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:55.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_1c04a.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\Debug\\".
+          Creating directory "cmTC_1c04a.dir\\Debug\\cmTC_1c04a.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_1c04a.dir\\Debug\\cmTC_1c04a.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_1c04a.dir\\Debug\\cmTC_1c04a.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1c04a.dir\\Debug\\\\" /Fd"cmTC_1c04a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1c04a.dir\\Debug\\\\" /Fd"cmTC_1c04a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c"
+          _OFF64_T.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(29,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(30,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(31,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(32,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(33,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(29,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(30,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(31,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(32,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\_OFF64_T.c(33,12): error C2065: '_off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-3151ga\\cmTC_1c04a.vcxproj]
+        
+            0 Warning(s)
+            5 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:212 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckTypeSize.cmake:339 (__check_type_size_impl)"
+      - "CMakeLists.txt:423 (check_type_size)"
+    checks:
+      - "Check size of __off64_t"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-bsqiot"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-bsqiot"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE___OFF64_T"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-bsqiot'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_052e4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:56.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_052e4.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\Debug\\".
+          Creating directory "cmTC_052e4.dir\\Debug\\cmTC_052e4.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_052e4.dir\\Debug\\cmTC_052e4.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_052e4.dir\\Debug\\cmTC_052e4.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_052e4.dir\\Debug\\\\" /Fd"cmTC_052e4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _LARGEFILE64_SOURCE=1 /D __USE_LARGEFILE64 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_052e4.dir\\Debug\\\\" /Fd"cmTC_052e4.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c"
+          __OFF64_T.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(29,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(30,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(31,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(32,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(33,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(29,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(30,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(31,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(32,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\__OFF64_T.c(33,12): error C2065: '__off64_t': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-bsqiot\\cmTC_052e4.vcxproj]
+        
+            0 Warning(s)
+            5 Error(s)
+        
+        Time Elapsed 00:00:00.23
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "CMakeLists.txt:432 (check_function_exists)"
+    checks:
+      - "Looking for fseeko"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ngrjju"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ngrjju"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_FSEEKO"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ngrjju'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_6069d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:56.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_6069d.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\Debug\\".
+          Creating directory "cmTC_6069d.dir\\Debug\\cmTC_6069d.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_6069d.dir\\Debug\\cmTC_6069d.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_6069d.dir\\Debug\\cmTC_6069d.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_6069d.dir\\Debug\\\\" /Fd"cmTC_6069d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_6069d.dir\\Debug\\\\" /Fd"cmTC_6069d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\Debug\\cmTC_6069d.exe" /INCREMENTAL /ILK:"cmTC_6069d.dir\\Debug\\cmTC_6069d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ngrjju/Debug/cmTC_6069d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ngrjju/Debug/cmTC_6069d.lib" /MACHINE:X64  /machine:x64 cmTC_6069d.dir\\Debug\\CheckFunctionExists.obj
+        CheckFunctionExists.obj : error LNK2019: unresolved external symbol fseeko referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\Debug\\cmTC_6069d.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          CheckFunctionExists.obj : error LNK2019: unresolved external symbol fseeko referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\Debug\\cmTC_6069d.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ngrjju\\cmTC_6069d.vcxproj]
+        
+            0 Warning(s)
+            2 Error(s)
+        
+        Time Elapsed 00:00:00.32
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "CMakeLists.txt:439 (check_function_exists)"
+    checks:
+      - "Looking for strerror"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-cl0m4i"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-cl0m4i"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_STRERROR"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-cl0m4i'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_453ac.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:57.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\cmTC_453ac.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_453ac.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\Debug\\".
+          Creating directory "cmTC_453ac.dir\\Debug\\cmTC_453ac.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_453ac.dir\\Debug\\cmTC_453ac.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_453ac.dir\\Debug\\cmTC_453ac.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strerror /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_453ac.dir\\Debug\\\\" /Fd"cmTC_453ac.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strerror /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_453ac.dir\\Debug\\\\" /Fd"cmTC_453ac.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\Debug\\cmTC_453ac.exe" /INCREMENTAL /ILK:"cmTC_453ac.dir\\Debug\\cmTC_453ac.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-cl0m4i/Debug/cmTC_453ac.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-cl0m4i/Debug/cmTC_453ac.lib" /MACHINE:X64  /machine:x64 cmTC_453ac.dir\\Debug\\CheckFunctionExists.obj
+          cmTC_453ac.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\Debug\\cmTC_453ac.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_453ac.dir\\Debug\\cmTC_453ac.tlog\\unsuccessfulbuild".
+          Touching "cmTC_453ac.dir\\Debug\\cmTC_453ac.tlog\\cmTC_453ac.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-cl0m4i\\cmTC_453ac.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckSymbolExists.cmake:160 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckSymbolExists.cmake:65 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:450 (check_symbol_exists)"
+    checks:
+      - "Looking for posix_memalign"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jx95no"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jx95no"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_POSIX_MEMALIGN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jx95no'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_9b681.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:58.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\cmTC_9b681.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_9b681.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\Debug\\".
+          Creating directory "cmTC_9b681.dir\\Debug\\cmTC_9b681.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_9b681.dir\\Debug\\cmTC_9b681.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_9b681.dir\\Debug\\cmTC_9b681.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _POSIX_C_SOURCE=200112L /D _ISOC11_SOURCE=1 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_9b681.dir\\Debug\\\\" /Fd"cmTC_9b681.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\CheckSymbolExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _POSIX_C_SOURCE=200112L /D _ISOC11_SOURCE=1 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_9b681.dir\\Debug\\\\" /Fd"cmTC_9b681.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\CheckSymbolExists.c"
+          CheckSymbolExists.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\CheckSymbolExists.c(8,19): error C2065: 'posix_memalign': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\cmTC_9b681.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\cmTC_9b681.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\cmTC_9b681.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\CheckSymbolExists.c(8,19): error C2065: 'posix_memalign': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jx95no\\cmTC_9b681.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckSymbolExists.cmake:160 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckSymbolExists.cmake:65 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:462 (check_symbol_exists)"
+    checks:
+      - "Looking for aligned_alloc"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ktcf25"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ktcf25"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_ALIGNED_ALLOC"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-ktcf25'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_4975b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:58.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\cmTC_4975b.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_4975b.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\Debug\\".
+          Creating directory "cmTC_4975b.dir\\Debug\\cmTC_4975b.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_4975b.dir\\Debug\\cmTC_4975b.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_4975b.dir\\Debug\\cmTC_4975b.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _POSIX_C_SOURCE=200112L /D _ISOC11_SOURCE=1 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4975b.dir\\Debug\\\\" /Fd"cmTC_4975b.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\CheckSymbolExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _POSIX_C_SOURCE=200112L /D _ISOC11_SOURCE=1 /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4975b.dir\\Debug\\\\" /Fd"cmTC_4975b.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\CheckSymbolExists.c"
+          CheckSymbolExists.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\CheckSymbolExists.c(8,19): error C2065: 'aligned_alloc': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\cmTC_4975b.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\cmTC_4975b.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\cmTC_4975b.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\CheckSymbolExists.c(8,19): error C2065: 'aligned_alloc': undeclared identifier [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-ktcf25\\cmTC_4975b.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:482 (check_c_compiler_flag)"
+    checks:
+      - "Performing Test HAVE_NO_INTERPOSITION"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-5unpp1"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-5unpp1"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_NO_INTERPOSITION"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-5unpp1'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7b9a8.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:58.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\cmTC_7b9a8.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_7b9a8.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\Debug\\".
+          Creating directory "cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_NO_INTERPOSITION /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_7b9a8.dir\\Debug\\\\" /Fd"cmTC_7b9a8.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 -fno-semantic-interposition "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_NO_INTERPOSITION /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_7b9a8.dir\\Debug\\\\" /Fd"cmTC_7b9a8.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 -fno-semantic-interposition "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\src.c"
+        cl : command line  warning D9002: ignoring unknown option '-fno-semantic-interposition' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\cmTC_7b9a8.vcxproj]
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\Debug\\cmTC_7b9a8.exe" /INCREMENTAL /ILK:"cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-5unpp1/Debug/cmTC_7b9a8.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-5unpp1/Debug/cmTC_7b9a8.lib" /MACHINE:X64  /machine:x64 cmTC_7b9a8.dir\\Debug\\src.obj
+          cmTC_7b9a8.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\Debug\\cmTC_7b9a8.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.tlog\\unsuccessfulbuild".
+          Touching "cmTC_7b9a8.dir\\Debug\\cmTC_7b9a8.tlog\\cmTC_7b9a8.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\cmTC_7b9a8.vcxproj" (default targets).
+        
+        Build succeeded.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\cmTC_7b9a8.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          cl : command line  warning D9002: ignoring unknown option '-fno-semantic-interposition' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-5unpp1\\cmTC_7b9a8.vcxproj]
+        
+            1 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.35
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:487 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_ATTRIBUTE_VISIBILITY_HIDDEN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-8j7tuh"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-8j7tuh"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_ATTRIBUTE_VISIBILITY_HIDDEN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-8j7tuh'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_b6269.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:30:59.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_b6269.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\Debug\\".
+          Creating directory "cmTC_b6269.dir\\Debug\\cmTC_b6269.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_b6269.dir\\Debug\\cmTC_b6269.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_b6269.dir\\Debug\\cmTC_b6269.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_VISIBILITY_HIDDEN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_b6269.dir\\Debug\\\\" /Fd"cmTC_b6269.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_VISIBILITY_HIDDEN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_b6269.dir\\Debug\\\\" /Fd"cmTC_b6269.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c"
+          src.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing ')' before '(' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2091: function returns function [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing ')' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing '{' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2059: syntax error: 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2059: syntax error: ')' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing ')' before '(' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2091: function returns function [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing ')' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2143: syntax error: missing '{' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2059: syntax error: 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\src.c(2,9): error C2059: syntax error: ')' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-8j7tuh\\cmTC_b6269.vcxproj]
+        
+            0 Warning(s)
+            6 Error(s)
+        
+        Time Elapsed 00:00:00.22
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:501 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_ATTRIBUTE_VISIBILITY_INTERNAL"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lxm373"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lxm373"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_ATTRIBUTE_VISIBILITY_INTERNAL"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-lxm373'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_71c43.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:00.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_71c43.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\Debug\\".
+          Creating directory "cmTC_71c43.dir\\Debug\\cmTC_71c43.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_71c43.dir\\Debug\\cmTC_71c43.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_71c43.dir\\Debug\\cmTC_71c43.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_VISIBILITY_INTERNAL /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_71c43.dir\\Debug\\\\" /Fd"cmTC_71c43.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_VISIBILITY_INTERNAL /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_71c43.dir\\Debug\\\\" /Fd"cmTC_71c43.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c"
+          src.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing ')' before '(' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2091: function returns function [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing ')' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing '{' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2059: syntax error: 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2059: syntax error: ')' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing ')' before '(' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2091: function returns function [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing ')' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2143: syntax error: missing '{' before 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2059: syntax error: 'string' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\src.c(2,9): error C2059: syntax error: ')' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-lxm373\\cmTC_71c43.vcxproj]
+        
+            0 Warning(s)
+            6 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:515 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_ATTRIBUTE_ALIGNED"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t8hdhz"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t8hdhz"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_ATTRIBUTE_ALIGNED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t8hdhz'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ad994.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:00.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\cmTC_ad994.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_ad994.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\Debug\\".
+          Creating directory "cmTC_ad994.dir\\Debug\\cmTC_ad994.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_ad994.dir\\Debug\\cmTC_ad994.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_ad994.dir\\Debug\\cmTC_ad994.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_ALIGNED /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_ad994.dir\\Debug\\\\" /Fd"cmTC_ad994.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_ATTRIBUTE_ALIGNED /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_ad994.dir\\Debug\\\\" /Fd"cmTC_ad994.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\src.c"
+          src.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\src.c(2,37): error C2143: syntax error: missing ';' before 'type' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\cmTC_ad994.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\cmTC_ad994.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\cmTC_ad994.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\src.c(2,37): error C2143: syntax error: missing ';' before 'type' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t8hdhz\\cmTC_ad994.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.23
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:530 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_ASSUME_ALIGNED"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-d9245q"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-d9245q"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_BUILTIN_ASSUME_ALIGNED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-d9245q'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_8c204.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:01.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\cmTC_8c204.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_8c204.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\Debug\\".
+          Creating directory "cmTC_8c204.dir\\Debug\\cmTC_8c204.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_8c204.dir\\Debug\\cmTC_8c204.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_8c204.dir\\Debug\\cmTC_8c204.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_ASSUME_ALIGNED /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_8c204.dir\\Debug\\\\" /Fd"cmTC_8c204.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_ASSUME_ALIGNED /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_8c204.dir\\Debug\\\\" /Fd"cmTC_8c204.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\Debug\\cmTC_8c204.exe" /INCREMENTAL /ILK:"cmTC_8c204.dir\\Debug\\cmTC_8c204.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-d9245q/Debug/cmTC_8c204.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-d9245q/Debug/cmTC_8c204.lib" /MACHINE:X64  /machine:x64 cmTC_8c204.dir\\Debug\\src.obj
+          cmTC_8c204.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\Debug\\cmTC_8c204.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_8c204.dir\\Debug\\cmTC_8c204.tlog\\unsuccessfulbuild".
+          Touching "cmTC_8c204.dir\\Debug\\cmTC_8c204.tlog\\cmTC_8c204.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-d9245q\\cmTC_8c204.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.37
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:548 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_CTZ"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-e2tasv"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-e2tasv"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_BUILTIN_CTZ"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-e2tasv'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_39c9c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:01.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_39c9c.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\Debug\\".
+          Creating directory "cmTC_39c9c.dir\\Debug\\cmTC_39c9c.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_39c9c.dir\\Debug\\cmTC_39c9c.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_39c9c.dir\\Debug\\cmTC_39c9c.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_CTZ /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_39c9c.dir\\Debug\\\\" /Fd"cmTC_39c9c.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_CTZ /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_39c9c.dir\\Debug\\\\" /Fd"cmTC_39c9c.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\Debug\\cmTC_39c9c.exe" /INCREMENTAL /ILK:"cmTC_39c9c.dir\\Debug\\cmTC_39c9c.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-e2tasv/Debug/cmTC_39c9c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-e2tasv/Debug/cmTC_39c9c.lib" /MACHINE:X64  /machine:x64 cmTC_39c9c.dir\\Debug\\src.obj
+        src.obj : error LNK2019: unresolved external symbol __builtin_ctz referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\Debug\\cmTC_39c9c.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          src.obj : error LNK2019: unresolved external symbol __builtin_ctz referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\Debug\\cmTC_39c9c.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-e2tasv\\cmTC_39c9c.vcxproj]
+        
+            0 Warning(s)
+            2 Error(s)
+        
+        Time Elapsed 00:00:00.33
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:566 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_CTZLL"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0h1os"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0h1os"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_BUILTIN_CTZLL"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0h1os'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_4f6aa.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:02.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_4f6aa.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\Debug\\".
+          Creating directory "cmTC_4f6aa.dir\\Debug\\cmTC_4f6aa.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_4f6aa.dir\\Debug\\cmTC_4f6aa.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_4f6aa.dir\\Debug\\cmTC_4f6aa.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_CTZLL /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4f6aa.dir\\Debug\\\\" /Fd"cmTC_4f6aa.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_BUILTIN_CTZLL /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_4f6aa.dir\\Debug\\\\" /Fd"cmTC_4f6aa.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\Debug\\cmTC_4f6aa.exe" /INCREMENTAL /ILK:"cmTC_4f6aa.dir\\Debug\\cmTC_4f6aa.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0h1os/Debug/cmTC_4f6aa.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-u0h1os/Debug/cmTC_4f6aa.lib" /MACHINE:X64  /machine:x64 cmTC_4f6aa.dir\\Debug\\src.obj
+        src.obj : error LNK2019: unresolved external symbol __builtin_ctzll referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj]
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\Debug\\cmTC_4f6aa.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          src.obj : error LNK2019: unresolved external symbol __builtin_ctzll referenced in function main [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj]
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\Debug\\cmTC_4f6aa.exe : fatal error LNK1120: 1 unresolved externals [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-u0h1os\\cmTC_4f6aa.vcxproj]
+        
+            0 Warning(s)
+            2 Error(s)
+        
+        Time Elapsed 00:00:00.32
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:583 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAVE_PTRDIFF_T"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-odb959"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-odb959"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_PTRDIFF_T"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-odb959'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_b8936.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:02.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\cmTC_b8936.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_b8936.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\Debug\\".
+          Creating directory "cmTC_b8936.dir\\Debug\\cmTC_b8936.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_b8936.dir\\Debug\\cmTC_b8936.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_b8936.dir\\Debug\\cmTC_b8936.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_PTRDIFF_T /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_b8936.dir\\Debug\\\\" /Fd"cmTC_b8936.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_PTRDIFF_T /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_b8936.dir\\Debug\\\\" /Fd"cmTC_b8936.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\Debug\\cmTC_b8936.exe" /INCREMENTAL /ILK:"cmTC_b8936.dir\\Debug\\cmTC_b8936.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-odb959/Debug/cmTC_b8936.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-odb959/Debug/cmTC_b8936.lib" /MACHINE:X64  /machine:x64 cmTC_b8936.dir\\Debug\\src.obj
+          cmTC_b8936.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\Debug\\cmTC_b8936.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_b8936.dir\\Debug\\cmTC_b8936.tlog\\unsuccessfulbuild".
+          Touching "cmTC_b8936.dir\\Debug\\cmTC_b8936.tlog\\cmTC_b8936.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-odb959\\cmTC_b8936.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.36
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:596 (check_c_source_compiles)"
+      - "CMakeLists.txt:921 (check_xsave_intrinsics)"
+    checks:
+      - "Performing Test HAVE_XSAVE_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7eiu64"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7eiu64"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_XSAVE_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7eiu64'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_58caa.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:03.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\cmTC_58caa.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_58caa.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\Debug\\".
+          Creating directory "cmTC_58caa.dir\\Debug\\cmTC_58caa.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_58caa.dir\\Debug\\cmTC_58caa.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_58caa.dir\\Debug\\cmTC_58caa.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_XSAVE_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_58caa.dir\\Debug\\\\" /Fd"cmTC_58caa.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_XSAVE_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_58caa.dir\\Debug\\\\" /Fd"cmTC_58caa.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\Debug\\cmTC_58caa.exe" /INCREMENTAL /ILK:"cmTC_58caa.dir\\Debug\\cmTC_58caa.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7eiu64/Debug/cmTC_58caa.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7eiu64/Debug/cmTC_58caa.lib" /MACHINE:X64  /machine:x64 cmTC_58caa.dir\\Debug\\src.obj
+          cmTC_58caa.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\Debug\\cmTC_58caa.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_58caa.dir\\Debug\\cmTC_58caa.tlog\\unsuccessfulbuild".
+          Touching "cmTC_58caa.dir\\Debug\\cmTC_58caa.tlog\\cmTC_58caa.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7eiu64\\cmTC_58caa.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:509 (check_c_source_compiles)"
+      - "CMakeLists.txt:932 (check_sse2_intrinsics)"
+    checks:
+      - "Performing Test HAVE_SSE2_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t1m5pz"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t1m5pz"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SSE2_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t1m5pz'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_add1f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:04.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\cmTC_add1f.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_add1f.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\Debug\\".
+          Creating directory "cmTC_add1f.dir\\Debug\\cmTC_add1f.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_add1f.dir\\Debug\\cmTC_add1f.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_add1f.dir\\Debug\\cmTC_add1f.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSE2_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_add1f.dir\\Debug\\\\" /Fd"cmTC_add1f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSE2_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_add1f.dir\\Debug\\\\" /Fd"cmTC_add1f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\Debug\\cmTC_add1f.exe" /INCREMENTAL /ILK:"cmTC_add1f.dir\\Debug\\cmTC_add1f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t1m5pz/Debug/cmTC_add1f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-t1m5pz/Debug/cmTC_add1f.lib" /MACHINE:X64  /machine:x64 cmTC_add1f.dir\\Debug\\src.obj
+          cmTC_add1f.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\Debug\\cmTC_add1f.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_add1f.dir\\Debug\\cmTC_add1f.tlog\\unsuccessfulbuild".
+          Touching "cmTC_add1f.dir\\Debug\\cmTC_add1f.tlog\\cmTC_add1f.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-t1m5pz\\cmTC_add1f.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:532 (check_c_source_compiles)"
+      - "CMakeLists.txt:953 (check_ssse3_intrinsics)"
+    checks:
+      - "Performing Test HAVE_SSSE3_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-izbtsw"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-izbtsw"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SSSE3_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-izbtsw'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3b5ee.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:04.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\cmTC_3b5ee.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_3b5ee.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\Debug\\".
+          Creating directory "cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSSE3_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3b5ee.dir\\Debug\\\\" /Fd"cmTC_3b5ee.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSSE3_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3b5ee.dir\\Debug\\\\" /Fd"cmTC_3b5ee.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\Debug\\cmTC_3b5ee.exe" /INCREMENTAL /ILK:"cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-izbtsw/Debug/cmTC_3b5ee.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-izbtsw/Debug/cmTC_3b5ee.lib" /MACHINE:X64  /machine:x64 cmTC_3b5ee.dir\\Debug\\src.obj
+          cmTC_3b5ee.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\Debug\\cmTC_3b5ee.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.tlog\\unsuccessfulbuild".
+          Touching "cmTC_3b5ee.dir\\Debug\\cmTC_3b5ee.tlog\\cmTC_3b5ee.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-izbtsw\\cmTC_3b5ee.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:557 (check_c_source_compiles)"
+      - "CMakeLists.txt:965 (check_sse42_intrinsics)"
+    checks:
+      - "Performing Test HAVE_SSE42_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-qu2dxe"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-qu2dxe"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_SSE42_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-qu2dxe'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_6b2e5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:05.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\cmTC_6b2e5.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_6b2e5.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\Debug\\".
+          Creating directory "cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSE42_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_6b2e5.dir\\Debug\\\\" /Fd"cmTC_6b2e5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_SSE42_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_6b2e5.dir\\Debug\\\\" /Fd"cmTC_6b2e5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\Debug\\cmTC_6b2e5.exe" /INCREMENTAL /ILK:"cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-qu2dxe/Debug/cmTC_6b2e5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-qu2dxe/Debug/cmTC_6b2e5.lib" /MACHINE:X64  /machine:x64 cmTC_6b2e5.dir\\Debug\\src.obj
+          cmTC_6b2e5.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\Debug\\cmTC_6b2e5.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.tlog\\unsuccessfulbuild".
+          Touching "cmTC_6b2e5.dir\\Debug\\cmTC_6b2e5.tlog\\cmTC_6b2e5.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-qu2dxe\\cmTC_6b2e5.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.37
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:279 (check_c_source_compiles)"
+      - "CMakeLists.txt:977 (check_pclmulqdq_intrinsics)"
+    checks:
+      - "Performing Test HAVE_PCLMULQDQ_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9uaxdw"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9uaxdw"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_PCLMULQDQ_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9uaxdw'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ba919.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:05.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\cmTC_ba919.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_ba919.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\Debug\\".
+          Creating directory "cmTC_ba919.dir\\Debug\\cmTC_ba919.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_ba919.dir\\Debug\\cmTC_ba919.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_ba919.dir\\Debug\\cmTC_ba919.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_PCLMULQDQ_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_ba919.dir\\Debug\\\\" /Fd"cmTC_ba919.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_PCLMULQDQ_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_ba919.dir\\Debug\\\\" /Fd"cmTC_ba919.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\Debug\\cmTC_ba919.exe" /INCREMENTAL /ILK:"cmTC_ba919.dir\\Debug\\cmTC_ba919.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9uaxdw/Debug/cmTC_ba919.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-9uaxdw/Debug/cmTC_ba919.lib" /MACHINE:X64  /machine:x64 cmTC_ba919.dir\\Debug\\src.obj
+          cmTC_ba919.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\Debug\\cmTC_ba919.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_ba919.dir\\Debug\\cmTC_ba919.tlog\\unsuccessfulbuild".
+          Touching "cmTC_ba919.dir\\Debug\\cmTC_ba919.tlog\\cmTC_ba919.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-9uaxdw\\cmTC_ba919.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:170 (check_c_source_compiles)"
+      - "CMakeLists.txt:989 (check_avx2_intrinsics)"
+    checks:
+      - "Performing Test HAVE_AVX2_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-s4eiyg"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-s4eiyg"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_AVX2_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-s4eiyg'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1b6e9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:06.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\cmTC_1b6e9.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_1b6e9.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\Debug\\".
+          Creating directory "cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX2_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1b6e9.dir\\Debug\\\\" /Fd"cmTC_1b6e9.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX2_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_1b6e9.dir\\Debug\\\\" /Fd"cmTC_1b6e9.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\Debug\\cmTC_1b6e9.exe" /INCREMENTAL /ILK:"cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-s4eiyg/Debug/cmTC_1b6e9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-s4eiyg/Debug/cmTC_1b6e9.lib" /MACHINE:X64  /machine:x64 cmTC_1b6e9.dir\\Debug\\src.obj
+          cmTC_1b6e9.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\Debug\\cmTC_1b6e9.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.tlog\\unsuccessfulbuild".
+          Touching "cmTC_1b6e9.dir\\Debug\\cmTC_1b6e9.tlog\\cmTC_1b6e9.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-s4eiyg\\cmTC_1b6e9.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.39
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:102 (check_c_source_compiles)"
+      - "CMakeLists.txt:1007 (check_avx512_intrinsics)"
+    checks:
+      - "Performing Test HAVE_AVX512_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-2ekvkr"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-2ekvkr"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_AVX512_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-2ekvkr'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3ae5a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:07.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\cmTC_3ae5a.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_3ae5a.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\Debug\\".
+          Creating directory "cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX512_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX512 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3ae5a.dir\\Debug\\\\" /Fd"cmTC_3ae5a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX512_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX512 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_3ae5a.dir\\Debug\\\\" /Fd"cmTC_3ae5a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\Debug\\cmTC_3ae5a.exe" /INCREMENTAL /ILK:"cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-2ekvkr/Debug/cmTC_3ae5a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-2ekvkr/Debug/cmTC_3ae5a.lib" /MACHINE:X64  /machine:x64 cmTC_3ae5a.dir\\Debug\\src.obj
+          cmTC_3ae5a.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\Debug\\cmTC_3ae5a.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.tlog\\unsuccessfulbuild".
+          Touching "cmTC_3ae5a.dir\\Debug\\cmTC_3ae5a.tlog\\cmTC_3ae5a.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-2ekvkr\\cmTC_3ae5a.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.39
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:138 (check_c_source_compiles)"
+      - "CMakeLists.txt:1022 (check_avx512vnni_intrinsics)"
+    checks:
+      - "Performing Test HAVE_AVX512VNNI_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7n9xn3"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7n9xn3"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_AVX512VNNI_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7n9xn3'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_daf19.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:07.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\cmTC_daf19.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_daf19.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\Debug\\".
+          Creating directory "cmTC_daf19.dir\\Debug\\cmTC_daf19.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_daf19.dir\\Debug\\cmTC_daf19.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_daf19.dir\\Debug\\cmTC_daf19.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX512VNNI_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX512 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_daf19.dir\\Debug\\\\" /Fd"cmTC_daf19.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_AVX512VNNI_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /arch:AVX512 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_daf19.dir\\Debug\\\\" /Fd"cmTC_daf19.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\Debug\\cmTC_daf19.exe" /INCREMENTAL /ILK:"cmTC_daf19.dir\\Debug\\cmTC_daf19.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7n9xn3/Debug/cmTC_daf19.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-7n9xn3/Debug/cmTC_daf19.lib" /MACHINE:X64  /machine:x64 cmTC_daf19.dir\\Debug\\src.obj
+          cmTC_daf19.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\Debug\\cmTC_daf19.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_daf19.dir\\Debug\\cmTC_daf19.tlog\\unsuccessfulbuild".
+          Touching "cmTC_daf19.dir\\Debug\\cmTC_daf19.tlog\\cmTC_daf19.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-7n9xn3\\cmTC_daf19.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.38
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/detect-intrinsics.cmake:301 (check_c_source_compiles)"
+      - "CMakeLists.txt:1034 (check_vpclmulqdq_intrinsics)"
+    checks:
+      - "Performing Test HAVE_VPCLMULQDQ_INTRIN"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-gyqbgw"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-gyqbgw"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "HAVE_VPCLMULQDQ_INTRIN"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-gyqbgw'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_cf9fd.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:08.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\cmTC_cf9fd.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_cf9fd.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\Debug\\".
+          Creating directory "cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_VPCLMULQDQ_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_cf9fd.dir\\Debug\\\\" /Fd"cmTC_cf9fd.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D HAVE_VPCLMULQDQ_INTRIN /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_cf9fd.dir\\Debug\\\\" /Fd"cmTC_cf9fd.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\src.c"
+          src.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\Debug\\cmTC_cf9fd.exe" /INCREMENTAL /ILK:"cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-gyqbgw/Debug/cmTC_cf9fd.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-gyqbgw/Debug/cmTC_cf9fd.lib" /MACHINE:X64  /machine:x64 cmTC_cf9fd.dir\\Debug\\src.obj
+          cmTC_cf9fd.vcxproj -> C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\Debug\\cmTC_cf9fd.exe
+        FinalizeBuildStatus:
+          Deleting file "cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.tlog\\unsuccessfulbuild".
+          Touching "cmTC_cf9fd.dir\\Debug\\cmTC_cf9fd.tlog\\cmTC_cf9fd.lastbuildstate".
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-gyqbgw\\cmTC_cf9fd.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.39
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:97 (check_c_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "_deps/googletest-src/googletest/cmake/internal_utils.cmake:65 (find_package)"
+      - "_deps/googletest-src/googletest/CMakeLists.txt:88 (config_compiler_and_linker)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jfklht"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jfklht"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-jfklht'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_8a973.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:17.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\cmTC_8a973.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_8a973.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\Debug\\".
+          Creating directory "cmTC_8a973.dir\\Debug\\cmTC_8a973.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_8a973.dir\\Debug\\cmTC_8a973.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_8a973.dir\\Debug\\cmTC_8a973.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_8a973.dir\\Debug\\\\" /Fd"cmTC_8a973.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c11 /Fo"cmTC_8a973.dir\\Debug\\\\" /Fd"cmTC_8a973.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\src.c"
+          src.c
+        C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\src.c(1,1): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\cmTC_8a973.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\cmTC_8a973.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\cmTC_8a973.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\src.c(1,1): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-jfklht\\cmTC_8a973.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.26
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckLibraryExists.cmake:112 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:112 (check_library_exists)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:175 (_threads_check_lib)"
+      - "_deps/googletest-src/googletest/cmake/internal_utils.cmake:65 (find_package)"
+      - "_deps/googletest-src/googletest/CMakeLists.txt:88 (config_compiler_and_linker)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-klygwx"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-klygwx"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-klygwx'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_754dd.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:17.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\cmTC_754dd.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_754dd.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\Debug\\".
+          Creating directory "cmTC_754dd.dir\\Debug\\cmTC_754dd.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_754dd.dir\\Debug\\cmTC_754dd.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_754dd.dir\\Debug\\cmTC_754dd.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_754dd.dir\\Debug\\\\" /Fd"cmTC_754dd.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_754dd.dir\\Debug\\\\" /Fd"cmTC_754dd.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\Debug\\cmTC_754dd.exe" /INCREMENTAL /ILK:"cmTC_754dd.dir\\Debug\\cmTC_754dd.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-klygwx/Debug/cmTC_754dd.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-klygwx/Debug/cmTC_754dd.lib" /MACHINE:X64  /machine:x64 cmTC_754dd.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\cmTC_754dd.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\cmTC_754dd.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\cmTC_754dd.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-klygwx\\cmTC_754dd.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.31
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/CheckLibraryExists.cmake:112 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:112 (check_library_exists)"
+      - "C:/Program Files/CMake/share/cmake-4.0/Modules/FindThreads.cmake:176 (_threads_check_lib)"
+      - "_deps/googletest-src/googletest/cmake/internal_utils.cmake:65 (find_package)"
+      - "_deps/googletest-src/googletest/CMakeLists.txt:88 (config_compiler_and_linker)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-1mhc4c"
+      binary: "C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-1mhc4c"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /utf-8"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-1mhc4c'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_244c0.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.14.18+a338add32 for .NET Framework
+        Build started 17/08/2025 04:31:18.
+        
+        Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\cmTC_244c0.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Creating directory "cmTC_244c0.dir\\Debug\\".
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\Debug\\".
+          Creating directory "cmTC_244c0.dir\\Debug\\cmTC_244c0.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_244c0.dir\\Debug\\cmTC_244c0.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_244c0.dir\\Debug\\cmTC_244c0.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_244c0.dir\\Debug\\\\" /Fd"cmTC_244c0.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35214 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_244c0.dir\\Debug\\\\" /Fd"cmTC_244c0.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue  /utf-8 "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\Debug\\cmTC_244c0.exe" /INCREMENTAL /ILK:"cmTC_244c0.dir\\Debug\\cmTC_244c0.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-1mhc4c/Debug/cmTC_244c0.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/jariw/Desktop/zlib-ng-2.2.5/CMakeFiles/CMakeScratch/TryCompile-1mhc4c/Debug/cmTC_244c0.lib" /MACHINE:X64  /machine:x64 cmTC_244c0.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\cmTC_244c0.vcxproj]
+        Done Building Project "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\cmTC_244c0.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\cmTC_244c0.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\jariw\\Desktop\\zlib-ng-2.2.5\\CMakeFiles\\CMakeScratch\\TryCompile-1mhc4c\\cmTC_244c0.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.32
+        
+      exitCode: 1
+...

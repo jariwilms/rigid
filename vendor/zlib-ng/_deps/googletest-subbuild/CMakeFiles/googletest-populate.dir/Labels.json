@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/googletest-populate"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/3f7ced5095792ea9b59cfd6a70ac2063/googletest-populate.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/ef7d88b8846051fa97538a4a95f6ca05/googletest-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/jariw/Desktop/zlib-ng-2.2.5/_deps/googletest-subbuild/CMakeFiles/6dda00b5a44569cd51eac7a29f1ce8fb/googletest-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"googletest-populate"
+		],
+		"name" : "googletest-populate"
+	}
+}
