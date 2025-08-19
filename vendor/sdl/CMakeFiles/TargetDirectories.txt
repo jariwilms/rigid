@@ -1,0 +1,9 @@
+C:/Users/jariw/Downloads/sdl/CMakeFiles/SDL3-shared.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/SDL3-static.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/SDL3_test.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/SDL_uclibc.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/uninstall.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/PACKAGE.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/INSTALL.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/ALL_BUILD.dir
+C:/Users/jariw/Downloads/sdl/CMakeFiles/ZERO_CHECK.dir
