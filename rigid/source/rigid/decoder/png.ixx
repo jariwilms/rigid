@@ -155,7 +155,11 @@ export namespace rgd
         };
         enum class compression_method_e : std::uint8_t
         {
-
+            _0, 
+        };
+        enum class filter_method_e : std::uint8_t
+        {
+            _0, 
         };
         enum class filter_e : std::uint8_t
         {
@@ -167,7 +171,8 @@ export namespace rgd
         };
         enum class interlace_method_e : std::uint8_t
         {
-
+            _0, 
+            _1, 
         };
 
         struct header
@@ -186,13 +191,13 @@ export namespace rgd
         #pragma pack(push, 1u)
         struct ihdr_data
         {
-            rgd::big_endian_view<std::uint32_t    > width;
-            rgd::big_endian_view<std::uint32_t    > height;
-            rgd::big_endian_view<png::bit_depth_e > bit_depth;
-            rgd::big_endian_view<png::color_type_e> color_type;
-            rgd::big_endian_view<std::uint8_t     > compression_method;
-            rgd::big_endian_view<std::uint8_t     > filter_method;
-            rgd::big_endian_view<std::uint8_t     > interlace_method;
+            rgd::big_endian_view<std::uint32_t            > width;
+            rgd::big_endian_view<std::uint32_t            > height;
+            rgd::big_endian_view<png::bit_depth_e         > bit_depth;
+            rgd::big_endian_view<png::color_type_e        > color_type;
+            rgd::big_endian_view<png::compression_method_e> compression_method;
+            rgd::big_endian_view<png::filter_method_e     > filter_method;
+            rgd::big_endian_view<png::interlace_method_e  > interlace_method;
         };
         struct plte_data
         {
@@ -277,6 +282,18 @@ export namespace rgd
         };
         #pragma pack(pop)
 
+        auto paeth_predictor(std::byte_t a, std::byte_t b, std::byte_t c) -> std::byte_t
+            {
+                const auto p  = a + b - c;
+                const auto pa = std::abs(p - a);
+                const auto pb = std::abs(p - b);
+                const auto pc = std::abs(p - c);
+
+                     if (pa <= pb && pa <= pc) return a;
+                else if (pb <= pc            ) return b;
+                else                           return c;
+            };
+
         constexpr auto signature = std::uint64_t{ 0x89'50'4E'47'0D'0A'1A'0A };
     };
 
@@ -293,7 +310,7 @@ export namespace rgd
 
 
 
-    void assert(const std::bool_t condition, std::string_view message = "")
+    void assert(const std::bool_t condition, const std::string_view message = "")
     {
         if (!condition) throw std::invalid_argument{ message.data() };
     }
@@ -454,10 +471,12 @@ export namespace rgd
 
               auto inflated_data      = rgd::inflate(deflated_data);
               auto without_filter     = std::vector<std::uint8_t >{};
+              auto resulting_image    = std::vector<std::uint8_t >{};
               auto filter_bytes       = std::vector<png::filter_e>{};
 
-        without_filter.reserve(image_data_size );
-        filter_bytes  .reserve(ihdr_data.height);
+        without_filter .reserve(image_data_size );
+        resulting_image.resize (image_data_size );
+        filter_bytes   .reserve(ihdr_data.height);
 
         std::ranges::for_each(std::views::iota(0u, ihdr_data.height), [&](const auto row)
             {
@@ -471,57 +490,77 @@ export namespace rgd
 
 
         using color_t = std::tuple<std::uint8_t, std::uint8_t, std::uint8_t>;
+
+
+
         for (const auto& row : std::views::iota(0u, ihdr_data.height))
         {
-            const auto current_row    = std::span{ without_filter.data() + (row * scanline_data_size), scanline_data_size };
-            const auto current_filter = filter_bytes.at(row);
+            auto source_scanline      = std::span<const std::byte_t>{ without_filter .data() + ( row      * scanline_data_size), scanline_data_size };
+            auto previous_scanline    = std::span<const std::byte_t>{ resulting_image.data() + ((row - 1) * scanline_data_size), scanline_data_size };
+            auto destination_scanline = std::span<      std::byte_t>{ resulting_image.data() + ( row      * scanline_data_size), scanline_data_size };
 
-            for (auto color_index = 0; color_index < ihdr_data.width; color_index += 3)
+            switch (filter_bytes.at(row))
             {
-                auto color           = std::make_tuple(current_row[color_index + 0u], current_row[color_index + 1u], current_row[color_index + 2u]);
-                auto resulting_color = color_t{};
+                using enum png::filter_e;
 
-                switch (current_filter)
+                case none    :
                 {
-                    using enum png::filter_e;
-
-                    case none:
+                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
                     {
-                        resulting_color = color;
+                        destination_scanline[index] = source_scanline[index];
                     }
-                    case subtract:
-                    {
-                        if (row > 0)
-                        {
 
+                    break;
+                }
+                case subtract:
+                {
+                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    {
+                        if   (index < 3u) destination_scanline[index] = source_scanline[index];
+                        else              destination_scanline[index] = source_scanline[index] + destination_scanline[index - 3u];
+                    }
+
+                    break;
+                }
+                case up      :
+                {
+                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    {
+                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
+                        else                           destination_scanline[index] = source_scanline[index] + previous_scanline[index];
+                    }
+
+                    break;
+                }
+                case average :
+                {
+                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    {
+                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
+                        else                           destination_scanline[index] = source_scanline[index] + static_cast<std::byte_t>((std::floor(destination_scanline[index - 3u] + previous_scanline[index]) / 2u));
+                    }
+
+                    break;
+                }
+                case paeth   :
+                {
+                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    {
+                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
+                        else
+                        {
+                            const auto a = destination_scanline[index - 3u];
+                            const auto b = previous_scanline   [index     ];
+                            const auto c = previous_scanline   [index - 3u];
+
+                            destination_scanline[index] = source_scanline[index] + png::paeth_predictor(a, b, c);
                         }
                     }
-                    case up:
-                    {
 
-                    }
-                    case average:
-                    {
-
-                    }
-                    case paeth:
-                    {
-
-                    }
+                    break;
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -531,7 +570,7 @@ export namespace rgd
         SDL_Window* window     = SDL_CreateWindow("SDL3 Texture Example", width, height, SDL_WINDOW_RESIZABLE);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
         SDL_Texture* texture   = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STATIC, width, height);
-        SDL_UpdateTexture(texture, NULL, without_filter.data(), width * 3);
+        SDL_UpdateTexture(texture, NULL, resulting_image.data(), width * 3);
 
 
 
