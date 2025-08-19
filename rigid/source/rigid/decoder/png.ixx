@@ -2,7 +2,7 @@ export module rigid.decode.png;
 
 import std;
 import <zlib-ng/zlib-ng.h>;
-import "SDL3/SDL.h";
+import "sdl3/sdl.h";
 
 export namespace std
 {
@@ -11,57 +11,44 @@ export namespace std
 }
 export namespace rgd
 {
-    std::vector<uint8_t> inflate(const std::vector<uint8_t>& compressedData) {
-        // Initialize zlib-ng stream
-        zng_stream stream = {};
+    auto inflate(const std::vector<std::byte_t>& compressedData) -> std::vector<std::byte_t>
+    {
+        auto stream = zng_stream{};
+        auto result = std::int32_t{};
+        
+        result = zng_inflateInit(&stream);
+        if (result != Z_OK) throw std::runtime_error("Failed to initialize zlib-ng inflation: " + std::to_string(result));
 
-        // Initialize inflation
-        int ret = zng_inflateInit(&stream);
-        if (ret != Z_OK) {
-            throw std::runtime_error("Failed to initialize zlib-ng inflation: " + std::to_string(ret));
-        }
+        stream.next_in  = compressedData.data();
+        stream.avail_in = static_cast<std::uint32_t>(compressedData.size());
 
-        // Set up input data
-        stream.next_in =  compressedData.data();
-        stream.avail_in = static_cast<unsigned int>(compressedData.size());
+              auto decompressed_data = std::vector<std::byte_t>{};
+        const auto chunk_size        = size_t{ 16384u };
 
-        // Prepare output buffer - start with reasonable size, will grow if needed
-        std::vector<uint8_t> decompressedData;
-        const size_t chunkSize = 16384; // 16KB chunks
+        do 
+        {
+            const auto old_size = std::size_t{ decompressed_data.size() };
+            decompressed_data.resize(old_size + chunk_size);
 
-        do {
-            // Expand output buffer
-            size_t oldSize = decompressedData.size();
-            decompressedData.resize(oldSize + chunkSize);
+            stream.next_out  = decompressed_data.data() + old_size;
+            stream.avail_out = chunk_size;
 
-            // Set up output pointers
-            stream.next_out = decompressedData.data() + oldSize;
-            stream.avail_out = chunkSize;
+            result = zng_inflate(&stream, Z_NO_FLUSH);
 
-            // Inflate data
-            ret = zng_inflate(&stream, Z_NO_FLUSH);
-
-            // Check for errors
-            if (ret != Z_OK && ret != Z_STREAM_END) {
+            if (result != Z_OK && result != Z_STREAM_END) 
+            {
                 zng_inflateEnd(&stream);
-                throw std::runtime_error("Inflation failed: " + std::to_string(ret));
+                throw std::runtime_error("Failed to inflate data: " + std::to_string(result));
             }
 
-            // Adjust actual size based on how much was written
-            decompressedData.resize(oldSize + chunkSize - stream.avail_out);
+            decompressed_data.resize(old_size + chunk_size - stream.avail_out);
 
-        } while (ret != Z_STREAM_END);
+        } while (result != Z_STREAM_END);
 
-        // Clean up
         zng_inflateEnd(&stream);
-
-        return decompressedData;
+        
+        return decompressed_data;
     }
-
-
-
-
-
 
 
 
