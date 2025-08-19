@@ -34,7 +34,6 @@ export namespace rgd
             stream.avail_out = chunk_size;
 
             result = zng_inflate(&stream, Z_NO_FLUSH);
-
             if (result != Z_OK && result != Z_STREAM_END) 
             {
                 zng_inflateEnd(&stream);
@@ -133,12 +132,11 @@ export namespace rgd
         };
         enum class color_type_e : std::uint8_t
         {
-            none          = 0u, 
-            palette       = 1u, 
-            color         = 2u, 
-            color_palette = color | palette, 
-            alpha         = 4u, 
-            color_alpha   = color | alpha, 
+            grayscale       = 0u                         , 
+            truecolor       = 2u                         , 
+            indexed_color   = truecolor | 1u             , 
+            grayscale_alpha = 4u                         , 
+            truecolor_alpha = truecolor | grayscale_alpha, 
         };
         enum class compression_method_e : std::uint8_t
         {
@@ -280,6 +278,21 @@ export namespace rgd
                 else if (pb <= pc            ) return b;
                 else                           return c;
             };
+        auto map_color_channels(png::color_type_e color_type) -> std::uint8_t
+        {
+            switch (color_type)
+            {
+                using enum png::color_type_e;
+
+                case grayscale      : return std::uint8_t{ 1u };
+                case truecolor      : return std::uint8_t{ 3u };
+                case indexed_color  : return std::uint8_t{ 1u };
+                case grayscale_alpha: return std::uint8_t{ 2u };
+                case truecolor_alpha: return std::uint8_t{ 4u };
+
+                default: throw std::invalid_argument{ "Invalid color type!" };
+            }
+        }
 
         constexpr auto signature = std::uint64_t{ 0x89'50'4E'47'0D'0A'1A'0A };
     };
@@ -303,7 +316,7 @@ export namespace rgd
     }
     auto decode_png(std::span<const std::byte_t> image)
     {
-        auto cursor  = image.data();
+        auto cursor = image.data();
 
 
 
@@ -334,8 +347,7 @@ export namespace rgd
 
         do
         {
-            auto header       = png::header{ cursor };
-            auto header_debug = rgd::view_as<std::array<char, 4u>>(std::bit_cast<std::byte_t*>(&header.type));
+            const auto header = png::header{ cursor };
 
             switch (header.type)
             {
@@ -357,10 +369,11 @@ export namespace rgd
                 }
                 case idat: 
                 {
-                    idat_data.data = cursor + 8u;
+                    idat_data.data    = cursor + 8u;
+                    const auto offset = deflated_data.size();
                     deflated_data.resize(deflated_data.size() + header.length);
 
-                    std::memcpy(deflated_data.data(), idat_data.data, header.length);
+                    std::memcpy(deflated_data.data() + offset, idat_data.data, header.length);
 
                     break;
                 }
@@ -385,19 +398,19 @@ export namespace rgd
                 {
                     switch (ihdr_data.color_type)
                     {
-                        case png::color_type_e::color_palette:
+                        case png::color_type_e::indexed_color:
                         {
                             bkgd_data.color = rgd::view_as<png::bkgd_data::indexed_color>(cursor + 8u);
                             break;
                         }
-                        case png::color_type_e::none         :
-                        case png::color_type_e::alpha        :
+                        case png::color_type_e::grayscale         :
+                        case png::color_type_e::grayscale_alpha        :
                         {
                             bkgd_data.color = rgd::view_as<png::bkgd_data::gray_scale   >(cursor + 8u);
                             break;
                         }
-                        case png::color_type_e::color        :
-                        case png::color_type_e::color_alpha  :
+                        case png::color_type_e::truecolor        :
+                        case png::color_type_e::truecolor_alpha  :
                         {
                             bkgd_data.color = rgd::view_as<png::bkgd_data::true_color   >(cursor + 8u);
                             break;
@@ -432,7 +445,7 @@ export namespace rgd
 
 
 
-        const auto bytes_per_pixel    = std::size_t{ 3u };
+        const auto bytes_per_pixel    = png::map_color_channels(ihdr_data.color_type);
         const auto scanline_data_size = std::size_t{ ihdr_data.width    * 3u };
         const auto scanline_size      = std::size_t{ scanline_data_size + 1u };
         const auto image_data_size    = scanline_data_size * ihdr_data.height;
