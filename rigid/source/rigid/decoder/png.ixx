@@ -445,105 +445,91 @@ export namespace rgd
 
 
 
-
+        const auto bytes_per_pixel    = std::size_t{ 3u };
         const auto scanline_data_size = std::size_t{ ihdr_data.width    * 3u };
         const auto scanline_size      = std::size_t{ scanline_data_size + 1u };
         const auto image_data_size    = scanline_data_size * ihdr_data.height;
 
               auto inflated_data      = rgd::inflate(deflated_data);
-              auto without_filter     = std::vector<std::uint8_t >{};
-              auto resulting_image    = std::vector<std::uint8_t >{};
-              auto filter_bytes       = std::vector<png::filter_e>{};
+              auto input_image        = std::vector<std::uint8_t >(image_data_size );
+              auto output_image       = std::vector<std::uint8_t >(image_data_size );
 
-        without_filter .reserve(image_data_size );
-        resulting_image.resize (image_data_size );
-        filter_bytes   .reserve(ihdr_data.height);
-
-        std::ranges::for_each(std::views::iota(0u, ihdr_data.height), [&](const auto row)
+        std::ranges::for_each(std::views::iota(0u, ihdr_data.height), [&](const auto row_index)
             {
-                const auto scanline_start = scanline_size * row;
+                const auto scanline_start = scanline_size * row_index;
                 const auto scanline       = std::span{ inflated_data.data() + scanline_start, scanline_size };
+                const auto filter         = static_cast<png::filter_e>(scanline[0u]);
 
-                without_filter.append_range(scanline.subspan(1u));
-                filter_bytes  .emplace_back(static_cast<png::filter_e>(scanline[0u]));
+                std::ranges::copy(scanline.subspan(1u), input_image.begin() + (row_index * scanline_data_size));
+
+                      auto input          = std::span<const std::byte_t>{ input_image .data() + ( row_index * scanline_data_size), scanline_data_size };
+                      auto output         = std::span<      std::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
+                      auto prior          = (row_index > 0u) ? std::span<const std::byte_t>{ output_image.data() + ((row_index - 1) * scanline_data_size), scanline_data_size } : input;
+
+                switch (filter)
+                {
+                    using enum png::filter_e;
+
+                    case none    :
+                    {
+                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
+                        {
+                            output[index] = input[index];
+                        }
+
+                        break;
+                    }
+                    case subtract:
+                    {
+                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
+                        {
+                            const auto left = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
+                        
+                            output[index] = input[index] + left;
+                        }
+
+                        break;
+                    }
+                    case up      :
+                    {
+                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
+                        {
+                            const auto up = std::byte_t{ (index < prior.size()) ? prior[index] : 0u };
+                        
+                            output[index] = input[index] + up;
+                        }
+
+                        break;
+                    }
+                    case average :
+                    {
+                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
+                        {
+                            const auto left    = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
+                            const auto up      = std::byte_t{ (index <  prior.size()   ) ? prior [index                  ] : 0u };
+                            const auto average = std::byte_t{ (left + up) / 2u };
+                        
+                            output[index] = input[index] + average;
+                        }
+
+                        break;
+                    }
+                    case paeth   :
+                    {
+                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
+                        {
+                            const auto left    = std::byte_t{ (index >= bytes_per_pixel                        ) ? output[index - bytes_per_pixel] : 0u };
+                            const auto up      = std::byte_t{ (index <  prior.size()                           ) ? prior [index                  ] : 0u };
+                            const auto up_left = std::byte_t{ (index >= bytes_per_pixel && index < prior.size()) ? prior [index - bytes_per_pixel] : 0u };
+                            const auto paeth   = png::paeth_predictor(left, up, up_left);
+
+                            output[index] = input[index] + paeth;
+                        }
+
+                        break;
+                    }
+                }
             });
-
-
-
-        using color_t = std::tuple<std::uint8_t, std::uint8_t, std::uint8_t>;
-
-
-        const auto bytes_per_pixel = std::size_t{ 3u };
-        for (const auto& row : std::views::iota(0u, ihdr_data.height))
-        {
-            auto input  = std::span<const std::byte_t>{ without_filter .data() + ( row * scanline_data_size), scanline_data_size };
-            auto output = std::span<      std::byte_t>{ resulting_image.data() + ( row * scanline_data_size), scanline_data_size };
-            auto prior  = (row > 0u) ? std::span<const std::byte_t>{ resulting_image.data() + ((row - 1) * scanline_data_size), scanline_data_size } : input;
-
-            switch (filter_bytes.at(row))
-            {
-                using enum png::filter_e;
-
-                case none    :
-                {
-                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                    {
-                        output[index] = input[index];
-                    }
-
-                    break;
-                }
-                case subtract:
-                {
-                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                    {
-                        const auto left = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
-                        
-                        output[index] = input[index] + left;
-                    }
-
-                    break;
-                }
-                case up      :
-                {
-                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                    {
-                        const auto up = std::byte_t{ (index < prior.size()) ? prior[index] : 0u };
-                        
-                        output[index] = input[index] + up;
-                    }
-
-                    break;
-                }
-                case average :
-                {
-                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                    {
-                        const auto left    = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
-                        const auto up      = std::byte_t{ (index <  prior.size()   ) ? prior [index                  ] : 0u };
-                        const auto average = std::byte_t{ (left + up) / 2u };
-                        
-                        output[index] = input[index] + average;
-                    }
-
-                    break;
-                }
-                case paeth   :
-                {
-                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                    {
-                        const auto left    = std::byte_t{ (index >= bytes_per_pixel                        ) ? output[index - bytes_per_pixel] : 0u };
-                        const auto up      = std::byte_t{ (index <  prior.size()                           ) ? prior [index                  ] : 0u };
-                        const auto up_left = std::byte_t{ (index >= bytes_per_pixel && index < prior.size()) ? prior [index - bytes_per_pixel] : 0u };
-                        const auto paeth   = png::paeth_predictor(left, up, up_left);
-
-                        output[index] = input[index] + paeth;
-                    }
-
-                    break;
-                }
-            }
-        }
 
 
 
@@ -553,9 +539,7 @@ export namespace rgd
         SDL_Window* window     = SDL_CreateWindow("SDL3 Texture Example", width, height, SDL_WINDOW_RESIZABLE);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
         SDL_Texture* texture   = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STATIC, width, height);
-        SDL_UpdateTexture(texture, NULL, resulting_image.data(), width * 3);
-
-
+        SDL_UpdateTexture(texture, NULL, output_image.data(), width * 3);
 
         bool running = true;
         SDL_Event event;
