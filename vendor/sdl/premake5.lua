@@ -5,7 +5,7 @@ project "sdl"
 	staticruntime "On"
 	warnings      "Off"
 	
-	builddependencies {
+	links {
 		"winmm.lib", 
 		"imm32.lib", 
 		"version.lib", 
