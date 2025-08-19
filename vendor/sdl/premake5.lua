@@ -22,7 +22,7 @@ project "sdl"
 	}
 	
 	files {	
-		"CMakeFiles/SDL3-static.dir/cmake_pch.c", 
+		"CMakeFiles/sdl3-static.dir/cmake_pch.c", 
 		"src/SDL.c", 
 		"src/SDL_assert.c", 
 		"src/SDL_error.c", 
