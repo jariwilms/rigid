@@ -6,7 +6,7 @@ project "zlib-ng"
 	warnings      "Off"
 	
 	includedirs {
-		"./", 
+		".", 
 	}
 	
 	files {	
