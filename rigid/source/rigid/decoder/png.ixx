@@ -357,15 +357,6 @@ export namespace rgd
                 case ihdr:
                 {
                     ihdr_data = rgd::view_as<png::ihdr_data>(cursor + 8u);
-
-                    auto q = ihdr_data.bit_depth         .to_native();
-                    auto w = ihdr_data.color_type        .to_native();
-                    auto e = ihdr_data.compression_method.to_native();
-                    auto r = ihdr_data.filter_method     .to_native();
-                    auto t = ihdr_data.height            .to_native();
-                    auto y = ihdr_data.interlace_method  .to_native();
-                    auto u = ihdr_data.width             .to_native();
-
                     break;
                 }
                 case plte: 
@@ -374,6 +365,8 @@ export namespace rgd
                     
                     const auto entry_count = header.length / sizeof(png::plte_data::entry);
                     plte_data.entries = std::span{ reinterpret_cast<const png::plte_data::entry*>(cursor + 8u), entry_count };
+
+                    break;
                 }
                 case idat: 
                 {
@@ -387,29 +380,17 @@ export namespace rgd
                 case iend:
                 {
                     iend_reached = true;
+                    break;
                 }
                 
                 case chrm:
                 {
                     chrm_data = rgd::view_as<png::chrm_data>(cursor + 8u);
-
-                    auto q = chrm_data.white_point_x.to_native();
-                    auto w = chrm_data.white_point_y.to_native();
-                    auto e = chrm_data.red_x        .to_native();
-                    auto r = chrm_data.red_y        .to_native();
-                    auto t = chrm_data.green_x      .to_native();
-                    auto y = chrm_data.green_y      .to_native();
-                    auto u = chrm_data.blue_x       .to_native();
-                    auto i = chrm_data.blue_y       .to_native();
-
                     break;
                 }
                 case gama: 
                 {
                     gama_data = rgd::view_as<png::gama_data>(cursor + 8u);
-                    
-                    auto q = gama_data.gamma.to_native();
-
                     break;
                 }
                 case sbit: break;
@@ -492,12 +473,12 @@ export namespace rgd
         using color_t = std::tuple<std::uint8_t, std::uint8_t, std::uint8_t>;
 
 
-
+        const auto bytes_per_pixel = std::size_t{ 3u };
         for (const auto& row : std::views::iota(0u, ihdr_data.height))
         {
-            auto source_scanline      = std::span<const std::byte_t>{ without_filter .data() + ( row      * scanline_data_size), scanline_data_size };
-            auto previous_scanline    = std::span<const std::byte_t>{ resulting_image.data() + ((row - 1) * scanline_data_size), scanline_data_size };
-            auto destination_scanline = std::span<      std::byte_t>{ resulting_image.data() + ( row      * scanline_data_size), scanline_data_size };
+            auto input  = std::span<const std::byte_t>{ without_filter .data() + ( row * scanline_data_size), scanline_data_size };
+            auto output = std::span<      std::byte_t>{ resulting_image.data() + ( row * scanline_data_size), scanline_data_size };
+            auto prior  = (row > 0u) ? std::span<const std::byte_t>{ resulting_image.data() + ((row - 1) * scanline_data_size), scanline_data_size } : input;
 
             switch (filter_bytes.at(row))
             {
@@ -505,56 +486,58 @@ export namespace rgd
 
                 case none    :
                 {
-                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                     {
-                        destination_scanline[index] = source_scanline[index];
+                        output[index] = input[index];
                     }
 
                     break;
                 }
                 case subtract:
                 {
-                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                     {
-                        if   (index < 3u) destination_scanline[index] = source_scanline[index];
-                        else              destination_scanline[index] = source_scanline[index] + destination_scanline[index - 3u];
+                        const auto left = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
+                        
+                        output[index] = input[index] + left;
                     }
 
                     break;
                 }
                 case up      :
                 {
-                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                     {
-                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
-                        else                           destination_scanline[index] = source_scanline[index] + previous_scanline[index];
+                        const auto up = std::byte_t{ (index < prior.size()) ? prior[index] : 0u };
+                        
+                        output[index] = input[index] + up;
                     }
 
                     break;
                 }
                 case average :
                 {
-                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                     {
-                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
-                        else                           destination_scanline[index] = source_scanline[index] + static_cast<std::byte_t>((std::floor(destination_scanline[index - 3u] + previous_scanline[index]) / 2u));
+                        const auto left    = std::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
+                        const auto up      = std::byte_t{ (index <  prior.size()   ) ? prior [index                  ] : 0u };
+                        const auto average = std::byte_t{ (left + up) / 2u };
+                        
+                        output[index] = input[index] + average;
                     }
 
                     break;
                 }
                 case paeth   :
                 {
-                    for (auto index = std::size_t{ 0u }; index < source_scanline.size(); ++index)
+                    for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                     {
-                        if   (index < 3u || row == 0u) destination_scanline[index] = source_scanline[index];
-                        else
-                        {
-                            const auto a = destination_scanline[index - 3u];
-                            const auto b = previous_scanline   [index     ];
-                            const auto c = previous_scanline   [index - 3u];
+                        const auto left    = std::byte_t{ (index >= bytes_per_pixel                        ) ? output[index - bytes_per_pixel] : 0u };
+                        const auto up      = std::byte_t{ (index <  prior.size()                           ) ? prior [index                  ] : 0u };
+                        const auto up_left = std::byte_t{ (index >= bytes_per_pixel && index < prior.size()) ? prior [index - bytes_per_pixel] : 0u };
+                        const auto paeth   = png::paeth_predictor(left, up, up_left);
 
-                            destination_scanline[index] = source_scanline[index] + png::paeth_predictor(a, b, c);
-                        }
+                        output[index] = input[index] + paeth;
                     }
 
                     break;
