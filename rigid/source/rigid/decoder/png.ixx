@@ -220,34 +220,78 @@ export namespace rgd
         };
         struct sbit_data
         {
+            struct grayscale
+            {
+                rgd::big_endian_view<std::byte_t> grayscale_significant_bits;
+            };
+            struct truecolor
+            {
+                rgd::big_endian_view<std::byte_t> red_significant_bits;
+                rgd::big_endian_view<std::byte_t> green_significant_bits;
+                rgd::big_endian_view<std::byte_t> blue_significant_bits;
+            };
+            struct indexed_color
+            {
+                rgd::big_endian_view<std::byte_t> red_significant_bits;
+                rgd::big_endian_view<std::byte_t> green_significant_bits;
+                rgd::big_endian_view<std::byte_t> blue_significant_bits;
+            };
+            struct grayscale_alpha
+            {
+                rgd::big_endian_view<std::byte_t> grayscale_significant_bits;
+                rgd::big_endian_view<std::byte_t> alpha_significant_bits;
+            };
+            struct truecolor_alpha
+            {
+                rgd::big_endian_view<std::byte_t> red_significant_bits;
+                rgd::big_endian_view<std::byte_t> green_significant_bits;
+                rgd::big_endian_view<std::byte_t> blue_significant_bits;
+                rgd::big_endian_view<std::byte_t> alpha_significant_bits;
+            };
 
+            std::variant<grayscale, truecolor, indexed_color, grayscale_alpha, truecolor_alpha> color;
         };
         struct bkgd_data
         {
-            struct indexed_color
-            {
-                rgd::big_endian_view<std::uint8_t> value;
-            };
-            struct gray_scale
+            struct grayscale
             {
                 rgd::big_endian_view<std::uint16_t> value;
             };
-            struct true_color
+            struct truecolor
             {
                 rgd::big_endian_view<std::uint16_t> red;
                 rgd::big_endian_view<std::uint16_t> green;
                 rgd::big_endian_view<std::uint16_t> blue;
             };
+            struct indexed_color
+            {
+                rgd::big_endian_view<std::uint8_t> value;
+            };
 
-            std::variant<indexed_color, gray_scale, true_color> color;
+            std::variant<grayscale, truecolor, indexed_color> color;
         };
         struct hist_data
         {
-
+            std::span<const std::uint16_t> data;
         };
         struct trns_data
         {
+            struct grayscale
+            {
+                rgd::big_endian_view<std::uint16_t> value;
+            };
+            struct truecolor
+            {
+                rgd::big_endian_view<std::uint16_t> red;
+                rgd::big_endian_view<std::uint16_t> green;
+                rgd::big_endian_view<std::uint16_t> blue;
+            };
+            struct indexed_color
+            {
+                std::span<const std::byte_t> values;
+            };
 
+            std::variant<grayscale, truecolor, indexed_color> value;
         };
         struct phys_data
         {
@@ -267,7 +311,7 @@ export namespace rgd
         };
         #pragma pack(pop)
 
-        auto paeth_predictor(std::byte_t a, std::byte_t b, std::byte_t c) -> std::byte_t
+        auto paeth_predictor   (std::byte_t a, std::byte_t b, std::byte_t c) -> std::byte_t
             {
                 const auto p  = a + b - c;
                 const auto pa = std::abs(p - a);
@@ -363,7 +407,7 @@ export namespace rgd
                     if (header.length % sizeof(png::plte_data::entry) != std::uint32_t{ 0u }) throw std::invalid_argument{ "Palette length must be divisible by size of entry!" };
                     
                     const auto entry_count = header.length / sizeof(png::plte_data::entry);
-                    plte_data.entries = std::span{ reinterpret_cast<const png::plte_data::entry*>(cursor + 8u), entry_count };
+                    plte_data.entries      = std::span{ reinterpret_cast<const png::plte_data::entry*>(cursor + 8u), entry_count };
 
                     break;
                 }
@@ -393,34 +437,95 @@ export namespace rgd
                     gama_data = rgd::view_as<png::gama_data>(cursor + 8u);
                     break;
                 }
-                case sbit: break;
+                case sbit: 
+                {
+                    switch (ihdr_data.color_type)
+                    {
+                        case png::color_type_e::grayscale      :
+                        {
+                            sbit_data.color = rgd::view_as<png::sbit_data::grayscale>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::truecolor      :
+                        {
+                            sbit_data.color = rgd::view_as<png::sbit_data::truecolor>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::indexed_color  :
+                        {
+                            sbit_data.color = rgd::view_as<png::sbit_data::indexed_color>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::grayscale_alpha:
+                        {
+                            sbit_data.color = rgd::view_as<png::sbit_data::grayscale_alpha>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::truecolor_alpha:
+                        {
+                            sbit_data.color = rgd::view_as<png::sbit_data::truecolor_alpha>(cursor + 8u);
+                            break;
+                        }
+                    }
+                }
                 case bkgd: 
                 {
                     switch (ihdr_data.color_type)
                     {
-                        case png::color_type_e::indexed_color:
+                        case png::color_type_e::grayscale      :
+                        {
+                            bkgd_data.color = rgd::view_as<png::bkgd_data::grayscale>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::truecolor      :
+                        {
+                            bkgd_data.color = rgd::view_as<png::bkgd_data::truecolor   >(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::indexed_color  :
                         {
                             bkgd_data.color = rgd::view_as<png::bkgd_data::indexed_color>(cursor + 8u);
                             break;
                         }
-                        case png::color_type_e::grayscale         :
-                        case png::color_type_e::grayscale_alpha        :
+                        case png::color_type_e::grayscale_alpha:
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::gray_scale   >(cursor + 8u);
+                            bkgd_data.color = rgd::view_as<png::bkgd_data::grayscale   >(cursor + 8u);
                             break;
                         }
-                        case png::color_type_e::truecolor        :
-                        case png::color_type_e::truecolor_alpha  :
+                        case png::color_type_e::truecolor_alpha:
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::true_color   >(cursor + 8u);
+                            bkgd_data.color = rgd::view_as<png::bkgd_data::truecolor   >(cursor + 8u);
                             break;
                         }
                     }
 
                     break;
                 }
-                case hist: break;
-                case trns: break;
+                case hist: 
+                {
+                    hist_data.data = std::span<const std::uint16_t>{ reinterpret_cast<const std::uint16_t*>(cursor + 8u), plte_data.entries.size() };
+                }
+                case trns: 
+                {
+                    switch (ihdr_data.color_type)
+                    {
+                        case png::color_type_e::grayscale      :
+                        {
+                            trns_data.value = rgd::view_as<png::trns_data::grayscale>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::truecolor      :
+                        {
+                            trns_data.value = rgd::view_as<png::trns_data::truecolor>(cursor + 8u);
+                            break;
+                        }
+                        case png::color_type_e::indexed_color  :
+                        {
+                            trns_data.value = rgd::view_as<png::trns_data::indexed_color>(cursor + 8u);
+                            break;
+                        }
+                    }
+                }
                 case phys: break;
                 case time: break;
                 case text: 
@@ -438,8 +543,6 @@ export namespace rgd
 
             cursor += sizeof(png::header) + header.length;
         } while (!iend_reached);
-
-
 
 
 
@@ -530,6 +633,8 @@ export namespace rgd
                     }
                 }
             });
+
+
 
 
 
