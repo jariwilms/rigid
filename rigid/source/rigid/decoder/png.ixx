@@ -71,7 +71,7 @@ export namespace rgd
 
 
     template<typename... Ts>
-    struct overload : Ts...
+    struct operator_overload : Ts...
     {
         using Ts::operator()...;
     };
@@ -98,7 +98,7 @@ export namespace rgd
     template<typename T>
     using little_endian_view = endian_view<T, std::endian::little>;
     template<typename T>
-    using big_endian_view    = endian_view<T, std::endian::big>;
+    using big_endian_view    = endian_view<T, std::endian::big   >;
 
     
 
@@ -174,7 +174,7 @@ export namespace rgd
         };
 
         #pragma pack(push, 1u)
-        struct ihdr_data
+        struct ihdr
         {
             rgd::big_endian_view<std::uint32_t            > width;
             rgd::big_endian_view<std::uint32_t            > height;
@@ -184,7 +184,7 @@ export namespace rgd
             rgd::big_endian_view<png::filter_method_e     > filter_method;
             rgd::big_endian_view<png::interlace_method_e  > interlace_method;
         };
-        struct plte_data
+        struct plte
         {
             struct entry
             {
@@ -195,15 +195,15 @@ export namespace rgd
 
             std::span<const entry> entries;
         };
-        struct idat_data
+        struct idat
         {
             const std::byte_t* data;
         };
-        struct iend_data
+        struct iend
         {
 
         };
-        struct chrm_data
+        struct chrm
         {
             rgd::big_endian_view<std::uint32_t> white_point_x;
             rgd::big_endian_view<std::uint32_t> white_point_y;
@@ -214,11 +214,11 @@ export namespace rgd
             rgd::big_endian_view<std::uint32_t> blue_x;
             rgd::big_endian_view<std::uint32_t> blue_y;
         };
-        struct gama_data
+        struct gama
         {
             rgd::big_endian_view<std::uint32_t> gamma;
         };
-        struct sbit_data
+        struct sbit
         {
             struct grayscale
             {
@@ -251,7 +251,7 @@ export namespace rgd
 
             std::variant<grayscale, truecolor, indexed_color, grayscale_alpha, truecolor_alpha> color;
         };
-        struct bkgd_data
+        struct bkgd
         {
             struct grayscale
             {
@@ -270,11 +270,11 @@ export namespace rgd
 
             std::variant<grayscale, truecolor, indexed_color> color;
         };
-        struct hist_data
+        struct hist
         {
             std::span<const std::uint16_t> data;
         };
-        struct trns_data
+        struct trns
         {
             struct grayscale
             {
@@ -293,19 +293,19 @@ export namespace rgd
 
             std::variant<grayscale, truecolor, indexed_color> value;
         };
-        struct phys_data
+        struct phys
         {
 
         };
-        struct time_data
+        struct time
         {
 
         };
-        struct text_data
+        struct text
         {
 
         };
-        struct ztxt_data
+        struct ztxt
         {
 
         };
@@ -326,13 +326,11 @@ export namespace rgd
         {
             switch (color_type)
             {
-                using enum png::color_type_e;
-
-                case grayscale      : return std::uint8_t{ 1u };
-                case truecolor      : return std::uint8_t{ 3u };
-                case indexed_color  : return std::uint8_t{ 1u };
-                case grayscale_alpha: return std::uint8_t{ 2u };
-                case truecolor_alpha: return std::uint8_t{ 4u };
+                case png::color_type_e::grayscale      : return std::uint8_t{ 1u };
+                case png::color_type_e::truecolor      : return std::uint8_t{ 3u };
+                case png::color_type_e::indexed_color  : return std::uint8_t{ 1u };
+                case png::color_type_e::grayscale_alpha: return std::uint8_t{ 2u };
+                case png::color_type_e::truecolor_alpha: return std::uint8_t{ 4u };
 
                 default: throw std::invalid_argument{ "Invalid color type!" };
             }
@@ -348,15 +346,15 @@ export namespace rgd
     public:
         enum class format_e
         {
-            auto_, png, jpeg, bmp, webp, gif, tiff, 
+            _auto, png, jpeg, bmp, webp, gif, tiff, 
         };
     };
 
 
 
-    void assert(const std::bool_t condition, const std::string_view message = "")
+    void assert(const std::bool_t condition, const std::string& message = {})
     {
-        if (!condition) throw std::invalid_argument{ message.data() };
+        if (!condition) throw std::invalid_argument{ message.c_str() };
     }
     auto decode_png(std::span<const std::byte_t> image)
     {
@@ -370,20 +368,20 @@ export namespace rgd
 
 
 
-        auto ihdr_data = png::ihdr_data{};
-        auto plte_data = png::plte_data{};
-        auto idat_data = png::idat_data{};
-        auto iend_data = png::iend_data{};
-        auto chrm_data = png::chrm_data{};
-        auto gama_data = png::gama_data{};
-        auto sbit_data = png::sbit_data{};
-        auto bkgd_data = png::bkgd_data{};
-        auto hist_data = png::hist_data{};
-        auto trns_data = png::trns_data{};
-        auto phys_data = png::phys_data{};
-        auto time_data = png::time_data{};
-        auto text_data = png::text_data{};
-        auto ztxt_data = png::ztxt_data{};
+        auto ihdr = png::ihdr{};
+        auto plte = png::plte{};
+        auto idat = png::idat{};
+        auto iend = png::iend{};
+        auto chrm = png::chrm{};
+        auto gama = png::gama{};
+        auto sbit = png::sbit{};
+        auto bkgd = png::bkgd{};
+        auto hist = png::hist{};
+        auto trns = png::trns{};
+        auto phys = png::phys{};
+        auto time = png::time{};
+        auto text = png::text{};
+        auto ztxt = png::ztxt{};
 
         auto deflated_data = std::vector<std::byte_t>{};
         auto text_strings  = std::vector<std::tuple<std::string, std::string>>{};
@@ -392,143 +390,140 @@ export namespace rgd
         do
         {
             const auto header = png::header{ cursor };
-
             switch (header.type)
             {
-                using enum png::chunk_e;
-
-                case ihdr:
+                case png::chunk_e::ihdr:
                 {
-                    ihdr_data = rgd::view_as<png::ihdr_data>(cursor + 8u);
+                    ihdr = rgd::view_as<png::ihdr>(cursor + 8u);
                     break;
                 }
-                case plte: 
+                case png::chunk_e::plte: 
                 {
-                    if (header.length % sizeof(png::plte_data::entry) != std::uint32_t{ 0u }) throw std::invalid_argument{ "Palette length must be divisible by size of entry!" };
+                    if (header.length % sizeof(png::plte::entry) != std::uint32_t{ 0u }) throw std::invalid_argument{ "Palette length must be divisible by size of entry!" };
                     
-                    const auto entry_count = header.length / sizeof(png::plte_data::entry);
-                    plte_data.entries      = std::span{ reinterpret_cast<const png::plte_data::entry*>(cursor + 8u), entry_count };
+                    const auto entry_count = header.length / sizeof(png::plte::entry);
+                    plte.entries      = std::span{ reinterpret_cast<const png::plte::entry*>(cursor + 8u), entry_count };
 
                     break;
                 }
-                case idat: 
+                case png::chunk_e::idat: 
                 {
-                    idat_data.data    = cursor + 8u;
+                    idat.data    = cursor + 8u;
                     const auto offset = deflated_data.size();
                     deflated_data.resize(deflated_data.size() + header.length);
 
-                    std::memcpy(deflated_data.data() + offset, idat_data.data, header.length);
+                    std::memcpy(deflated_data.data() + offset, idat.data, header.length);
 
                     break;
                 }
-                case iend:
+                case png::chunk_e::iend:
                 {
                     iend_reached = true;
                     break;
                 }
                 
-                case chrm:
+                case png::chunk_e::chrm:
                 {
-                    chrm_data = rgd::view_as<png::chrm_data>(cursor + 8u);
+                    chrm = rgd::view_as<png::chrm>(cursor + 8u);
                     break;
                 }
-                case gama: 
+                case png::chunk_e::gama: 
                 {
-                    gama_data = rgd::view_as<png::gama_data>(cursor + 8u);
+                    gama = rgd::view_as<png::gama>(cursor + 8u);
                     break;
                 }
-                case sbit: 
+                case png::chunk_e::sbit: 
                 {
-                    switch (ihdr_data.color_type)
+                    switch (ihdr.color_type)
                     {
                         case png::color_type_e::grayscale      :
                         {
-                            sbit_data.color = rgd::view_as<png::sbit_data::grayscale>(cursor + 8u);
+                            sbit.color = rgd::view_as<png::sbit::grayscale>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::truecolor      :
                         {
-                            sbit_data.color = rgd::view_as<png::sbit_data::truecolor>(cursor + 8u);
+                            sbit.color = rgd::view_as<png::sbit::truecolor>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::indexed_color  :
                         {
-                            sbit_data.color = rgd::view_as<png::sbit_data::indexed_color>(cursor + 8u);
+                            sbit.color = rgd::view_as<png::sbit::indexed_color>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::grayscale_alpha:
                         {
-                            sbit_data.color = rgd::view_as<png::sbit_data::grayscale_alpha>(cursor + 8u);
+                            sbit.color = rgd::view_as<png::sbit::grayscale_alpha>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::truecolor_alpha:
                         {
-                            sbit_data.color = rgd::view_as<png::sbit_data::truecolor_alpha>(cursor + 8u);
+                            sbit.color = rgd::view_as<png::sbit::truecolor_alpha>(cursor + 8u);
                             break;
                         }
                     }
                 }
-                case bkgd: 
+                case png::chunk_e::bkgd: 
                 {
-                    switch (ihdr_data.color_type)
+                    switch (ihdr.color_type)
                     {
                         case png::color_type_e::grayscale      :
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::grayscale>(cursor + 8u);
+                            bkgd.color = rgd::view_as<png::bkgd::grayscale>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::truecolor      :
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::truecolor   >(cursor + 8u);
+                            bkgd.color = rgd::view_as<png::bkgd::truecolor   >(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::indexed_color  :
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::indexed_color>(cursor + 8u);
+                            bkgd.color = rgd::view_as<png::bkgd::indexed_color>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::grayscale_alpha:
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::grayscale   >(cursor + 8u);
+                            bkgd.color = rgd::view_as<png::bkgd::grayscale   >(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::truecolor_alpha:
                         {
-                            bkgd_data.color = rgd::view_as<png::bkgd_data::truecolor   >(cursor + 8u);
+                            bkgd.color = rgd::view_as<png::bkgd::truecolor   >(cursor + 8u);
                             break;
                         }
                     }
 
                     break;
                 }
-                case hist: 
+                case png::chunk_e::hist: 
                 {
-                    hist_data.data = std::span<const std::uint16_t>{ reinterpret_cast<const std::uint16_t*>(cursor + 8u), plte_data.entries.size() };
+                    hist.data = std::span<const std::uint16_t>{ reinterpret_cast<const std::uint16_t*>(cursor + 8u), plte.entries.size() };
                 }
-                case trns: 
+                case png::chunk_e::trns: 
                 {
-                    switch (ihdr_data.color_type)
+                    switch (ihdr.color_type)
                     {
                         case png::color_type_e::grayscale      :
                         {
-                            trns_data.value = rgd::view_as<png::trns_data::grayscale>(cursor + 8u);
+                            trns.value = rgd::view_as<png::trns::grayscale>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::truecolor      :
                         {
-                            trns_data.value = rgd::view_as<png::trns_data::truecolor>(cursor + 8u);
+                            trns.value = rgd::view_as<png::trns::truecolor>(cursor + 8u);
                             break;
                         }
                         case png::color_type_e::indexed_color  :
                         {
-                            trns_data.value = rgd::view_as<png::trns_data::indexed_color>(cursor + 8u);
+                            trns.value = rgd::view_as<png::trns::indexed_color>(cursor + 8u);
                             break;
                         }
                     }
                 }
-                case phys: break;
-                case time: break;
-                case text: 
+                case png::chunk_e::phys: break;
+                case png::chunk_e::time: break;
+                case png::chunk_e::text: 
                 {
                     auto key       = std::string{ reinterpret_cast<const char*>(cursor + 8u), header.length };
                     auto separator = key.find('\0') + std::size_t{ 1u };
@@ -538,7 +533,7 @@ export namespace rgd
 
                     break;
                 }
-                case ztxt: break;
+                case png::chunk_e::ztxt: break;
             }
 
             cursor += sizeof(png::header) + header.length;
@@ -548,16 +543,16 @@ export namespace rgd
 
 
 
-        const auto bytes_per_pixel    = png::map_color_channels(ihdr_data.color_type);
-        const auto scanline_data_size = std::size_t{ ihdr_data.width    * 3u };
+        const auto bytes_per_pixel    = png::map_color_channels(ihdr.color_type);
+        const auto scanline_data_size = std::size_t{ ihdr.width    * 3u };
         const auto scanline_size      = std::size_t{ scanline_data_size + 1u };
-        const auto image_data_size    = scanline_data_size * ihdr_data.height;
+        const auto image_data_size    = scanline_data_size * ihdr.height;
 
               auto inflated_data      = rgd::inflate(deflated_data);
               auto input_image        = std::vector<std::uint8_t >(image_data_size );
               auto output_image       = std::vector<std::uint8_t >(image_data_size );
 
-        std::ranges::for_each(std::views::iota(0u, ihdr_data.height), [&](const auto row_index)
+        std::ranges::for_each(std::views::iota(0u, ihdr.height), [&](const auto row_index)
             {
                 const auto scanline_start = scanline_size * row_index;
                 const auto scanline       = std::span{ inflated_data.data() + scanline_start, scanline_size };
@@ -571,18 +566,15 @@ export namespace rgd
 
                 switch (filter)
                 {
-                    using enum png::filter_e;
-
-                    case none    :
+                    case png::filter_e::none    :
                     {
                         for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                         {
                             output[index] = input[index];
                         }
-
                         break;
                     }
-                    case subtract:
+                    case png::filter_e::subtract:
                     {
                         for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                         {
@@ -590,10 +582,9 @@ export namespace rgd
                         
                             output[index] = input[index] + left;
                         }
-
                         break;
                     }
-                    case up      :
+                    case png::filter_e::up      :
                     {
                         for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                         {
@@ -601,10 +592,9 @@ export namespace rgd
                         
                             output[index] = input[index] + up;
                         }
-
                         break;
                     }
-                    case average :
+                    case png::filter_e::average :
                     {
                         for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                         {
@@ -614,10 +604,9 @@ export namespace rgd
                         
                             output[index] = input[index] + average;
                         }
-
                         break;
                     }
-                    case paeth   :
+                    case png::filter_e::paeth   :
                     {
                         for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
                         {
@@ -628,7 +617,6 @@ export namespace rgd
 
                             output[index] = input[index] + paeth;
                         }
-
                         break;
                     }
                 }
@@ -639,8 +627,8 @@ export namespace rgd
 
 
         SDL_Init(SDL_INIT_VIDEO);
-        int width  = ihdr_data.width;
-        int height = ihdr_data.height;
+        int width  = ihdr.width;
+        int height = ihdr.height;
         SDL_Window* window     = SDL_CreateWindow("SDL3 Texture Example", width, height, SDL_WINDOW_RESIZABLE);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
         SDL_Texture* texture   = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STATIC, width, height);
@@ -669,7 +657,7 @@ export namespace rgd
 
         return 0;
     }
-    template<image::format_e F = image::format_e::auto_>
+    template<image::format_e F = image::format_e::_auto>
     auto decode(std::span<const std::byte_t> image)
     {
         decode_png(image);
