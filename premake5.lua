@@ -40,7 +40,6 @@ group "Application"
 		
 		includedirs {
 			"vendor", 
-			
 			"vendor/sdl/include", 
 		}
 		
@@ -49,7 +48,6 @@ group "Application"
 		}
 		
 		links {
-			"sdl", 
 			"zlib-ng", 
 		}
 		
@@ -81,6 +79,7 @@ group "Application"
 		
 		includedirs {
 			"rigid/source", 
+			"vendor/sdl/include", 
 		}
 		files {
 			"run/source/**.hpp", 
@@ -89,7 +88,9 @@ group "Application"
 		}
 		links {
 			"rigid", 
+			"sdl", 
 		}
+		
 group "Vendor"
 	include "vendor/sdl"
 	include "vendor/zlib-ng"
