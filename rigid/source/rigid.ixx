@@ -6,6 +6,7 @@ export import rigid.decode.bmp;
 
 import std;
 import rigid.core;
+import rigid.image;
 
 export namespace rgd
 {

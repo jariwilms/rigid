@@ -6,12 +6,6 @@ import <zlib-ng/zlib-ng.h>;
 
 export namespace rgd
 {
-    enum class image_format_e
-    {
-        auto_,
-        png, jpeg, bmp, webp,
-    };
-
     auto inflate(const std::vector<rgd::byte_t>& compressedData) -> std::vector<rgd::byte_t>
     {
         auto stream = zng_stream{};
