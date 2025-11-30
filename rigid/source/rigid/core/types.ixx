@@ -19,6 +19,12 @@ export namespace rgd
     using float32_t     = std::float_t ;
     using float64_t     = std::double_t;
 
+    enum : rgd::bool_t
+    {
+        false_ = false, 
+        true_  = true , 
+    };
+
     template<typename T, rgd::uint32_t Components>
     struct vector;
     template<typename T>
