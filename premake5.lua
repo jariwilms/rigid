@@ -40,23 +40,16 @@ group "Application"
 		
 		includedirs {
 			"vendor", 
-			"vendor/sdl/include", 
 		}
 		
 		files {
 			"rigid/source/**.ixx", 
+			"rigid/vendor/**.ixx", 
 		}
 		
 		links {
 			"zlib-ng", 
 		}
-		
-		filter "system:windows"
-			systemversion "latest"
-			
-			defines {
-				"NOMINMAX", 
-			}
 		
 		filter "configurations:Debug"
 			defines   "RGD_DEBUG"
