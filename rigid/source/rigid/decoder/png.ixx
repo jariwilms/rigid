@@ -753,68 +753,60 @@ export namespace rgd::png
         auto const image_channels     = png::map_image_channels(model.ihdr.color_type);
         auto const scanline_size      = rgd::size_t{ model.ihdr.width * image_channels + 1u };
         auto const scanline_data_size = rgd::size_t{ scanline_size                     - 1u };
+        auto const total_image_size   = scanline_data_size * model.ihdr.height;
 
         auto const inflated_data      = zlib::inflate(model.idat.data);
-        auto const total_image_size   = scanline_data_size * model.ihdr.height;
-        auto       input_image        = std::vector<rgd::byte_t>(total_image_size);
-        auto       output_image       = std::vector<rgd::byte_t>(total_image_size);
+        auto       previous_scanline  = std::span<const rgd::byte_t>{};
+        auto       current_scanline   = std::span<const rgd::byte_t>{};
+        auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
 
-        auto       current_operation  = std::function<void(rgd::size_t, rgd::uint8_t, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, std::span<const rgd::byte_t>)>{};
-        auto       none_operation     = [](auto column_index, auto               , auto input, auto output, auto      )
+        auto const decode_operation   = std::unordered_map<png::filter_e, std::function<void(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t)>>
+        {
+            { png::filter_e::none    , [](auto input, auto         , auto output, auto column_index, auto               )
             {
                 output[column_index] = input[column_index];
-            };
-        auto       subtract_operation = [](auto column_index, auto image_channels, auto input, auto output, auto      )
+            } }, 
+            { png::filter_e::subtract, [](auto input, auto         , auto output, auto column_index, auto image_channels)
             {
                 auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
-                output[column_index] = input[column_index] + left;
-            };
-        auto       up_operation       = [](auto column_index, auto               , auto input, auto output, auto prior)
+                output[column_index] = (input[column_index] + left) % 256u;
+            } }, 
+            { png::filter_e::up      , [](auto input, auto previous, auto output, auto column_index, auto               )
             {
-                auto const up = column_index < prior.size() ? prior[column_index] : 0u;
-                output[column_index] = input[column_index] + up;
-            };
-        auto       average_operation  = [](auto column_index, auto image_channels, auto input, auto output, auto prior)
+                auto const up = rgd::byte_t{ !previous.empty() ? previous[column_index] : 0u };
+                output[column_index] = (input[column_index] + up) % 256u;
+            } }, 
+            { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
             {
                 auto const left    = column_index >= image_channels ? output[column_index - image_channels] : 0u;
-                auto const up      = column_index <  prior.size()   ? prior [column_index                 ] : 0u;
-                auto const average = (left + up) / 2u;
-                        
-                output[column_index] = input[column_index] + average;
-            };
-        auto       paeth_operation    = [](auto column_index, auto image_channels, auto input, auto output, auto prior)
-            {
-                auto const left    = (column_index >= image_channels                               ) ? output[column_index - image_channels] : 0u;
-                auto const up      = (column_index <  prior.size()                                 ) ? prior [column_index                 ] : 0u;
-                auto const up_left = (column_index >= image_channels && column_index < prior.size()) ? prior [column_index - image_channels] : 0u;
-                auto const paeth   = png::paeth_predictor(left, up, up_left);
+                auto const up      = !previous.empty() ? previous[column_index] : 0u;
+                auto const average = (static_cast<rgd::uint16_t>(left) + up) / 2u;
 
-                output[column_index] = input[column_index] + paeth;
-            };
+                output[column_index] = (input[column_index] + average) % 256u;
+            } }, 
+            { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
+            {
+                auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
+                auto const up = !previous.empty() ? previous[column_index] : 0u;
+                auto const up_left = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : 0u;
+                auto const paeth = png::paeth_predictor(left, up, up_left);
+
+                output[column_index] = (input[column_index] + paeth) % 256u;
+            } }, 
+        };
 
         std::ranges::for_each(std::views::iota(0u, model.ihdr.height), [&](auto const row_index)
             {
-                auto const scanline_start = scanline_size * row_index;
-                auto const scanline       = std::span{ inflated_data.data() + scanline_start, scanline_size };
-                auto const filter         = static_cast<png::filter_e>(scanline[0u]);
+                previous_scanline   = current_scanline;
+                current_scanline    = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
+                auto const filter   = static_cast<png::filter_e>(current_scanline[0u]);
+                auto const input    = current_scanline.subspan<1u>();
+                auto const previous = row_index > 0u ? std::span<const rgd::byte_t>{ result_image.data() + (row_index - 1) * scanline_data_size, scanline_data_size } : std::span<const rgd::byte_t>{};
+                auto const output   = std::span<rgd::byte_t>{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
 
-                std::ranges::copy(scanline.subspan(1u), input_image.begin() + (row_index * scanline_data_size));
-
-                auto const input          = std::span<const rgd::byte_t>{ input_image .data() + ( row_index * scanline_data_size), scanline_data_size };
-                auto const prior          = (row_index > 0u) ? std::span<const rgd::byte_t>{ output_image.data() + ((row_index - 1) * scanline_data_size), scanline_data_size } : input;
-                auto       output         = std::span<      rgd::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
-
-                switch (filter)
-                {
-                    case png::filter_e::none    : current_operation = none_operation    ; break;
-                    case png::filter_e::subtract: current_operation = subtract_operation; break;
-                    case png::filter_e::up      : current_operation = up_operation      ; break;
-                    case png::filter_e::average : current_operation = average_operation ; break;
-                    case png::filter_e::paeth   : current_operation = paeth_operation   ; break;
-                }
-                std::ranges::for_each(std::views::iota(0u, input.size()), [&](auto index)
+                std::ranges::for_each(std::views::iota(0u, input.size()), [&](auto column_index)
                     {
-                        current_operation(index, image_channels, input, output, prior);
+                        decode_operation.at(filter)(input, previous, output, column_index, image_channels);
                     });
             });
 
@@ -824,7 +816,7 @@ export namespace rgd::png
         { 
             .layout     = rgd::image::layout_e::rgb                          , 
             .dimensions = rgd::vector_2u{model.ihdr.width, model.ihdr.height}, 
-            .data       = output_image                                       , 
+            .data       = result_image                                       , 
         };
     }
 }
