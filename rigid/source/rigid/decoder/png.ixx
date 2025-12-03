@@ -780,9 +780,9 @@ export namespace rgd::png
             } }, 
             { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
             {
-                auto const left    = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up      = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const average = rgd::byte_t{ (static_cast<rgd::uint16_t>(left) + up) / 2u };
+                auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
                 output[column_index] = input[column_index] + average;
             } }, 
             { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
