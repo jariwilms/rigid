@@ -323,6 +323,12 @@ export namespace rgd::png
         png::chunk::hist hist{};
         png::chunk::time time{};
     };
+    struct decode_state
+    {
+        rgd::bool_t ihdr_reached  = rgd::false_;
+        rgd::bool_t iend_reached  = rgd::false_;
+        rgd::bool_t idat_previous = rgd::false_;
+    };
 
 
 
@@ -384,13 +390,6 @@ export namespace rgd::png
 
         return rgd::true_;
     }
-
-    struct decode_state
-    {
-        rgd::bool_t ihdr_reached  = rgd::false_;
-        rgd::bool_t iend_reached  = rgd::false_;
-        rgd::bool_t idat_previous = rgd::false_;
-    };
     auto decode            (std::span<const rgd::byte_t> image) -> rgd::image
     {
         if (!png::validate_signature(image)) throw std::invalid_argument{ "invalid png signature" };
@@ -752,29 +751,30 @@ export namespace rgd::png
 
 
         auto const image_channels     = png::map_image_channels(model.ihdr.color_type);
-        auto const scanline_data_size = rgd::size_t{ model.ihdr.width    * image_channels };
-        auto const scanline_size      = rgd::size_t{ scanline_data_size  +             1u };
-        auto const inflated_data      = zlib::inflate(model.idat.data);
-        auto const image_data_size    = scanline_data_size * model.ihdr.height;
-        auto       input_image        = std::vector<rgd::byte_t>(image_data_size);
-        auto       output_image       = std::vector<rgd::byte_t>(image_data_size);
-        auto       current_operation  = std::function<void(rgd::size_t, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, std::span<const rgd::byte_t>)>{};
+        auto const scanline_size      = rgd::size_t{ model.ihdr.width * image_channels + 1u };
+        auto const scanline_data_size = rgd::size_t{ scanline_size                     - 1u };
 
-        auto       none_operation     = [&](auto column_index, auto input, auto output, auto      )
+        auto const inflated_data      = zlib::inflate(model.idat.data);
+        auto const total_image_size   = scanline_data_size * model.ihdr.height;
+        auto       input_image        = std::vector<rgd::byte_t>(total_image_size);
+        auto       output_image       = std::vector<rgd::byte_t>(total_image_size);
+
+        auto       current_operation  = std::function<void(rgd::size_t, rgd::uint8_t, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, std::span<const rgd::byte_t>)>{};
+        auto       none_operation     = [](auto column_index, auto               , auto input, auto output, auto      )
             {
                 output[column_index] = input[column_index];
             };
-        auto       subtract_operation = [&](auto column_index, auto input, auto output, auto      )
+        auto       subtract_operation = [](auto column_index, auto image_channels, auto input, auto output, auto      )
             {
                 auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
                 output[column_index] = input[column_index] + left;
             };
-        auto       up_operation       = [&](auto column_index, auto input, auto output, auto prior)
+        auto       up_operation       = [](auto column_index, auto               , auto input, auto output, auto prior)
             {
                 auto const up = column_index < prior.size() ? prior[column_index] : 0u;
                 output[column_index] = input[column_index] + up;
             };
-        auto       average_operation  = [&](auto column_index, auto input, auto output, auto prior)
+        auto       average_operation  = [](auto column_index, auto image_channels, auto input, auto output, auto prior)
             {
                 auto const left    = column_index >= image_channels ? output[column_index - image_channels] : 0u;
                 auto const up      = column_index <  prior.size()   ? prior [column_index                 ] : 0u;
@@ -782,7 +782,7 @@ export namespace rgd::png
                         
                 output[column_index] = input[column_index] + average;
             };
-        auto       paeth_operation    = [&](auto column_index, auto input, auto output, auto prior)
+        auto       paeth_operation    = [](auto column_index, auto image_channels, auto input, auto output, auto prior)
             {
                 auto const left    = (column_index >= image_channels                               ) ? output[column_index - image_channels] : 0u;
                 auto const up      = (column_index <  prior.size()                                 ) ? prior [column_index                 ] : 0u;
@@ -801,8 +801,8 @@ export namespace rgd::png
                 std::ranges::copy(scanline.subspan(1u), input_image.begin() + (row_index * scanline_data_size));
 
                 auto const input          = std::span<const rgd::byte_t>{ input_image .data() + ( row_index * scanline_data_size), scanline_data_size };
-                auto       output         = std::span<      rgd::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
                 auto const prior          = (row_index > 0u) ? std::span<const rgd::byte_t>{ output_image.data() + ((row_index - 1) * scanline_data_size), scanline_data_size } : input;
+                auto       output         = std::span<      rgd::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
 
                 switch (filter)
                 {
@@ -814,7 +814,7 @@ export namespace rgd::png
                 }
                 std::ranges::for_each(std::views::iota(0u, input.size()), [&](auto index)
                     {
-                        current_operation(index, input, output, prior);
+                        current_operation(index, image_channels, input, output, prior);
                     });
             });
 
