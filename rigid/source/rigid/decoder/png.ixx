@@ -436,17 +436,17 @@ export namespace rgd::png
                     auto const entry_count = rgd::size_t{ chunk_header.length / sizeof(png::chunk::plte::entry) };
                     model.plte.entries.resize(entry_count);
 
-                    std::ranges::for_each(std::views::iota(0u, entry_count), [&](auto index)
+                    for (auto index = rgd::size_t{ 0u }; index < entry_count; ++index)
+                    {
+                        auto const entry = png::chunk::plte::entry
                         {
-                            auto const entry = png::chunk::plte::entry
-                            {
-                                .red   = png::consume<rgd::uint8_t>(image, cursor), 
-                                .green = png::consume<rgd::uint8_t>(image, cursor), 
-                                .blue  = png::consume<rgd::uint8_t>(image, cursor), 
-                            };
+                            .red   = png::consume<rgd::uint8_t>(image, cursor), 
+                            .green = png::consume<rgd::uint8_t>(image, cursor), 
+                            .blue  = png::consume<rgd::uint8_t>(image, cursor), 
+                        };
 
-                            model.plte.entries.at(index) = std::move(entry);
-                        });
+                        model.plte.entries.at(index) = std::move(entry);
+                    }
 
                     break;
                 }
@@ -498,10 +498,10 @@ export namespace rgd::png
                         case png::color_type_e::indexed_color  :
                         {
                             auto indexed_color = png::chunk::trns::indexed_color{};
-                            std::ranges::for_each(std::views::iota(0u, model.plte.entries.size()), [&](auto)
-                                {
-                                    indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
-                                });
+                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
+                            {
+                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
+                            }
 
                             model.trns.value = std::move(indexed_color);
                             break;
@@ -619,10 +619,10 @@ export namespace rgd::png
                         case png::color_type_e::indexed_color   :
                         {
                             auto indexed_color = png::chunk::bkgd::indexed_color{};
-                            std::ranges::for_each(std::views::iota(0u, model.plte.entries.size()), [&](auto)
-                                {
-                                    indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
-                                });
+                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
+                            {
+                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
+                            }
 
                             model.bkgd.color = std::move(indexed_color);
                             break;
@@ -707,10 +707,10 @@ export namespace rgd::png
                 {
                     if (chunk_header.length % 2u != 0u) throw std::runtime_error{ "invalid histogram chunk length" };
 
-                    std::ranges::for_each(std::views::iota(0u, chunk_header.length / 2u), [&](auto)
-                        {
-                            model.hist.data.emplace_back(png::consume<rgd::uint16_t>(image, cursor));
-                        });
+                    for (auto index = rgd::size_t{ 0u }; index < chunk_header.length / 2u; ++index)
+                    {
+                        model.hist.data.emplace_back(png::consume<rgd::uint16_t>(image, cursor));
+                    }
 
                     break;
                 }
@@ -757,8 +757,8 @@ export namespace rgd::png
 
         auto const inflated_data      = zlib::inflate(model.idat.data);
         auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
-        auto       previous_scanline  = std::span<const rgd::byte_t>{};
         auto       input_scanline     = std::span<const rgd::byte_t>{};
+        auto       previous_scanline  = std::span<const rgd::byte_t>{};
         auto       output_scanline    = std::span<      rgd::byte_t>{};
 
         using decode_function         = void(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
@@ -795,20 +795,20 @@ export namespace rgd::png
             } }, 
         };
 
-        std::ranges::for_each(std::views::iota(0u, model.ihdr.height), [&](auto const row_index)
+        for (auto row_index = rgd::size_t{ 0u }; row_index < model.ihdr.height; ++row_index)
+        {
+            auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
+            auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
+            input_scanline              = current_scanline.subspan<1u>();
+            output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
+
+            for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
             {
-                auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
-                auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
-                input_scanline              = current_scanline.subspan<1u>();
-                output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
+                decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
+            }
 
-                std::ranges::for_each(std::views::iota(0u, input_scanline.size()), [&](auto column_index)
-                    {
-                        decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
-                    });
-
-                previous_scanline = output_scanline;
-            });
+            previous_scanline = output_scanline;
+        }
 
 
 
