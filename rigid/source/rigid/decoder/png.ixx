@@ -337,23 +337,23 @@ export namespace rgd::png
     }
     auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
         {
-            const auto paeth       = alpha + beta - gamma;
-            const auto paeth_alpha = std::abs(paeth - alpha);
-            const auto paeth_beta  = std::abs(paeth - beta );
-            const auto paeth_gamma = std::abs(paeth - gamma);
+            auto const paeth       = alpha + beta - gamma;
+            auto const paeth_alpha = std::abs(paeth - alpha);
+            auto const paeth_beta  = std::abs(paeth - beta );
+            auto const paeth_gamma = std::abs(paeth - gamma);
 
                  if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
             else if (paeth_beta  <= paeth_gamma                              ) return beta ;
             else                                                               return gamma;
         };
-    auto map_color_channels(png::color_type_e color_type) -> std::uint8_t
+    auto map_image_channels(png::color_type_e color_type) -> std::uint8_t
     {
         switch (color_type)
         {
-            case png::color_type_e::grayscale      : return std::uint8_t{ 1u };
+            case png::color_type_e::grayscale       : return std::uint8_t{ 1u };
             case png::color_type_e::true_color      : return std::uint8_t{ 3u };
-            case png::color_type_e::indexed_color  : return std::uint8_t{ 1u };
-            case png::color_type_e::grayscale_alpha: return std::uint8_t{ 2u };
+            case png::color_type_e::indexed_color   : return std::uint8_t{ 1u };
+            case png::color_type_e::grayscale_alpha : return std::uint8_t{ 2u };
             case png::color_type_e::true_color_alpha: return std::uint8_t{ 4u };
 
             default: throw std::invalid_argument{ "invalid color type" };
@@ -391,9 +391,11 @@ export namespace rgd::png
         rgd::bool_t iend_reached  = rgd::false_;
         rgd::bool_t idat_previous = rgd::false_;
     };
-    auto decode            (std::span<const rgd::byte_t> image) -> std::vector<rgd::byte_t>
+    auto decode            (std::span<const rgd::byte_t> image) -> rgd::image
     {
         if (!png::validate_signature(image)) throw std::invalid_argument{ "invalid png signature" };
+
+
 
         auto decode_state  = png::decode_state{};
         auto cursor        = rgd::cursor_t{};
@@ -746,92 +748,83 @@ export namespace rgd::png
 
             chunk_header.crc  = png::consume<rgd::uint32_t>(image, cursor);
         };
-        
-        
 
 
-        
 
+        auto const image_channels     = png::map_image_channels(model.ihdr.color_type);
+        auto const scanline_data_size = rgd::size_t{ model.ihdr.width    * image_channels };
+        auto const scanline_size      = rgd::size_t{ scanline_data_size  +             1u };
+        auto const inflated_data      = zlib::inflate(model.idat.data);
+        auto const image_data_size    = scanline_data_size * model.ihdr.height;
+        auto       input_image        = std::vector<rgd::byte_t>(image_data_size);
+        auto       output_image       = std::vector<rgd::byte_t>(image_data_size);
+        auto       current_operation  = std::function<void(rgd::size_t, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, std::span<const rgd::byte_t>)>{};
 
-        const auto bytes_per_pixel    = png::map_color_channels(model.ihdr.color_type);
-        const auto scanline_data_size = std::size_t{ model.ihdr.width    * 3u };
-        const auto scanline_size      = std::size_t{ scanline_data_size + 1u };
-        const auto image_data_size    = scanline_data_size * model.ihdr.height;
-
-                auto inflated_data    = zlib::inflate(model.idat.data);
-                auto input_image      = std::vector<std::uint8_t >(image_data_size );
-                auto output_image     = std::vector<std::uint8_t >(image_data_size );
-
-        std::ranges::for_each(std::views::iota(0u, model.ihdr.height), [&](const auto row_index)
+        auto       none_operation     = [&](auto column_index, auto input, auto output, auto      )
             {
-                const auto scanline_start = scanline_size * row_index;
-                const auto scanline       = std::span{ inflated_data.data() + scanline_start, scanline_size };
-                const auto filter         = static_cast<png::filter_e>(scanline[0u]);
+                output[column_index] = input[column_index];
+            };
+        auto       subtract_operation = [&](auto column_index, auto input, auto output, auto      )
+            {
+                auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
+                output[column_index] = input[column_index] + left;
+            };
+        auto       up_operation       = [&](auto column_index, auto input, auto output, auto prior)
+            {
+                auto const up = column_index < prior.size() ? prior[column_index] : 0u;
+                output[column_index] = input[column_index] + up;
+            };
+        auto       average_operation  = [&](auto column_index, auto input, auto output, auto prior)
+            {
+                auto const left    = column_index >= image_channels ? output[column_index - image_channels] : 0u;
+                auto const up      = column_index <  prior.size()   ? prior [column_index                 ] : 0u;
+                auto const average = (left + up) / 2u;
+                        
+                output[column_index] = input[column_index] + average;
+            };
+        auto       paeth_operation    = [&](auto column_index, auto input, auto output, auto prior)
+            {
+                auto const left    = (column_index >= image_channels                               ) ? output[column_index - image_channels] : 0u;
+                auto const up      = (column_index <  prior.size()                                 ) ? prior [column_index                 ] : 0u;
+                auto const up_left = (column_index >= image_channels && column_index < prior.size()) ? prior [column_index - image_channels] : 0u;
+                auto const paeth   = png::paeth_predictor(left, up, up_left);
+
+                output[column_index] = input[column_index] + paeth;
+            };
+
+        std::ranges::for_each(std::views::iota(0u, model.ihdr.height), [&](auto const row_index)
+            {
+                auto const scanline_start = scanline_size * row_index;
+                auto const scanline       = std::span{ inflated_data.data() + scanline_start, scanline_size };
+                auto const filter         = static_cast<png::filter_e>(scanline[0u]);
 
                 std::ranges::copy(scanline.subspan(1u), input_image.begin() + (row_index * scanline_data_size));
 
-                        auto input          = std::span<const rgd::byte_t>{ input_image .data() + ( row_index * scanline_data_size), scanline_data_size };
-                        auto output         = std::span<      rgd::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
-                        auto prior          = (row_index > 0u) ? std::span<const rgd::byte_t>{ output_image.data() + ((row_index - 1) * scanline_data_size), scanline_data_size } : input;
+                auto const input          = std::span<const rgd::byte_t>{ input_image .data() + ( row_index * scanline_data_size), scanline_data_size };
+                auto       output         = std::span<      rgd::byte_t>{ output_image.data() + ( row_index * scanline_data_size), scanline_data_size };
+                auto const prior          = (row_index > 0u) ? std::span<const rgd::byte_t>{ output_image.data() + ((row_index - 1) * scanline_data_size), scanline_data_size } : input;
 
                 switch (filter)
                 {
-                    case png::filter_e::none    :
-                    {
-                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                        {
-                            output[index] = input[index];
-                        }
-                        break;
-                    }
-                    case png::filter_e::subtract:
-                    {
-                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                        {
-                            const auto left = rgd::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
-                        
-                            output[index] = input[index] + left;
-                        }
-                        break;
-                    }
-                    case png::filter_e::up      :
-                    {
-                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                        {
-                            const auto up = rgd::byte_t{ (index < prior.size()) ? prior[index] : 0u };
-                        
-                            output[index] = input[index] + up;
-                        }
-                        break;
-                    }
-                    case png::filter_e::average :
-                    {
-                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                        {
-                            const auto left    = rgd::byte_t{ (index >= bytes_per_pixel) ? output[index - bytes_per_pixel] : 0u };
-                            const auto up      = rgd::byte_t{ (index <  prior.size()   ) ? prior [index                  ] : 0u };
-                            const auto average = rgd::byte_t{ (left + up) / 2u };
-                        
-                            output[index] = input[index] + average;
-                        }
-                        break;
-                    }
-                    case png::filter_e::paeth   :
-                    {
-                        for (auto index = std::size_t{ 0u }; index < input.size(); ++index)
-                        {
-                            const auto left    = rgd::byte_t{ (index >= bytes_per_pixel                        ) ? output[index - bytes_per_pixel] : 0u };
-                            const auto up      = rgd::byte_t{ (index <  prior.size()                           ) ? prior [index                  ] : 0u };
-                            const auto up_left = rgd::byte_t{ (index >= bytes_per_pixel && index < prior.size()) ? prior [index - bytes_per_pixel] : 0u };
-                            const auto paeth   = png::paeth_predictor(left, up, up_left);
-
-                            output[index] = input[index] + paeth;
-                        }
-                        break;
-                    }
+                    case png::filter_e::none    : current_operation = none_operation    ; break;
+                    case png::filter_e::subtract: current_operation = subtract_operation; break;
+                    case png::filter_e::up      : current_operation = up_operation      ; break;
+                    case png::filter_e::average : current_operation = average_operation ; break;
+                    case png::filter_e::paeth   : current_operation = paeth_operation   ; break;
                 }
+                std::ranges::for_each(std::views::iota(0u, input.size()), [&](auto index)
+                    {
+                        current_operation(index, input, output, prior);
+                    });
             });
 
-        return output_image;
+
+
+        return rgd::image
+        { 
+            .layout     = rgd::image::layout_e::rgb                          , 
+            .dimensions = rgd::vector_2u{model.ihdr.width, model.ihdr.height}, 
+            .data       = output_image                                       , 
+        };
     }
 }

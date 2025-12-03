@@ -1,12 +1,11 @@
 export module rigid;
+export import rigid.core;
 export import rigid.decode.png;
 export import rigid.decode.jpeg;
 export import rigid.decode.webp;
 export import rigid.decode.bmp;
 
 import std;
-export import rigid.core;
-import rigid.image;
 
 export namespace rgd
 {
@@ -24,7 +23,7 @@ export namespace rgd
         throw std::invalid_argument{ "unsupported image format" };
     }
     template<rgd::image_format_e Format = rgd::image_format_e::auto_>
-    auto decode                 (std::span<const rgd::byte_t> image)
+    auto decode                 (std::span<const rgd::byte_t> image) -> rgd::image
     {
         return png::decode(image);
     }
