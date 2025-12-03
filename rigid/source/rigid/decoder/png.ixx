@@ -756,11 +756,13 @@ export namespace rgd::png
         auto const total_image_size   = scanline_data_size * model.ihdr.height;
 
         auto const inflated_data      = zlib::inflate(model.idat.data);
-        auto       previous_scanline  = std::span<const rgd::byte_t>{};
-        auto       current_scanline   = std::span<const rgd::byte_t>{};
         auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
+        auto       previous_scanline  = std::span<const rgd::byte_t>{};
+        auto       input_scanline     = std::span<const rgd::byte_t>{};
+        auto       output_scanline    = std::span<      rgd::byte_t>{};
 
-        auto const decode_operation   = std::unordered_map<png::filter_e, std::function<void(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t)>>
+        using decode_function         = void(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
+        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
         {
             { png::filter_e::none    , [](auto input, auto         , auto output, auto column_index, auto               )
             {
@@ -768,46 +770,44 @@ export namespace rgd::png
             } }, 
             { png::filter_e::subtract, [](auto input, auto         , auto output, auto column_index, auto image_channels)
             {
-                auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
-                output[column_index] = (input[column_index] + left) % 256u;
+                auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
+                output[column_index] = input[column_index] + left;
             } }, 
             { png::filter_e::up      , [](auto input, auto previous, auto output, auto column_index, auto               )
             {
-                auto const up = rgd::byte_t{ !previous.empty() ? previous[column_index] : 0u };
-                output[column_index] = (input[column_index] + up) % 256u;
+                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
+                output[column_index] = input[column_index] + up;
             } }, 
             { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
             {
-                auto const left    = column_index >= image_channels ? output[column_index - image_channels] : 0u;
-                auto const up      = !previous.empty() ? previous[column_index] : 0u;
-                auto const average = (static_cast<rgd::uint16_t>(left) + up) / 2u;
-
-                output[column_index] = (input[column_index] + average) % 256u;
+                auto const left    = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up      = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const average = rgd::byte_t{ (static_cast<rgd::uint16_t>(left) + up) / 2u };
+                output[column_index] = input[column_index] + average;
             } }, 
             { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
             {
-                auto const left = column_index >= image_channels ? output[column_index - image_channels] : 0u;
-                auto const up = !previous.empty() ? previous[column_index] : 0u;
-                auto const up_left = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : 0u;
-                auto const paeth = png::paeth_predictor(left, up, up_left);
-
-                output[column_index] = (input[column_index] + paeth) % 256u;
+                auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const predictor = paeth_predictor(left, up, up_left);
+                output[column_index] = input[column_index] + predictor;
             } }, 
         };
 
         std::ranges::for_each(std::views::iota(0u, model.ihdr.height), [&](auto const row_index)
             {
-                previous_scanline   = current_scanline;
-                current_scanline    = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
-                auto const filter   = static_cast<png::filter_e>(current_scanline[0u]);
-                auto const input    = current_scanline.subspan<1u>();
-                auto const previous = row_index > 0u ? std::span<const rgd::byte_t>{ result_image.data() + (row_index - 1) * scanline_data_size, scanline_data_size } : std::span<const rgd::byte_t>{};
-                auto const output   = std::span<rgd::byte_t>{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
+                auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
+                auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
+                input_scanline              = current_scanline.subspan<1u>();
+                output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
 
-                std::ranges::for_each(std::views::iota(0u, input.size()), [&](auto column_index)
+                std::ranges::for_each(std::views::iota(0u, input_scanline.size()), [&](auto column_index)
                     {
-                        decode_operation.at(filter)(input, previous, output, column_index, image_channels);
+                        decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
                     });
+
+                previous_scanline = output_scanline;
             });
 
 
