@@ -6,29 +6,6 @@ import rigid.core;
 
 export namespace rgd::png
 {
-    auto constexpr signature = std::array<rgd::byte_t, 8u>{ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, };
-
-
-
-    template<typename T>
-    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
-    {
-        auto const value = rgd::consume<T>(memory, cursor);
-        return bit::swap_bytes_native<bit::endian_e::big>(value);
-    }
-    template<typename T>
-    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> T;
-    template<>
-    auto consume<std::string>(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> std::string
-    {
-        auto const string = std::string{ reinterpret_cast<rgd::char_t const*>(memory.data() + cursor), length };
-        cursor += length;
-
-        return string;
-    }
-
-
-
     enum class ancillary_bit_e : rgd::uint8_t
     {
         critical  = 0u, 
@@ -329,6 +306,44 @@ export namespace rgd::png
         rgd::bool_t iend_reached  = rgd::false_;
         rgd::bool_t idat_previous = rgd::false_;
     };
+    struct adam7_pass
+    {
+        rgd::vector_2u offset;
+        rgd::vector_2u stride;
+    };
+
+
+
+    auto constexpr signature        = std::array<rgd::byte_t, 8u>{ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, };
+    auto constexpr adam7_image_data = std::array<png::adam7_pass, 7u>
+    {
+        png::adam7_pass{ .offset = { 0u, 0u }, .stride = { 8u, 8u } }, 
+        png::adam7_pass{ .offset = { 4u, 0u }, .stride = { 8u, 8u } }, 
+        png::adam7_pass{ .offset = { 0u, 4u }, .stride = { 4u, 8u } }, 
+        png::adam7_pass{ .offset = { 2u, 0u }, .stride = { 4u, 4u } }, 
+        png::adam7_pass{ .offset = { 0u, 2u }, .stride = { 2u, 4u } }, 
+        png::adam7_pass{ .offset = { 1u, 0u }, .stride = { 2u, 2u } }, 
+        png::adam7_pass{ .offset = { 0u, 1u }, .stride = { 1u, 2u } }, 
+    };
+
+
+
+    template<typename T>
+    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
+    {
+        auto const value = rgd::consume<T>(memory, cursor);
+        return bit::swap_bytes_native<bit::endian_e::big>(value);
+    }
+    template<typename T>
+    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> T;
+    template<>
+    auto consume<std::string>(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> std::string
+    {
+        auto const string = std::string{ reinterpret_cast<rgd::char_t const*>(memory.data() + cursor), length };
+        cursor += length;
+
+        return string;
+    }
 
 
 
@@ -390,15 +405,86 @@ export namespace rgd::png
 
         return rgd::true_;
     }
+    auto create_image_model() -> png::model
+    {
+        return png::model{};
+    }
+    auto decode_sub_image  (rgd::vector_2u const& dimensions, png::color_type_e color_type, std::span<const rgd::byte_t> image_data) -> rgd::image
+    {
+        auto const image_channels     = png::map_image_channels(color_type);
+        auto const scanline_size      = rgd::size_t{ dimensions.x * image_channels + 1u };
+        auto const scanline_data_size = rgd::size_t{ scanline_size                 - 1u };
+        auto const total_image_size   = scanline_data_size * dimensions.y;
+
+        auto const inflated_data      = zlib::inflate(image_data);
+        auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
+        auto       input_scanline     = std::span<const rgd::byte_t>{};
+        auto       previous_scanline  = std::span<const rgd::byte_t>{};
+        auto       output_scanline    = std::span<      rgd::byte_t>{};
+
+        using decode_function         = rgd::void_t(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
+        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
+        {
+            { png::filter_e::none    , [](auto input, auto         , auto output, auto column_index, auto               )
+            {
+                output[column_index] = input[column_index];
+            } }, 
+            { png::filter_e::subtract, [](auto input, auto         , auto output, auto column_index, auto image_channels)
+            {
+                auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
+                output[column_index] = input[column_index] + left;
+            } }, 
+            { png::filter_e::up      , [](auto input, auto previous, auto output, auto column_index, auto               )
+            {
+                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
+                output[column_index] = input[column_index] + up;
+            } }, 
+            { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
+            {
+                auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
+                output[column_index] = input[column_index] + average;
+            } }, 
+            { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
+            {
+                auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const predictor = paeth_predictor(left, up, up_left);
+                output[column_index] = input[column_index] + predictor;
+            } }, 
+        };
+
+        for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
+        {
+            auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
+            auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
+            input_scanline              = current_scanline.subspan<1u>();
+            output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
+
+            for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
+            {
+                decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
+            }
+
+            previous_scanline           = output_scanline;
+        }
+
+        return rgd::image
+        { 
+            .layout     = rgd::image::layout_e::rgb, 
+            .dimensions = dimensions               , 
+            .data       = result_image             , 
+        };
+    }
     auto decode            (std::span<const rgd::byte_t> image) -> rgd::image
     {
         if (!png::validate_signature(image)) throw std::invalid_argument{ "invalid png signature" };
 
-
-
-        auto decode_state  = png::decode_state{};
-        auto cursor        = rgd::cursor_t{};
-        auto model         = png::model{};
+        auto decode_state = png::decode_state{};
+        auto cursor       = rgd::cursor_t{};
+        auto model        = png::model{};
         
         cursor += sizeof(png::signature);
         while (cursor < image.size_bytes())
@@ -470,7 +556,6 @@ export namespace rgd::png
 
                     break;
                 }
-
                 case png::chunk_e::trns: 
                 {
                     switch (model.ihdr.color_type)
@@ -748,75 +833,6 @@ export namespace rgd::png
             chunk_header.crc  = png::consume<rgd::uint32_t>(image, cursor);
         };
 
-
-
-        auto const image_channels     = png::map_image_channels(model.ihdr.color_type);
-        auto const scanline_size      = rgd::size_t{ model.ihdr.width * image_channels + 1u };
-        auto const scanline_data_size = rgd::size_t{ scanline_size                     - 1u };
-        auto const total_image_size   = scanline_data_size * model.ihdr.height;
-
-        auto const inflated_data      = zlib::inflate(model.idat.data);
-        auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
-        auto       input_scanline     = std::span<const rgd::byte_t>{};
-        auto       previous_scanline  = std::span<const rgd::byte_t>{};
-        auto       output_scanline    = std::span<      rgd::byte_t>{};
-
-        using decode_function         = void(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
-        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
-        {
-            { png::filter_e::none    , [](auto input, auto         , auto output, auto column_index, auto               )
-            {
-                output[column_index] = input[column_index];
-            } }, 
-            { png::filter_e::subtract, [](auto input, auto         , auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
-                output[column_index] = input[column_index] + left;
-            } }, 
-            { png::filter_e::up      , [](auto input, auto previous, auto output, auto column_index, auto               )
-            {
-                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
-                output[column_index] = input[column_index] + up;
-            } }, 
-            { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                output[column_index] = input[column_index] + average;
-            } }, 
-            { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const predictor = paeth_predictor(left, up, up_left);
-                output[column_index] = input[column_index] + predictor;
-            } }, 
-        };
-
-        for (auto row_index = rgd::size_t{ 0u }; row_index < model.ihdr.height; ++row_index)
-        {
-            auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
-            auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
-            input_scanline              = current_scanline.subspan<1u>();
-            output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
-
-            for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
-            {
-                decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
-            }
-
-            previous_scanline = output_scanline;
-        }
-
-
-
-        return rgd::image
-        { 
-            .layout     = rgd::image::layout_e::rgb                          , 
-            .dimensions = rgd::vector_2u{model.ihdr.width, model.ihdr.height}, 
-            .data       = result_image                                       , 
-        };
+        return decode_sub_image(rgd::vector_2u{ model.ihdr.width, model.ihdr.height }, model.ihdr.color_type, model.idat.data);
     }
 }
