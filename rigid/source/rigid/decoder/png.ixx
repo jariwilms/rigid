@@ -110,7 +110,6 @@ export namespace rgd::png
     };
     struct chunk
     {
-        #pragma pack(push, 1u)
         //Critical Chunks
         struct ihdr
         {
@@ -277,7 +276,6 @@ export namespace rgd::png
             rgd::uint8_t  minute;
             rgd::uint8_t  second;
         };
-        #pragma pack(pop)
     };
     struct model
     {
@@ -314,7 +312,17 @@ export namespace rgd::png
 
 
 
-    auto constexpr signature        = std::array<rgd::byte_t, 8u>{ 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, };
+    auto constexpr signature        = std::array<rgd::byte_t    , 8u>
+    { 
+        0x89, 
+        0x50, 
+        0x4E, 
+        0x47, 
+        0x0D, 
+        0x0A, 
+        0x1A, 
+        0x0A, 
+    };
     auto constexpr adam7_image_data = std::array<png::adam7_pass, 7u>
     {
         png::adam7_pass{ .offset = { 0u, 0u }, .stride = { 8u, 8u } }, 
@@ -326,7 +334,7 @@ export namespace rgd::png
         png::adam7_pass{ .offset = { 0u, 1u }, .stride = { 1u, 2u } }, 
     };
 
-
+    
 
     template<typename T>
     auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
@@ -349,12 +357,8 @@ export namespace rgd::png
 
     auto memory_compare    (std::span<const rgd::byte_t> left, std::span<const rgd::byte_t> right) -> rgd::bool_t
     {
-        constexpr auto equal_result = 0;
+        auto constexpr equal_result = 0;
         return std::memcmp(left.data(), right.data(), std::min(left.size_bytes(), right.size_bytes())) == equal_result;
-    }
-    auto validate_signature(std::span<const rgd::byte_t> image) -> rgd::bool_t
-    {
-        return png::memory_compare(image, png::signature);
     }
     auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
         {
@@ -380,10 +384,22 @@ export namespace rgd::png
             default: throw std::invalid_argument{ "invalid color type" };
         }
     }
+
+    auto validate_signature(std::span<const rgd::byte_t> image) -> rgd::bool_t
+    {
+        return png::memory_compare(image, png::signature);
+    }
     auto validate_ihdr     (png::chunk::ihdr const& ihdr) -> rgd::bool_t
     {
-        auto const valid_color_types  = std::array<rgd::uint32_t, 5u>{ 0u, 2u, 3u, 4u, 6u };
-        auto const valid_combinations = std::unordered_map<png::color_type_e, std::initializer_list<rgd::uint32_t>>
+        auto const valid_color_types        = std::array<png::color_type_e, 5u>
+        {
+            png::color_type_e::grayscale       , 
+            png::color_type_e::true_color      , 
+            png::color_type_e::indexed_color   , 
+            png::color_type_e::grayscale_alpha , 
+            png::color_type_e::true_color_alpha, 
+        };
+        auto const valid_color_combinations = std::unordered_map<png::color_type_e, std::initializer_list<rgd::uint32_t>>
         {
             { png::color_type_e::grayscale       , { 1u, 2u, 4u, 8u, 16u } }, 
             { png::color_type_e::true_color      , {             8u, 16u } }, 
@@ -391,13 +407,13 @@ export namespace rgd::png
             { png::color_type_e::grayscale_alpha , {             8u, 16u } }, 
             { png::color_type_e::true_color_alpha, {             8u, 16u } }, 
         };
-
+        
         if (ihdr.width  == 0u || ihdr.width  == std::numeric_limits<rgd::uint32_t>::max())                  return rgd::false_;
         if (ihdr.height == 0u || ihdr.height == std::numeric_limits<rgd::uint32_t>::max())                  return rgd::false_;
         if (!bit::is_power_of_2(std::to_underlying(ihdr.bit_depth)))                                        return rgd::false_;
-        if (!std::ranges::contains(valid_color_types, std::to_underlying(ihdr.color_type)))                 return rgd::false_;
-        if (!valid_combinations.contains(ihdr.color_type))                                                  return rgd::false_;
-        auto const combination = valid_combinations.at(ihdr.color_type);
+        if (!std::ranges::contains(valid_color_types, ihdr.color_type))                                     return rgd::false_;
+        if (!valid_color_combinations.contains(ihdr.color_type))                                            return rgd::false_;
+        auto const combination = valid_color_combinations.at(ihdr.color_type);
         if (!std::ranges::contains(combination, std::to_underlying(ihdr.bit_depth)))                        return rgd::false_;
         if (ihdr.compression_method != png::compression_method_e::deflate)                                  return rgd::false_;
         if (ihdr.filter_method      != png::filter_method_e::adaptive)                                      return rgd::false_;
@@ -405,9 +421,360 @@ export namespace rgd::png
 
         return rgd::true_;
     }
-    auto create_image_model() -> png::model
+    
+    auto parse_chunks      (std::span<const rgd::byte_t> chunk_data) -> png::model
     {
-        return png::model{};
+        auto decode_state = png::decode_state{};
+        auto cursor       = rgd::cursor_t{};
+        auto model        = png::model{};
+
+        while (cursor < chunk_data.size_bytes())
+        {
+            auto chunk_header = png::chunk_header
+            {
+                .length = png::consume<rgd::uint32_t>(chunk_data, cursor), 
+                .type   = png::consume<png::chunk_e >(chunk_data, cursor), 
+            };
+
+            switch (chunk_header.type)
+            {
+                case png::chunk_e::ihdr:
+                {
+                    model.ihdr = png::chunk::ihdr
+                    {
+                        .width              = png::consume<rgd::uint32_t            >(chunk_data, cursor), 
+                        .height             = png::consume<rgd::uint32_t            >(chunk_data, cursor), 
+                        .bit_depth          = png::consume<png::bit_depth_e         >(chunk_data, cursor), 
+                        .color_type         = png::consume<png::color_type_e        >(chunk_data, cursor), 
+                        .compression_method = png::consume<png::compression_method_e>(chunk_data, cursor), 
+                        .filter_method      = png::consume<png::filter_method_e     >(chunk_data, cursor), 
+                        .interlace_method   = png::consume<png::interlace_method_e  >(chunk_data, cursor), 
+                    };
+
+                    auto const valid_ihdr = png::validate_ihdr(model.ihdr);
+                    if (!valid_ihdr) throw;
+
+                    break;
+                }
+                case png::chunk_e::plte:
+                {
+                    if (chunk_header.length % sizeof(png::chunk::plte::entry) != 0u) throw std::invalid_argument{ "palette length must be divisible by size of entry!" };
+                    
+                    auto const entry_count = rgd::size_t{ chunk_header.length / sizeof(png::chunk::plte::entry) };
+                    model.plte.entries.resize(entry_count);
+
+                    for (auto index = rgd::size_t{ 0u }; index < entry_count; ++index)
+                    {
+                        auto const entry = png::chunk::plte::entry
+                        {
+                            .red   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            .green = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            .blue  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                        };
+
+                        model.plte.entries.at(index) = std::move(entry);
+                    }
+
+                    break;
+                }
+                case png::chunk_e::idat:
+                {
+                    auto const previous_size = model.idat.data.size();
+                    auto const new_size      = model.idat.data.size() + chunk_header.length;
+                    model.idat.data.resize(new_size);
+                    std::memcpy(
+                        model.idat.data.data() + previous_size                                                    , 
+                        chunk_data     .data() + cursor                                                           , 
+                        std::min(static_cast<rgd::size_t>(chunk_header.length), chunk_data.size_bytes() - cursor));
+
+                    cursor += chunk_header.length;
+
+                    break;
+                }
+                case png::chunk_e::iend:
+                {
+                    decode_state.iend_reached = rgd::true_;
+
+                    break;
+                }
+                case png::chunk_e::trns: 
+                {
+                    switch (model.ihdr.color_type)
+                    {
+                        case png::color_type_e::grayscale      :
+                        {
+                            model.trns.value = png::chunk::trns::grayscale
+                            { 
+                                .level = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::true_color      :
+                        {
+                            model.trns.value = png::chunk::trns::true_color
+                            {
+                                .red   = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .green = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .blue  = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::indexed_color  :
+                        {
+                            auto indexed_color = png::chunk::trns::indexed_color{};
+                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
+                            {
+                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(chunk_data, cursor));
+                            }
+
+                            model.trns.value = std::move(indexed_color);
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                case png::chunk_e::gama: 
+                {
+                    model.gama = png::chunk::gama
+                    { 
+                        .gamma = png::consume<rgd::uint32_t>(chunk_data, cursor), 
+                    };
+
+                    break;
+                }
+                case png::chunk_e::chrm:
+                {
+                    model.chrm = png::chunk::chrm
+                    {
+                        .white_point_x = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .white_point_y = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .red_x         = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .red_y         = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .green_x       = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .green_y       = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .blue_x        = png::consume<std::uint32_t>(chunk_data, cursor), 
+                        .blue_y        = png::consume<std::uint32_t>(chunk_data, cursor), 
+                    };
+                        
+                    break;
+                }
+                case png::chunk_e::srgb:
+                {
+                    model.srgb = png::chunk::srgb
+                    {
+                        .rendering_intent = png::consume<png::rendering_intent_e>(chunk_data, cursor),
+                    };
+
+                    break;
+                }
+                case png::chunk_e::iccp:
+                {
+                    auto const profile_name       = std::string{ reinterpret_cast<rgd::char_t const*>(chunk_data.data() + cursor) };
+                    cursor += profile_name.length() + 1u;
+                    auto const compression_method = png::consume<png::compression_method_e>(chunk_data, cursor);
+                    auto const compressed_profile = std::string{ reinterpret_cast<rgd::char_t const*>(chunk_data.data() + cursor) };
+                    cursor += compressed_profile.length() + 1u;
+
+                    model.iccp = png::chunk::iccp
+                    {
+                        .profile_name       = std::move(profile_name)      , 
+                        .compression_method = compression_method           , 
+                        .compressed_profile = std::move(compressed_profile), 
+                    };
+
+                    break;
+                }
+                case png::chunk_e::text:
+                {
+                    auto const text           = png::consume<std::string>(chunk_data, cursor, chunk_header.length);
+                    auto const null_separator = text.find('\0');
+                    auto const key            = text.substr(0u, null_separator);
+                    auto const value          = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
+                    model.text.map.emplace(std::move(key), std::move(value));
+
+                    break;
+                }
+                case png::chunk_e::ztxt:
+                {
+                    auto const text               = png::consume<std::string>(chunk_data, cursor, chunk_header.length);
+                    auto const null_separator     = text.find('\0');
+                    auto const key                = text.substr(0u, null_separator);
+                    auto const value              = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
+                    auto const deflate            = zng::inflate(bit::as_bytes(value));
+                    
+                    model.ztxt.map.emplace(std::move(key), std::string{ deflate.begin(), deflate.end() });
+                    model.ztxt.compression_method = png::consume<png::compression_method_e>(chunk_data, cursor);
+
+                    break;
+                }
+                case png::chunk_e::itxt:
+                {
+                    cursor += chunk_header.length;
+
+                    break;
+                }
+                case png::chunk_e::bkgd: 
+                {
+                    switch (model.ihdr.color_type)
+                    {
+                        case png::color_type_e::grayscale       :
+                        case png::color_type_e::grayscale_alpha :
+                        {
+                            model.bkgd.color = png::chunk::bkgd::grayscale
+                            { 
+                                .level = png::consume<rgd::uint16_t>(chunk_data, cursor) 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::true_color      :
+                        case png::color_type_e::true_color_alpha:
+                        {
+                            model.bkgd.color = png::chunk::bkgd::true_color
+                            {
+                                .red   = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .green = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .blue  = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::indexed_color   :
+                        {
+                            auto indexed_color = png::chunk::bkgd::indexed_color{};
+                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
+                            {
+                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(chunk_data, cursor));
+                            }
+
+                            model.bkgd.color = std::move(indexed_color);
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                case png::chunk_e::phys:
+                {
+                    model.phys = png::chunk::phys
+                    {
+                        .pixels_per_unit_x = png::consume<rgd::uint32_t        >(chunk_data, cursor), 
+                        .pixels_per_unit_y = png::consume<rgd::uint32_t        >(chunk_data, cursor), 
+                        .unit_specifier    = png::consume<png::unit_specifier_e>(chunk_data, cursor), 
+                    };
+
+                    break;
+                }
+                case png::chunk_e::sbit: 
+                {
+                    switch (model.ihdr.color_type)
+                    {
+                        case png::color_type_e::grayscale       :
+                        {
+                            model.sbit.color = png::chunk::sbit::grayscale
+                            { 
+                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor) 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::true_color      :
+                        {
+                            model.sbit.color = png::chunk::sbit::true_color
+                            {
+                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::indexed_color   :
+                        {
+                            model.sbit.color = png::chunk::sbit::indexed_color
+                            { 
+                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::grayscale_alpha :
+                        {
+                            model.sbit.color = png::chunk::sbit::grayscale_alpha
+                            {
+                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .alpha_significant_bits     = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                        case png::color_type_e::true_color_alpha:
+                        {
+                            model.sbit.color = png::chunk::sbit::true_color_alpha
+                            {
+                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .alpha_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            };
+
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                case png::chunk_e::hist: 
+                {
+                    if (chunk_header.length % 2u != 0u) throw std::runtime_error{ "invalid histogram chunk length" };
+
+                    for (auto index = rgd::size_t{ 0u }; index < chunk_header.length / 2u; ++index)
+                    {
+                        model.hist.data.emplace_back(png::consume<rgd::uint16_t>(chunk_data, cursor));
+                    }
+
+                    break;
+                }
+                case png::chunk_e::time:
+                {
+                    model.time = png::chunk::time
+                    {
+                        .year   = png::consume<rgd::uint16_t>(chunk_data, cursor),
+                        .month  = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                        .day    = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                        .hour   = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                        .minute = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                        .second = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                    };
+
+                    break;
+                }
+
+                default:
+                {
+                    auto const ancillary_bit    = static_cast<png::ancillary_bit_e   >(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
+                    auto const private_bit      = static_cast<png::private_bit_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
+                    auto const reserved_bit     = static_cast<png::reserved_bit_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
+                    auto const safe_to_copy_bit = static_cast<png::safe_to_copy_bit_e>(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
+
+                    std::println("Unknown chunk type");
+                    std::println("Chunk properties:");
+                    std::println("\t{:16}: {}", "Ancillary bit"   , std::to_underlying(ancillary_bit   ));
+                    std::println("\t{:16}: {}", "Private bit"     , std::to_underlying(private_bit     ));
+                    std::println("\t{:16}: {}", "Reserved bit"    , std::to_underlying(reserved_bit    ));
+                    std::println("\t{:16}: {}", "Safe To Copy bit", std::to_underlying(safe_to_copy_bit));
+                }
+            }
+
+            chunk_header.crc  = png::consume<rgd::uint32_t>(chunk_data, cursor);
+        };
+
+        return model;
     }
     auto decode_sub_image  (rgd::vector_2u const& dimensions, png::color_type_e color_type, std::span<const rgd::byte_t> image_data) -> rgd::image
     {
@@ -416,7 +783,6 @@ export namespace rgd::png
         auto const scanline_data_size = rgd::size_t{ scanline_size                 - 1u };
         auto const total_image_size   = scanline_data_size * dimensions.y;
 
-        auto const inflated_data      = zlib::inflate(image_data);
         auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
         auto       input_scanline     = std::span<const rgd::byte_t>{};
         auto       previous_scanline  = std::span<const rgd::byte_t>{};
@@ -458,17 +824,18 @@ export namespace rgd::png
 
         for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
         {
-            auto const current_scanline = std::span{ inflated_data.data() + row_index * scanline_size, scanline_size };
-            auto const filter           = static_cast<png::filter_e>(current_scanline[0u]);
-            input_scanline              = current_scanline.subspan<1u>();
-            output_scanline             = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
+            auto const current_scanline  = std::span{ image_data.data() + row_index * scanline_size, scanline_size };
+            auto const filter            = static_cast<png::filter_e>(current_scanline[0u]);
+            auto const current_operation = decode_operation.at(filter);
+            input_scanline               = current_scanline.subspan<1u>();
+            output_scanline              = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
 
             for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
             {
-                decode_operation.at(filter)(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
+                current_operation(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
             }
 
-            previous_scanline           = output_scanline;
+            previous_scanline            = output_scanline;
         }
 
         return rgd::image
@@ -478,361 +845,70 @@ export namespace rgd::png
             .data       = result_image             , 
         };
     }
-    auto decode            (std::span<const rgd::byte_t> image) -> rgd::image
+    
+    auto decode            (std::span<const rgd::byte_t> image_data) -> rgd::image
     {
-        if (!png::validate_signature(image)) throw std::invalid_argument{ "invalid png signature" };
+        if (!png::validate_signature(image_data)) throw std::invalid_argument{ "invalid png signature" };
 
-        auto decode_state = png::decode_state{};
-        auto cursor       = rgd::cursor_t{};
-        auto model        = png::model{};
+        auto const image_model    = png::parse_chunks(image_data.subspan<sizeof(png::signature)>());
+        auto const image_channels = png::map_image_channels(image_model.ihdr.color_type);
+        auto const inflated_data  = zng::inflate(image_model.idat.data);
+        auto const current_data   = std::span{ inflated_data };
+        auto       image          = rgd::image{};
         
-        cursor += sizeof(png::signature);
-        while (cursor < image.size_bytes())
+        switch (image_model.ihdr.interlace_method)
         {
-            auto chunk_header = png::chunk_header
+            case png::interlace_method_e::none : 
             {
-                .length = png::consume<rgd::uint32_t>(image, cursor), 
-                .type   = png::consume<png::chunk_e >(image, cursor), 
-            };
-
-            switch (chunk_header.type)
+                image = png::decode_sub_image(rgd::vector_2u{ image_model.ihdr.width, image_model.ihdr.height }, image_model.ihdr.color_type, inflated_data);
+                break;
+            }
+            case png::interlace_method_e::adam7: 
             {
-                case png::chunk_e::ihdr:
+                auto index        = rgd::size_t{ 0u };
+                auto data_offset  = rgd::size_t{ 0u };
+                image             = rgd::image
                 {
-                    model.ihdr = png::chunk::ihdr
+                    .layout     = rgd::image_layout_e::rgb                                                                   , 
+                    .dimensions = { image_model.ihdr.width, image_model.ihdr.height }                                        , 
+                    .data       = std::vector<rgd::byte_t>(image_model.ihdr.width * image_model.ihdr.height * image_channels), 
+                };
+                for (auto const& pass : png::adam7_image_data)
+                {
+                    auto const pass_dimensions = rgd::vector_2u
                     {
-                        .width              = png::consume<rgd::uint32_t            >(image, cursor), 
-                        .height             = png::consume<rgd::uint32_t            >(image, cursor), 
-                        .bit_depth          = png::consume<png::bit_depth_e         >(image, cursor), 
-                        .color_type         = png::consume<png::color_type_e        >(image, cursor), 
-                        .compression_method = png::consume<png::compression_method_e>(image, cursor), 
-                        .filter_method      = png::consume<png::filter_method_e     >(image, cursor), 
-                        .interlace_method   = png::consume<png::interlace_method_e  >(image, cursor), 
+                        (image_model.ihdr.width  - pass.offset.x + pass.stride.x - 1u) / pass.stride.x, 
+                        (image_model.ihdr.height - pass.offset.y + pass.stride.y - 1u) / pass.stride.y, 
                     };
-
-                    auto const valid_ihdr = png::validate_ihdr(model.ihdr);
-                    if (!valid_ihdr) throw;
-
-                    break;
-                }
-                case png::chunk_e::plte:
-                {
-                    if (chunk_header.length % sizeof(png::chunk::plte::entry) != 0u) throw std::invalid_argument{ "palette length must be divisible by size of entry!" };
-                    
-                    auto const entry_count = rgd::size_t{ chunk_header.length / sizeof(png::chunk::plte::entry) };
-                    model.plte.entries.resize(entry_count);
-
-                    for (auto index = rgd::size_t{ 0u }; index < entry_count; ++index)
+                    if (std::min(pass_dimensions.x, pass_dimensions.y) > 0u)
                     {
-                        auto const entry = png::chunk::plte::entry
+                        auto const pass_data    = current_data.subspan(data_offset);
+                        auto const pass_image   = decode_sub_image(pass_dimensions, image_model.ihdr.color_type, pass_data);
+                        data_offset            += (pass_dimensions.x * pass_dimensions.y * image_channels) + pass_dimensions.y;
+
+                        for (auto pass_y = 0u; pass_y < pass_dimensions.y; ++pass_y)
                         {
-                            .red   = png::consume<rgd::uint8_t>(image, cursor), 
-                            .green = png::consume<rgd::uint8_t>(image, cursor), 
-                            .blue  = png::consume<rgd::uint8_t>(image, cursor), 
-                        };
-
-                        model.plte.entries.at(index) = std::move(entry);
-                    }
-
-                    break;
-                }
-                case png::chunk_e::idat:
-                {
-                    auto const previous_size = model.idat.data.size();
-                    auto const new_size      = model.idat.data.size() + chunk_header.length;
-                    model.idat.data.resize(new_size);
-                    std::memcpy(
-                        model.idat.data.data() + previous_size                                               , 
-                        image.data() + cursor                                                                ,
-                        std::min(static_cast<rgd::size_t>(chunk_header.length), image.size_bytes() - cursor));
-
-                    cursor += chunk_header.length;
-
-                    break;
-                }
-                case png::chunk_e::iend:
-                {
-                    decode_state.iend_reached = rgd::true_;
-
-                    break;
-                }
-                case png::chunk_e::trns: 
-                {
-                    switch (model.ihdr.color_type)
-                    {
-                        case png::color_type_e::grayscale      :
-                        {
-                            model.trns.value = png::chunk::trns::grayscale
-                            { 
-                                .level = png::consume<rgd::uint16_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::true_color      :
-                        {
-                            model.trns.value = png::chunk::trns::true_color
+                            for (auto pass_x = 0u; pass_x < pass_dimensions.x; ++pass_x)
                             {
-                                .red   = png::consume<rgd::uint16_t>(image, cursor), 
-                                .green = png::consume<rgd::uint16_t>(image, cursor), 
-                                .blue  = png::consume<rgd::uint16_t>(image, cursor), 
-                            };
+                                auto const result_x      = pass.offset.x + pass_x * pass.stride.x;
+                                auto const result_y      = pass.offset.y + pass_y * pass.stride.y;
+                                auto const pass_offset   = (pass_y * pass_dimensions.x + pass_x) * image_channels;
+                                auto const result_offset = (result_y * image_model.ihdr.width + result_x) * image_channels;
 
-                            break;
-                        }
-                        case png::color_type_e::indexed_color  :
-                        {
-                            auto indexed_color = png::chunk::trns::indexed_color{};
-                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
-                            {
-                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
+                                std::memcpy(&image.data[result_offset], &pass_image.data[pass_offset], image_channels);
                             }
-
-                            model.trns.value = std::move(indexed_color);
-                            break;
                         }
                     }
-
-                    break;
-                }
-                case png::chunk_e::gama: 
-                {
-                    model.gama = png::chunk::gama
-                    { 
-                        .gamma = png::consume<rgd::uint32_t>(image, cursor), 
-                    };
-
-                    break;
-                }
-                case png::chunk_e::chrm:
-                {
-                    model.chrm = png::chunk::chrm
-                    {
-                        .white_point_x = png::consume<std::uint32_t>(image, cursor), 
-                        .white_point_y = png::consume<std::uint32_t>(image, cursor), 
-                        .red_x         = png::consume<std::uint32_t>(image, cursor), 
-                        .red_y         = png::consume<std::uint32_t>(image, cursor), 
-                        .green_x       = png::consume<std::uint32_t>(image, cursor), 
-                        .green_y       = png::consume<std::uint32_t>(image, cursor), 
-                        .blue_x        = png::consume<std::uint32_t>(image, cursor), 
-                        .blue_y        = png::consume<std::uint32_t>(image, cursor), 
-                    };
-                        
-                    break;
-                }
-                case png::chunk_e::srgb:
-                {
-                    model.srgb = png::chunk::srgb
-                    {
-                        .rendering_intent = png::consume<png::rendering_intent_e>(image, cursor),
-                    };
-
-                    break;
-                }
-                case png::chunk_e::iccp:
-                {
-                    auto const profile_name       = std::string{ reinterpret_cast<rgd::char_t const*>(image.data() + cursor) };
-                    cursor += profile_name.length() + 1u;
-                    auto const compression_method = png::consume<png::compression_method_e>(image, cursor);
-                    auto const compressed_profile = std::string{ reinterpret_cast<rgd::char_t const*>(image.data() + cursor) };
-                    cursor += compressed_profile.length() + 1u;
-
-                    model.iccp = png::chunk::iccp
-                    {
-                        .profile_name       = std::move(profile_name)      , 
-                        .compression_method = compression_method           , 
-                        .compressed_profile = std::move(compressed_profile), 
-                    };
-
-                    break;
-                }
-                case png::chunk_e::text:
-                {
-                    auto const text           = png::consume<std::string>(image, cursor, chunk_header.length);
-                    auto const null_separator = text.find('\0');
-                    auto const key            = text.substr(0u, null_separator);
-                    auto const value          = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
-                    model.text.map.emplace(std::move(key), std::move(value));
-
-                    break;
-                }
-                case png::chunk_e::ztxt:
-                {
-                    auto const text               = png::consume<std::string>(image, cursor, chunk_header.length);
-                    auto const null_separator     = text.find('\0');
-                    auto const key                = text.substr(0u, null_separator);
-                    auto const value              = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
-                    auto const deflate            = zlib::inflate(bit::as_bytes(value));
                     
-                    model.ztxt.map.emplace(std::move(key), std::string{ deflate.begin(), deflate.end() });
-                    model.ztxt.compression_method = png::consume<png::compression_method_e>(image, cursor);
-
-                    break;
-                }
-                case png::chunk_e::itxt:
-                {
-                    cursor += chunk_header.length;
-
-                    break;
-                }
-                case png::chunk_e::bkgd: 
-                {
-                    switch (model.ihdr.color_type)
-                    {
-                        case png::color_type_e::grayscale       :
-                        case png::color_type_e::grayscale_alpha :
-                        {
-                            model.bkgd.color = png::chunk::bkgd::grayscale
-                            { 
-                                .level = png::consume<rgd::uint16_t>(image, cursor) 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::true_color      :
-                        case png::color_type_e::true_color_alpha:
-                        {
-                            model.bkgd.color = png::chunk::bkgd::true_color
-                            {
-                                .red   = png::consume<rgd::uint16_t>(image, cursor), 
-                                .green = png::consume<rgd::uint16_t>(image, cursor), 
-                                .blue  = png::consume<rgd::uint16_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::indexed_color   :
-                        {
-                            auto indexed_color = png::chunk::bkgd::indexed_color{};
-                            for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
-                            {
-                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(image, cursor));
-                            }
-
-                            model.bkgd.color = std::move(indexed_color);
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-                case png::chunk_e::phys:
-                {
-                    model.phys = png::chunk::phys
-                    {
-                        .pixels_per_unit_x = png::consume<rgd::uint32_t        >(image, cursor), 
-                        .pixels_per_unit_y = png::consume<rgd::uint32_t        >(image, cursor), 
-                        .unit_specifier    = png::consume<png::unit_specifier_e>(image, cursor), 
-                    };
-
-                    break;
-                }
-                case png::chunk_e::sbit: 
-                {
-                    switch (model.ihdr.color_type)
-                    {
-                        case png::color_type_e::grayscale       :
-                        {
-                            model.sbit.color = png::chunk::sbit::grayscale
-                            { 
-                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(image, cursor) 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::true_color      :
-                        {
-                            model.sbit.color = png::chunk::sbit::true_color
-                            {
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(image, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(image, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::indexed_color   :
-                        {
-                            model.sbit.color = png::chunk::sbit::indexed_color
-                            { 
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(image, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(image, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::grayscale_alpha :
-                        {
-                            model.sbit.color = png::chunk::sbit::grayscale_alpha
-                            {
-                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(image, cursor), 
-                                .alpha_significant_bits     = png::consume<rgd::uint8_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                        case png::color_type_e::true_color_alpha:
-                        {
-                            model.sbit.color = png::chunk::sbit::true_color_alpha
-                            {
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(image, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(image, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(image, cursor), 
-                                .alpha_significant_bits = png::consume<rgd::uint8_t>(image, cursor), 
-                            };
-
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-                case png::chunk_e::hist: 
-                {
-                    if (chunk_header.length % 2u != 0u) throw std::runtime_error{ "invalid histogram chunk length" };
-
-                    for (auto index = rgd::size_t{ 0u }; index < chunk_header.length / 2u; ++index)
-                    {
-                        model.hist.data.emplace_back(png::consume<rgd::uint16_t>(image, cursor));
-                    }
-
-                    break;
-                }
-                case png::chunk_e::time:
-                {
-                    model.time = png::chunk::time
-                    {
-                        .year   = png::consume<rgd::uint16_t>(image, cursor),
-                        .month  = png::consume<rgd::uint8_t >(image, cursor), 
-                        .day    = png::consume<rgd::uint8_t >(image, cursor), 
-                        .hour   = png::consume<rgd::uint8_t >(image, cursor), 
-                        .minute = png::consume<rgd::uint8_t >(image, cursor), 
-                        .second = png::consume<rgd::uint8_t >(image, cursor), 
-                    };
-
-                    break;
+                    ++index;
                 }
 
-                default:
-                {
-                    auto const ancillary_bit    = static_cast<png::ancillary_bit_e   >(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
-                    auto const private_bit      = static_cast<png::private_bit_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
-                    auto const reserved_bit     = static_cast<png::reserved_bit_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
-                    auto const safe_to_copy_bit = static_cast<png::safe_to_copy_bit_e>(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
-
-                    std::println("Unknown chunk type");
-                    std::println("Chunk properties:");
-                    std::println("\t{:16}: {}", "Ancillary bit"   , std::to_underlying(ancillary_bit   ));
-                    std::println("\t{:16}: {}", "Private bit"     , std::to_underlying(private_bit     ));
-                    std::println("\t{:16}: {}", "Reserved bit"    , std::to_underlying(reserved_bit    ));
-                    std::println("\t{:16}: {}", "Safe To Copy bit", std::to_underlying(safe_to_copy_bit));
-                }
+                break;
             }
 
-            chunk_header.crc  = png::consume<rgd::uint32_t>(image, cursor);
-        };
+            default: throw std::invalid_argument{ "invalid interlace method" };
+        }
 
-        return decode_sub_image(rgd::vector_2u{ model.ihdr.width, model.ihdr.height }, model.ihdr.color_type, model.idat.data);
+        return image;
     }
 }
