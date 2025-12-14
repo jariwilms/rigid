@@ -373,6 +373,7 @@ export namespace rgd::png
         }
     }
     
+    
     auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
     {
         auto const paeth       = alpha + beta - gamma;
@@ -380,38 +381,52 @@ export namespace rgd::png
         auto const paeth_beta  = std::abs(paeth - beta );
         auto const paeth_gamma = std::abs(paeth - gamma);
 
-                if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
+             if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
         else if (paeth_beta  <= paeth_gamma                              ) return beta ;
         else                                                               return gamma;
     };
-    auto none_operation    (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t>         , std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t               )
+    auto decode_operation  (png::filter_e operation, std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<const rgd::byte_t> current, rgd::size_t column_index, rgd::uint8_t image_channels) -> rgd::byte_t
     {
-        output[column_index] = input[column_index];
-    }
-    auto subtract_operation(std::span<const rgd::byte_t> input, std::span<const rgd::byte_t>         , std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
-    {
-        auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
-        output[column_index] = input[column_index] + left;
-    }
-    auto up_operation      (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t               )
-    {
-        auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
-        output[column_index] = input[column_index] + up;
-    }
-    auto average_operation (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
-    {
-        auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-        auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
-        auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-        output[column_index] = input[column_index] + average;
-    }
-    auto paeth_operation   (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
-    {
-        auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-        auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
-        auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
-        auto const predictor = paeth_predictor(left, up, up_left);
-        output[column_index] = input[column_index] + predictor;
+        switch (operation)
+        {
+            using enum png::filter_e;
+
+            case none    : 
+            {
+                return input[column_index];
+            }
+            case subtract: 
+            {
+                auto const left      = column_index >= image_channels ? current[column_index - image_channels] : rgd::byte_t{ 0u };
+                
+                return input[column_index] + left;
+            }
+            case up      : 
+            {
+                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
+                
+                return input[column_index] + up;
+            }
+            case average : 
+            {
+                auto const left      = column_index >= image_channels ? current[column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
+                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
+                
+                return input[column_index] + average;
+            }
+            case paeth   : 
+            {
+                auto const left      = column_index >= image_channels                      ? current [column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
+                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
+                auto const predictor = paeth_predictor(left, up, up_left);
+                
+                return input[column_index] + predictor;
+            }
+            
+            default      : throw std::invalid_argument{ "invalid operation" };
+        }
     }
 
     auto validate_signature(std::span<const rgd::byte_t> image) -> rgd::bool_t
@@ -437,16 +452,15 @@ export namespace rgd::png
             { png::color_type_e::true_color_alpha, {             8u, 16u } }, 
         };
         
-        if (ihdr.width  == 0u || ihdr.width  == std::numeric_limits<rgd::uint32_t>::max())                  return rgd::false_;
-        if (ihdr.height == 0u || ihdr.height == std::numeric_limits<rgd::uint32_t>::max())                  return rgd::false_;
-        if (!bit::is_power_of_2(std::to_underlying(ihdr.bit_depth)))                                        return rgd::false_;
-        if (!std::ranges::contains(valid_color_types, ihdr.color_type))                                     return rgd::false_;
-        if (!valid_color_combinations.contains(ihdr.color_type))                                            return rgd::false_;
-        auto const combination = valid_color_combinations.at(ihdr.color_type);
-        if (!std::ranges::contains(combination, std::to_underlying(ihdr.bit_depth)))                        return rgd::false_;
-        if (ihdr.compression_method != png::compression_method_e::deflate)                                  return rgd::false_;
-        if (ihdr.filter_method      != png::filter_method_e::adaptive)                                      return rgd::false_;
-        if (std::to_underlying(ihdr.interlace_method) > std::to_underlying(png::interlace_method_e::adam7)) return rgd::false_;
+        if (ihdr.width  == 0u || ihdr.width  == std::numeric_limits<rgd::uint32_t>::max())                            return rgd::false_;
+        if (ihdr.height == 0u || ihdr.height == std::numeric_limits<rgd::uint32_t>::max())                            return rgd::false_;
+        if (!bit::is_power_of_2(std::to_underlying(ihdr.bit_depth)))                                                  return rgd::false_;
+        if (!std::ranges::contains(valid_color_types, ihdr.color_type))                                               return rgd::false_;
+        if (!valid_color_combinations.contains(ihdr.color_type))                                                      return rgd::false_;
+        if (!std::ranges::contains(valid_color_combinations.at(ihdr.color_type), std::to_underlying(ihdr.bit_depth))) return rgd::false_;
+        if (ihdr.compression_method != png::compression_method_e::deflate)                                            return rgd::false_;
+        if (ihdr.filter_method      != png::filter_method_e::adaptive)                                                return rgd::false_;
+        if (std::to_underlying(ihdr.interlace_method) > std::to_underlying(png::interlace_method_e::adam7))           return rgd::false_;
 
         return rgd::true_;
     }
@@ -811,14 +825,6 @@ export namespace rgd::png
         auto const scanline_size      = rgd::size_t{ dimensions.x * image_channels + 1u };
         auto const scanline_data_size = rgd::size_t{ scanline_size                 - 1u };
         auto const total_image_size   = scanline_data_size * dimensions.y;
-        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
-        {
-            { png::filter_e::none    , png::none_operation     },
-            { png::filter_e::subtract, png::subtract_operation },
-            { png::filter_e::up      , png::up_operation       },
-            { png::filter_e::average , png::average_operation  },
-            { png::filter_e::paeth   , png::paeth_operation    },
-        };
 
         auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
         auto       input_scanline     = std::span<const rgd::byte_t>{};
@@ -829,13 +835,12 @@ export namespace rgd::png
         {
             auto const current_scanline  = std::span{ image_data.data() + row_index * scanline_size, scanline_size };
             auto const filter            = static_cast<png::filter_e>(current_scanline[0u]);
-            auto const current_operation = decode_operation.at(filter);
             input_scanline               = current_scanline.subspan<1u>();
             output_scanline              = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
 
             for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
             {
-                current_operation(input_scanline, previous_scanline, output_scanline, column_index, image_channels);
+                output_scanline[column_index] = png::decode_operation(filter, input_scanline, previous_scanline, output_scanline, column_index, image_channels);
             }
 
             previous_scanline            = output_scanline;
@@ -864,6 +869,7 @@ export namespace rgd::png
             case png::interlace_method_e::none : 
             {
                 image = png::decode_sub_image(rgd::vector_2u{ image_model.ihdr.width, image_model.ihdr.height }, image_model.ihdr.color_type, inflated_data);
+                
                 break;
             }
             case png::interlace_method_e::adam7: 
