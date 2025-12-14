@@ -310,8 +310,7 @@ export namespace rgd::png
         rgd::vector_2u stride;
     };
 
-
-
+    using decode_function           = rgd::void_t(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
     auto constexpr signature        = std::array<rgd::byte_t    , 8u>
     { 
         0x89, 
@@ -334,7 +333,7 @@ export namespace rgd::png
         png::adam7_pass{ .offset = { 0u, 1u }, .stride = { 1u, 2u } }, 
     };
 
-    
+
 
     template<typename T>
     auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
@@ -360,17 +359,6 @@ export namespace rgd::png
         auto constexpr equal_result = 0;
         return std::memcmp(left.data(), right.data(), std::min(left.size_bytes(), right.size_bytes())) == equal_result;
     }
-    auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
-        {
-            auto const paeth       = alpha + beta - gamma;
-            auto const paeth_alpha = std::abs(paeth - alpha);
-            auto const paeth_beta  = std::abs(paeth - beta );
-            auto const paeth_gamma = std::abs(paeth - gamma);
-
-                 if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
-            else if (paeth_beta  <= paeth_gamma                              ) return beta ;
-            else                                                               return gamma;
-        };
     auto map_image_channels(png::color_type_e color_type) -> std::uint8_t
     {
         switch (color_type)
@@ -383,6 +371,47 @@ export namespace rgd::png
 
             default: throw std::invalid_argument{ "invalid color type" };
         }
+    }
+    
+    auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
+    {
+        auto const paeth       = alpha + beta - gamma;
+        auto const paeth_alpha = std::abs(paeth - alpha);
+        auto const paeth_beta  = std::abs(paeth - beta );
+        auto const paeth_gamma = std::abs(paeth - gamma);
+
+                if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
+        else if (paeth_beta  <= paeth_gamma                              ) return beta ;
+        else                                                               return gamma;
+    };
+    auto none_operation    (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t>         , std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t               )
+    {
+        output[column_index] = input[column_index];
+    }
+    auto subtract_operation(std::span<const rgd::byte_t> input, std::span<const rgd::byte_t>         , std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
+    {
+        auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
+        output[column_index] = input[column_index] + left;
+    }
+    auto up_operation      (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t               )
+    {
+        auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
+        output[column_index] = input[column_index] + up;
+    }
+    auto average_operation (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
+    {
+        auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+        auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
+        auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
+        output[column_index] = input[column_index] + average;
+    }
+    auto paeth_operation   (std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<rgd::byte_t> output, rgd::size_t column_index, rgd::uint8_t image_channels)
+    {
+        auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
+        auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
+        auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
+        auto const predictor = paeth_predictor(left, up, up_left);
+        output[column_index] = input[column_index] + predictor;
     }
 
     auto validate_signature(std::span<const rgd::byte_t> image) -> rgd::bool_t
@@ -782,45 +811,19 @@ export namespace rgd::png
         auto const scanline_size      = rgd::size_t{ dimensions.x * image_channels + 1u };
         auto const scanline_data_size = rgd::size_t{ scanline_size                 - 1u };
         auto const total_image_size   = scanline_data_size * dimensions.y;
+        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
+        {
+            { png::filter_e::none    , png::none_operation     },
+            { png::filter_e::subtract, png::subtract_operation },
+            { png::filter_e::up      , png::up_operation       },
+            { png::filter_e::average , png::average_operation  },
+            { png::filter_e::paeth   , png::paeth_operation    },
+        };
 
         auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
         auto       input_scanline     = std::span<const rgd::byte_t>{};
         auto       previous_scanline  = std::span<const rgd::byte_t>{};
         auto       output_scanline    = std::span<      rgd::byte_t>{};
-
-        using decode_function         = rgd::void_t(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
-        auto const decode_operation   = std::unordered_map<png::filter_e, decode_function>
-        {
-            { png::filter_e::none    , [](auto input, auto         , auto output, auto column_index, auto               )
-            {
-                output[column_index] = input[column_index];
-            } }, 
-            { png::filter_e::subtract, [](auto input, auto         , auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels ? output[column_index - image_channels] : rgd::byte_t{ 0u };
-                output[column_index] = input[column_index] + left;
-            } }, 
-            { png::filter_e::up      , [](auto input, auto previous, auto output, auto column_index, auto               )
-            {
-                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
-                output[column_index] = input[column_index] + up;
-            } }, 
-            { png::filter_e::average , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty()              ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                output[column_index] = input[column_index] + average;
-            } }, 
-            { png::filter_e::paeth   , [](auto input, auto previous, auto output, auto column_index, auto image_channels)
-            {
-                auto const left      = column_index >= image_channels                      ? output  [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const predictor = paeth_predictor(left, up, up_left);
-                output[column_index] = input[column_index] + predictor;
-            } }, 
-        };
 
         for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
         {
