@@ -14,10 +14,10 @@ export namespace rgd
     };
     enum class image_layout_e
     {
-        r   , 
-        rg  , 
-        rgb , 
-        rgba, 
+        r    = 1u, 
+        rg   = 2u, 
+        rgb  = 3u, 
+        rgba = 4u, 
     };
     class image
     {
