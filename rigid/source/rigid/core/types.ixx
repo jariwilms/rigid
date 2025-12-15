@@ -38,16 +38,16 @@ export namespace rgd
     template<typename T>
     struct vector<T, 4u> : public rgd::vector<T, 3u>{ union { T w; T a; }; };
 
-    //using vector_1i = rgd::vector<rgd::int32_t  , 1u>;
-    //using vector_2i = rgd::vector<rgd::int32_t  , 2u>;
-    //using vector_3i = rgd::vector<rgd::int32_t  , 3u>;
-    //using vector_4i = rgd::vector<rgd::int32_t  , 4u>;
-    //using vector_1u = rgd::vector<rgd::uint32_t , 1u>;
+    using vector_1i = rgd::vector<rgd::int32_t  , 1u>;
+    using vector_2i = rgd::vector<rgd::int32_t  , 2u>;
+    using vector_3i = rgd::vector<rgd::int32_t  , 3u>;
+    using vector_4i = rgd::vector<rgd::int32_t  , 4u>;
+    using vector_1u = rgd::vector<rgd::uint32_t , 1u>;
     using vector_2u = rgd::vector<rgd::uint32_t , 2u>;
-    //using vector_3u = rgd::vector<rgd::uint32_t , 3u>;
-    //using vector_4u = rgd::vector<rgd::uint32_t , 4u>;
-    //using vector_1f = rgd::vector<rgd::float32_t, 1u>;
-    //using vector_2f = rgd::vector<rgd::float32_t, 2u>;
-    //using vector_3f = rgd::vector<rgd::float32_t, 3u>;
-    //using vector_4f = rgd::vector<rgd::float32_t, 4u>;
+    using vector_3u = rgd::vector<rgd::uint32_t , 3u>;
+    using vector_4u = rgd::vector<rgd::uint32_t , 4u>;
+    using vector_1f = rgd::vector<rgd::float32_t, 1u>;
+    using vector_2f = rgd::vector<rgd::float32_t, 2u>;
+    using vector_3f = rgd::vector<rgd::float32_t, 3u>;
+    using vector_4f = rgd::vector<rgd::float32_t, 4u>;
 }
