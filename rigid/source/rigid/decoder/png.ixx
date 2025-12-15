@@ -966,7 +966,7 @@ export namespace rgd::png
             }
         }
     }
-    auto decode_sub_image    (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> source_data) -> rgd::image
+    auto decode_image    (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> source_data) -> rgd::image
     {
         auto const source_channels           = std::to_underlying(source_layout);
         auto const source_scanline_size      = rgd::size_t{ dimensions.x * source_channels };
@@ -1061,61 +1061,59 @@ export namespace rgd::png
     {
         if (!png::validate_signature(image_data)) throw std::invalid_argument{ "invalid png signature" };
 
-        auto const image_model   = png::parse_chunks(image_data.subspan<sizeof(png::signature)>());
-        auto const image_layout  = static_cast<rgd::image_layout_e>(png::map_image_channels(image_model.ihdr.color_type));
-        auto const inflated_data = zng::inflate(image_model.idat.data);
-        auto       image         = rgd::image{};
+        auto const source_model         = png::parse_chunks(image_data.subspan<sizeof(png::signature)>());
+        auto const source_channels      = png::map_image_channels(source_model.ihdr.color_type);
+        auto const source_layout        = static_cast<rgd::image_layout_e>(source_channels);
+        auto const source_data          = zng::inflate(source_model.idat.data);
+        auto const destination_channels = std::to_underlying(destination_layout);
+        auto       destination_image    = rgd::image{};
         
-        switch (image_model.ihdr.interlace_method)
+        switch (source_model.ihdr.interlace_method)
         {
             case png::interlace_method_e::none : 
             {
-                image = png::decode_sub_image(image_model.ihdr.dimensions, image_layout, destination_layout, inflated_data);
+                destination_image = png::decode_image(source_model.ihdr.dimensions, source_layout, destination_layout, source_data);
                 
                 break;
             }
-            case png::interlace_method_e::adam7: 
+            case png::interlace_method_e::adam7:
             {
-                auto const image_channels = png::map_image_channels(image_model.ihdr.color_type);
-                auto const current_data   = std::span{ inflated_data };
-                auto const data_size      = image_model.ihdr.dimensions.x * image_model.ihdr.dimensions.y * image_channels;
-                auto       data_offset    = rgd::size_t{ 0u };
-                image                     = rgd::image
+                auto const input_data         = std::span{ source_data };
+                auto const output_buffer_size = source_model.ihdr.dimensions.x * source_model.ihdr.dimensions.y * destination_channels;
+                auto       bytes_processed    = rgd::size_t{ 0u };
+                destination_image             = rgd::image
                 {
-                    .layout     = rgd::image_layout_e::rgb           , 
-                    .dimensions = image_model.ihdr.dimensions        , 
-                    .data       = std::vector<rgd::byte_t>(data_size), 
+                    .layout     = rgd::image_layout_e::rgb                    , 
+                    .dimensions = source_model.ihdr.dimensions          , 
+                    .data       = std::vector<rgd::byte_t>(output_buffer_size), 
                 };
 
-                auto       index          = rgd::size_t{ 0u };
                 for (auto const& pass : png::adam7_image_data)
                 {
                     auto const pass_dimensions = rgd::vector_2u
                     {
-                        (image_model.ihdr.dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x, 
-                        (image_model.ihdr.dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y, 
+                        (source_model.ihdr.dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x,
+                        (source_model.ihdr.dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y
                     };
-                    if (std::min(pass_dimensions.x, pass_dimensions.y) > 0u)
+                    auto const pass_data       = input_data.subspan(bytes_processed);
+                    auto const pass_image      = png::decode_image(pass_dimensions, source_layout, destination_layout, pass_data);
+                    if (pass_dimensions.x == 0u || pass_dimensions.y == 0u) continue;
+
+                    for (auto row_index = rgd::size_t{ 0u }; row_index < pass_dimensions.y; ++row_index)
                     {
-                        auto const pass_data    = current_data.subspan(data_offset);
-                        auto const pass_image   = png::decode_sub_image(pass_dimensions, image_layout, destination_layout, pass_data);
-                        data_offset            += (pass_dimensions.x * pass_dimensions.y * image_channels) + pass_dimensions.y;
-
-                        for (auto pass_y = 0u; pass_y < pass_dimensions.y; ++pass_y)
+                        for (auto column_index = rgd::size_t{ 0u }; column_index < pass_dimensions.x; ++column_index)
                         {
-                            for (auto pass_x = 0u; pass_x < pass_dimensions.x; ++pass_x)
-                            {
-                                auto const result_x      = pass.offset.x + pass_x * pass.stride.x;
-                                auto const result_y      = pass.offset.y + pass_y * pass.stride.y;
-                                auto const pass_offset   = (pass_y * pass_dimensions.x + pass_x) * image_channels;
-                                auto const result_offset = (result_y * image_model.ihdr.dimensions.x + result_x) * image_channels;
-
-                                std::memcpy(&image.data[result_offset], &pass_image.data[pass_offset], image_channels);
-                            }
+                            auto const source_pixel_offset     = (row_index * pass_dimensions.x + column_index) * destination_channels;
+                            auto const destination_row         = pass.offset.y + row_index     * pass.stride.y;
+                            auto const destination_column      = pass.offset.x + column_index  * pass.stride.x;
+                            auto const destination_pixel_index = destination_row               * source_model.ihdr.dimensions.x + destination_column;
+                            auto const destination_byte_offset = destination_pixel_index       * destination_channels;
+                            
+                            std::memcpy(&destination_image.data[destination_byte_offset], &pass_image.data[source_pixel_offset], destination_channels);
                         }
                     }
-                    
-                    ++index;
+
+                    bytes_processed += (pass_dimensions.x * pass_dimensions.y * source_channels) + pass_dimensions.y;
                 }
 
                 break;
@@ -1124,6 +1122,6 @@ export namespace rgd::png
             default                            : throw std::invalid_argument{ "invalid interlace method" };
         }
 
-        return image;
+        return destination_image;
     }
 }
