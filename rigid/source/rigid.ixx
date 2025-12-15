@@ -23,8 +23,8 @@ export namespace rgd
         throw std::invalid_argument{ "unsupported image format" };
     }
     template<rgd::image_format_e Format = rgd::image_format_e::auto_>
-    auto decode                 (std::span<const rgd::byte_t> image) -> rgd::image
+    auto decode                 (rgd::image_layout_e image_layout, std::span<const rgd::byte_t> image_data) -> rgd::image
     {
-        return png::decode(image);
+        return png::decode(image_layout, image_data);
     }
 }
