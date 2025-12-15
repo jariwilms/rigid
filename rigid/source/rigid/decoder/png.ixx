@@ -966,29 +966,31 @@ export namespace rgd::png
             }
         }
     }
-
-    auto decode_sub_image(rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> image_data) -> rgd::image
+    auto decode_sub_image    (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> source_data) -> rgd::image
     {
-        auto const source_channels      = std::to_underlying(source_layout);
-        auto const source_row_size      = rgd::size_t{ dimensions.x * source_channels };
-        auto const source_row_stride    = rgd::size_t{ source_row_size + 1u };
-        auto const destination_channels = std::to_underlying(destination_layout);
-        auto const destination_row_size = rgd::size_t{ dimensions.x * destination_channels };
-        auto const total_image_size     = destination_row_size * dimensions.y;
-        auto       result_image         = std::vector<rgd::byte_t>(total_image_size);
+        auto const source_channels           = std::to_underlying(source_layout);
+        auto const source_scanline_size      = rgd::size_t{ dimensions.x * source_channels };
+        auto const source_scanline_stride    = rgd::size_t{ source_scanline_size + 1u };
+        auto const destination_channels      = std::to_underlying(destination_layout);
+        auto const destination_scanline_size = rgd::size_t{ dimensions.x * destination_channels };
+        auto const destination_image_size    = destination_scanline_size * dimensions.y;
+        auto       destination_data          = std::vector<rgd::byte_t>(destination_image_size);
 
-        auto       left_buffer          = std::vector<rgd::byte_t>(source_row_size);
-        auto       right_buffer         = std::vector<rgd::byte_t>(source_row_size);
-        auto       left_span            = std::span<rgd::byte_t>{ left_buffer  };
-        auto       right_span           = std::span<rgd::byte_t>{ right_buffer };
+        auto       scanline_buffers          = std::array<std::vector<rgd::byte_t>, 2u>
+        { 
+            std::vector<rgd::byte_t>(source_scanline_size), 
+            std::vector<rgd::byte_t>(source_scanline_size) 
+        };
+        auto       output_scanline           = std::span<rgd::byte_t>{ scanline_buffers[0u] };
+        auto       previous_scanline         = std::span<rgd::byte_t>{ scanline_buffers[1u] };
 
         for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
         {
-            auto const input_wrapper = std::span{ image_data.data() + row_index * source_row_stride, source_row_stride };
-            auto const filter        = static_cast<png::filter_e>(input_wrapper[0u]);
-            auto const input_data    = input_wrapper.subspan<1u>();
+            auto const current_scanline      = std::span{ source_data.data() + row_index * source_scanline_stride, source_scanline_stride };
+            auto const current_scanline_data = current_scanline.subspan<1u>();
+            auto const filter                = static_cast<png::filter_e>(current_scanline[0u]);
 
-            for (auto column_index = rgd::size_t{ 0u }; column_index < source_row_size; ++column_index)
+            for (auto column_index = rgd::size_t{ 0u }; column_index < source_scanline_size; ++column_index)
             {
                 switch (filter)
                 {
@@ -996,40 +998,40 @@ export namespace rgd::png
 
                     case none    : 
                     {
-                        left_span[column_index] = input_data[column_index];
+                        output_scanline[column_index] = current_scanline_data[column_index];
 
                         break;
                     }
                     case subtract: 
                     {
-                        auto const left         = column_index >= source_channels ? left_span[column_index - source_channels] : rgd::byte_t{ 0u };
-                        left_span[column_index] = input_data[column_index] + left;
+                        auto const left               = column_index >= source_channels ? output_scanline[column_index - source_channels] : rgd::byte_t{ 0u };
+                        output_scanline[column_index] = current_scanline_data[column_index] + left;
 
                         break;
                     }
                     case up      : 
                     {
-                        auto const up           = !right_span.empty() ? right_span[column_index] : rgd::byte_t{ 0u };
-                        left_span[column_index] = input_data[column_index] + up;
+                        auto const up                 = !previous_scanline.empty() ? previous_scanline[column_index] : rgd::byte_t{ 0u };
+                        output_scanline[column_index] = current_scanline_data[column_index] + up;
 
                         break;
                     }
                     case average : 
                     {
-                        auto const left            = column_index >= source_channels ? left_span[column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const up              = !right_span.empty()             ? right_span[column_index]                  : rgd::byte_t{ 0u };
-                        auto const average         = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                        left_span[column_index] = input_data[column_index] + average;
+                        auto const left               = column_index >= source_channels ? output_scanline  [column_index - source_channels] : rgd::byte_t{ 0u };
+                        auto const up                 = !previous_scanline.empty()      ? previous_scanline[column_index]                   : rgd::byte_t{ 0u };
+                        auto const average            = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
+                        output_scanline[column_index] = current_scanline_data[column_index] + average;
 
                         break;
                     }
                     case paeth   : 
                     {
-                        auto const left            = column_index >= source_channels                        ? left_span [column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const up              = !right_span.empty()                                    ? right_span[column_index                  ] : rgd::byte_t{ 0u };
-                        auto const up_left         = column_index >= source_channels && !right_span.empty() ? right_span[column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const predictor       = png::paeth_predictor(left, up, up_left);
-                        left_span[column_index] = input_data[column_index] + predictor;
+                        auto const left               = column_index >= source_channels                               ? output_scanline  [column_index - source_channels] : rgd::byte_t{ 0u };
+                        auto const up                 = !previous_scanline.empty()                                    ? previous_scanline[column_index                  ] : rgd::byte_t{ 0u };
+                        auto const up_left            = column_index >= source_channels && !previous_scanline.empty() ? previous_scanline[column_index - source_channels] : rgd::byte_t{ 0u };
+                        auto const predictor          = png::paeth_predictor(left, up, up_left);
+                        output_scanline[column_index] = current_scanline_data[column_index] + predictor;
 
                         break;
                     }
@@ -1038,18 +1040,18 @@ export namespace rgd::png
                 }
             }
 
-            auto const destination_offset = row_index * destination_row_size;
-            auto       destination_span   = std::span{ result_image.data() + destination_offset, destination_row_size };
+            auto const destination_offset = row_index * destination_scanline_size;
+            auto       destination_span   = std::span{ destination_data.data() + destination_offset, destination_scanline_size };
 
-            png::dispatch_convert_row(dimensions.x, source_layout, destination_layout, left_span, destination_span);
-            std::swap                (left_span, right_span);
+            png::dispatch_convert_row(dimensions.x, source_layout, destination_layout, output_scanline, destination_span);
+            std::swap                (output_scanline, previous_scanline);
         }
 
         return rgd::image
         {
             .layout     = destination_layout     , 
             .dimensions = dimensions             , 
-            .data       = std::move(result_image), 
+            .data       = std::move(destination_data), 
         };
     }
 
