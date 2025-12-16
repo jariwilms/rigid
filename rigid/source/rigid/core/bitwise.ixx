@@ -53,4 +53,29 @@ export namespace rgd::bit
         if   constexpr (E == bit::endian_e::native) return value;
         else                                        return bit::swap_bytes(value);
     }
+
+    auto pack  (std::span<const rgd::byte_t, 8u> value) -> rgd::byte_t
+    {
+        auto result = rgd::byte_t{};
+        for (auto index = rgd::size_t{ 0u }; index < 8u; ++index)
+        {
+            result |= (bit::test(value[index], 0u) << index);
+        }
+        
+        return result;
+    }
+    auto unpack(rgd::byte_t value) -> std::array<rgd::byte_t, 8u>
+    {
+        return std::array<rgd::byte_t, 8u>
+        {
+            bit::test(value, 7u), 
+            bit::test(value, 6u), 
+            bit::test(value, 5u), 
+            bit::test(value, 4u), 
+            bit::test(value, 3u), 
+            bit::test(value, 2u), 
+            bit::test(value, 1u), 
+            bit::test(value, 0u), 
+        };
+    }
 }
