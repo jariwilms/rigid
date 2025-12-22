@@ -1,8 +1,15 @@
 export module rigid.decode.webp;
 
+import std;
 import rigid.types;
 
 export namespace rgd::webp
 {
-    constexpr auto signature = 0x52'49'46'46;
+    auto constexpr signature = std::array<rgd::byte_t, 4u>
+    {
+        0x52, 
+        0x49, 
+        0x46, 
+        0x46, 
+    };
 }
