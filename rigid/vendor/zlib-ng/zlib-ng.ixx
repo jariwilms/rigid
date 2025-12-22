@@ -2,6 +2,7 @@ export module zlib_ng;
 
 import std;
 import <zlib-ng/zlib-ng.h>;
+import zlib_ng.config;
 
 export namespace zng
 {
@@ -44,17 +45,17 @@ export namespace zng
         return static_cast<zng::result_e>(::zng_inflateEnd(&stream));
     }
     
-    auto inflate           (std::span<const std::uint8_t> deflated_memory) -> std::vector<std::uint8_t>
+    auto inflate           (std::span<const std::uint8_t> memory) -> std::vector<std::uint8_t>
     {
         auto       stream        = zng::stream{};
         auto       result        = zng::result_e{};
         auto       inflated_data = std::vector<std::uint8_t>{};
-        auto const chunk_size    = std::size_t{ 1u << 17u };
+        auto const chunk_size    = config::chunk_size;
         auto const zng_init      = zng::initialize_inflate(stream);
         if (zng_init != zng::result_e::ok) throw std::runtime_error{ "failed to initialize zlib inflate" };
 
-        stream.next_in           = deflated_memory.data();
-        stream.avail_in          = static_cast<std::uint32_t>(deflated_memory.size_bytes());
+        stream.next_in           = memory.data();
+        stream.avail_in          = static_cast<std::uint32_t>(memory.size_bytes());
 
         while (result != zng::result_e::stream_end)
         {
