@@ -12,14 +12,7 @@ export namespace rgd::bit
         native = std::endian::native, 
     };
 
-    template<typename T>
-    auto as_bytes(T const& value) -> std::span<const rgd::byte_t>
-    {
-        auto span      = std::span<const T>{ &value, 1u };
-        auto byte_span = std::span<const rgd::byte_t>{ reinterpret_cast<const rgd::byte_t*>(span.data()), span.size_bytes() };
 
-        return byte_span;
-    }
 
     template<std::unsigned_integral T>
     auto test             (T value, rgd::size_t index) -> rgd::bool_t
@@ -36,22 +29,31 @@ export namespace rgd::bit
     {
         return std::has_single_bit(value);
     }
-    
+
     template<typename T>
     auto swap_bytes       (T value) -> T
     {
         return std::byteswap(value);
     }
     template<typename T> requires (std::is_enum_v<T>)
-    auto swap_bytes(T value) -> T
+    auto swap_bytes       (T value) -> T
     {
         return static_cast<T>(std::byteswap(std::to_underlying(value)));
     }
-    template<bit::endian_e E, typename T>
+    template<bit::endian_e Endian, typename T>
     auto swap_bytes_native(T value) -> T
     {
-        if   constexpr (E == bit::endian_e::native) return value;
-        else                                        return bit::swap_bytes(value);
+        if   constexpr (Endian == bit::endian_e::native) return value;
+        else                                             return bit::swap_bytes(value);
+    }
+    
+    template<typename T>
+    auto as_bytes(T const& value) -> std::span<const rgd::byte_t>
+    {
+        auto const span      = std::span<const T>{ &value, 1u };
+        auto const byte_span = std::span<const rgd::byte_t>{ reinterpret_cast<const rgd::byte_t*>(span.data()), span.size_bytes() };
+
+        return byte_span;
     }
 
     auto pack  (std::span<const rgd::byte_t, 8u> value) -> rgd::byte_t
