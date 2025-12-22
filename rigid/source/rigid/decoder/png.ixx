@@ -1,39 +1,99 @@
 export module rigid.decode.png;
 
 import std;
-import zlib_ng;
 import rigid.core;
+import zlib_ng;
 
+namespace rgd::mem::adapter
+{
+    //A specialized allocator that bypasses initialization when a vector is resized.
+    //This allows for direct population of the raw, uninitialized memory.
+    //It can significantly improve performance for large allocations by eliminating redundant initialization.
+    //https://stackoverflow.com/a/21028912
+    //https://www.boost.org/doc/libs/1_75_0/boost/core/noinit_adaptor.hpp
+    //template<typename A>
+    //class no_init : public A
+    //{
+    //public:
+    //    template<typename U> 
+    //    struct rebind
+    //    {
+    //        using other = no_init<typename std::allocator_traits<A>::template rebind_alloc<U>>;
+    //    };
+
+    //    template<typename U>
+    //    void construct(U* pointer) noexcept(std::is_nothrow_default_constructible<U>::value)
+    //    {
+    //        ::new(static_cast<void*>(pointer)) U;
+    //    }
+    //    template<typename U, typename...Args>
+    //    void construct(U* pointer, Args&&... args)
+    //    {
+    //        std::allocator_traits<A>::construct(static_cast<A&>(*this), pointer, std::forward<Args>(args)...);
+    //    }
+
+    //    template<class U>
+    //    void destroy(U* pointer)
+    //    {
+    //        pointer->~U();
+    //    }
+
+    //    template<class T, class U>
+    //    friend auto operator==(const no_init<T>& left, const no_init<U>& right) noexcept -> rgd::bool_t
+    //    {
+    //        return static_cast<const T&>(left) == static_cast<const U&>(right);
+    //    }
+    //    template<class T, class U>
+    //    friend auto operator!=(const no_init<T>& left, const no_init<U>& right) noexcept -> rgd::bool_t
+    //    {
+    //        return !(left == right);
+    //    }
+    //};
+
+    template<typename T>
+    class no_init {
+        static_assert(
+            std::is_fundamental<T>::value,
+            "should be a fundamental type");
+    public:
+        no_init() noexcept {}
+        constexpr  no_init(T value) noexcept : v_{ value } {}
+        constexpr  operator T () const noexcept { return v_; }
+    private:
+        T v_;
+    };
+}
 export namespace rgd
 {
-    template<auto V, auto Min, auto Max>
-    concept in_inclusive_range = V >= Min && V <= Max;
-    template<auto V, auto Min, auto Max>
-    concept in_exclusive_range = V >  Min && V <  Max;
+    enum class error_type_e
+    {
+        runtime         , 
+        overflow        , 
+        invalid_argument, 
+        out_of_range    , 
+    };
+    struct error_result
+    {
+        rgd::error_type_e type;
+        std::string_view  message;
+    };
 }
 export namespace rgd::png
 {
-    enum class ancillary_bit_e : rgd::uint8_t
-    {
-        critical  = 0u, 
-        ancillary = 1u, 
-    };
-    enum class private_bit_e : rgd::uint8_t
+    enum class accessibility_e : rgd::uint8_t
     {
         public_  = 0u, 
         private_ = 1u, 
     };
-    enum class reserved_bit_e : rgd::uint8_t
+    enum class bit_depth_e : rgd::uint8_t
     {
-        reserved = 0u, 
+        _1  =  1u, 
+        _2  =  2u, 
+        _4  =  4u, 
+        _8  =  8u, 
+        _16 = 16u, 
     };
-    enum class safe_to_copy_bit_e : rgd::uint8_t
-    {
-        unsafe = 0u, 
-        safe   = 1u, 
-    };
-
-    enum class chunk_e : std::uint32_t
+    enum class chunk_type_e : rgd::uint32_t
     {
         bkgd = 0x62'4B'47'44, 
         chrm = 0x63'48'52'4D, 
@@ -54,36 +114,25 @@ export namespace rgd::png
         trns = 0x74'52'4E'53, 
         ztxt = 0x7A'54'58'74, 
     };
-    enum class bit_depth_e : std::uint8_t
+    enum class chunk_requirement_e : rgd::uint8_t
     {
-        _1  =  1u, 
-        _2  =  2u, 
-        _4  =  4u, 
-        _8  =  8u, 
-        _16 = 16u, 
-    };
-    enum class color_type_e : std::uint8_t
-    {
-        grayscale        = 0u                          , 
-        true_color       = 2u                          , 
-        indexed_color    = true_color | 1u             , 
-        grayscale_alpha  = 4u                          , 
-        true_color_alpha = true_color | grayscale_alpha, 
+        critical  = 0u, 
+        ancillary = 1u, 
     };
     enum class compression_flag_e : rgd::uint8_t
     {
         uncompressed = 0u, 
         compressed   = 1u, 
     };
-    enum class compression_method_e : std::uint8_t
+    enum class compression_method_e : rgd::uint8_t
     {
         deflate = 0u, 
     };
-    enum class filter_method_e : std::uint8_t
+    enum class filter_method_e : rgd::uint8_t
     {
         adaptive = 0u, 
     };
-    enum class filter_e : std::uint8_t
+    enum class filter_type_e : rgd::uint8_t
     {
         none     = 0u, 
         subtract = 1u, 
@@ -91,10 +140,18 @@ export namespace rgd::png
         average  = 3u, 
         paeth    = 4u, 
     };
-    enum class interlace_method_e : std::uint8_t
+    enum class interlace_method_e : rgd::uint8_t
     {
         none  = 0u, 
         adam7 = 1u, 
+    };
+    enum class pixel_type_e : rgd::uint8_t
+    {
+        grayscale        = 0u                          , 
+        true_color       = 2u                          , 
+        indexed_color    = true_color | 1u             , 
+        grayscale_alpha  = 4u                          , 
+        true_color_alpha = true_color | grayscale_alpha, 
     };
     enum class rendering_intent_e : rgd::uint8_t
     {
@@ -103,26 +160,35 @@ export namespace rgd::png
         saturation            = 2u, 
         absolute_colorimetric = 3u, 
     };
+    enum class reserved_e : rgd::uint8_t
+    {
+        _ = 0u, 
+    };
+    enum class safe_to_copy_e : rgd::uint8_t
+    {
+        no  = 0u, 
+        yes = 1u, 
+    };
     enum class unit_specifier_e : rgd::uint8_t
     {
         unknown = 0u, 
         meter   = 1u, 
     };
 
-    struct chunk_header
-    {
-        rgd::uint32_t length;
-        png::chunk_e  type;
-        rgd::uint32_t crc;
-    };
     struct chunk
     {
-        //Critical Chunks
+        struct header
+        {
+            rgd::uint32_t     length;
+            png::chunk_type_e type;
+            rgd::uint32_t     crc;
+        };
+
         struct ihdr
         {
             rgd::vector_2u            dimensions;
             png::bit_depth_e          bit_depth;
-            png::color_type_e         color_type;
+            png::pixel_type_e         pixel_type;
             png::compression_method_e compression_method;
             png::filter_method_e      filter_method;
             png::interlace_method_e   interlace_method;
@@ -146,7 +212,6 @@ export namespace rgd::png
         {
 
         };
-        //Ancillary Chunks
         struct trns
         {
             struct grayscale
@@ -300,7 +365,7 @@ export namespace rgd::png
         png::chunk::hist hist{};
         png::chunk::time time{};
     };
-    struct decode_state
+    struct decoding_state
     {
         rgd::bool_t ihdr_reached  = rgd::false_;
         rgd::bool_t iend_reached  = rgd::false_;
@@ -311,270 +376,300 @@ export namespace rgd::png
         rgd::vector_2u offset;
         rgd::vector_2u stride;
     };
-
-    using decode_function           = rgd::void_t(*)(std::span<const rgd::byte_t>, std::span<const rgd::byte_t>, std::span<rgd::byte_t>, rgd::size_t, rgd::uint8_t);
-    auto constexpr signature        = std::array<rgd::byte_t    , 8u>
-    { 
-        0x89, 
-        0x50, 
-        0x4E, 
-        0x47, 
-        0x0D, 
-        0x0A, 
-        0x1A, 
-        0x0A, 
+}
+export namespace rgd::png
+{
+    auto constexpr signature       = std::array<rgd::byte_t, 8u>
+    {
+        0x89,
+        0x50,
+        0x4E,
+        0x47,
+        0x0D,
+        0x0A,
+        0x1A,
+        0x0A,
     };
-    auto constexpr adam7_image_data = std::array<png::adam7_pass, 7u>
+    auto constexpr adam7_pass_data = std::array<png::adam7_pass, 7u>
     {
-        png::adam7_pass{ .offset = { 0u, 0u }, .stride = { 8u, 8u } }, 
-        png::adam7_pass{ .offset = { 4u, 0u }, .stride = { 8u, 8u } }, 
-        png::adam7_pass{ .offset = { 0u, 4u }, .stride = { 4u, 8u } }, 
-        png::adam7_pass{ .offset = { 2u, 0u }, .stride = { 4u, 4u } }, 
-        png::adam7_pass{ .offset = { 0u, 2u }, .stride = { 2u, 4u } }, 
-        png::adam7_pass{ .offset = { 1u, 0u }, .stride = { 2u, 2u } }, 
-        png::adam7_pass{ .offset = { 0u, 1u }, .stride = { 1u, 2u } }, 
+        png::adam7_pass{.offset = { 0u, 0u }, .stride = { 8u, 8u } },
+        png::adam7_pass{.offset = { 4u, 0u }, .stride = { 8u, 8u } },
+        png::adam7_pass{.offset = { 0u, 4u }, .stride = { 4u, 8u } },
+        png::adam7_pass{.offset = { 2u, 0u }, .stride = { 4u, 4u } },
+        png::adam7_pass{.offset = { 0u, 2u }, .stride = { 2u, 4u } },
+        png::adam7_pass{.offset = { 1u, 0u }, .stride = { 2u, 2u } },
+        png::adam7_pass{.offset = { 0u, 1u }, .stride = { 1u, 2u } },
     };
-
-
-
-    template<typename T>
-    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
+}
+export namespace rgd::png
+{
+    auto map_color_channels      (png::pixel_type_e pixel_type) -> rgd::size_t
     {
-        auto const value = rgd::consume<T>(memory, cursor);
-        return bit::swap_bytes_native<bit::endian_e::big>(value);
-    }
-    template<typename T>
-    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> T;
-    template<>
-    auto consume<std::string>(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, rgd::size_t length) -> std::string
-    {
-        auto const string = std::string{ reinterpret_cast<rgd::char_t const*>(memory.data() + cursor), length };
-        cursor += length;
-
-        return string;
-    }
-
-
-
-    auto memory_compare    (std::span<const rgd::byte_t> left, std::span<const rgd::byte_t> right) -> rgd::bool_t
-    {
-        auto constexpr equal_result = 0;
-        return std::memcmp(left.data(), right.data(), std::min(left.size_bytes(), right.size_bytes())) == equal_result;
-    }
-    auto map_image_channels(png::color_type_e color_type) -> rgd::uint8_t
-    {
-        switch (color_type)
+        switch (pixel_type)
         {
-            case png::color_type_e::grayscale       : return rgd::uint8_t{ 1u };
-            case png::color_type_e::true_color      : return rgd::uint8_t{ 3u };
-            case png::color_type_e::indexed_color   : return rgd::uint8_t{ 1u };
-            case png::color_type_e::grayscale_alpha : return rgd::uint8_t{ 2u };
-            case png::color_type_e::true_color_alpha: return rgd::uint8_t{ 4u };
+            using enum png::pixel_type_e;
+
+            case grayscale       : return 1u;
+            case true_color      : return 3u;
+            case indexed_color   : return 1u;
+            case grayscale_alpha : return 2u;
+            case true_color_alpha: return 4u;
 
             default: throw std::invalid_argument{ "invalid color type" };
         }
     }
-    
-    
-    auto paeth_predictor   (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
+    auto calculate_scanline_size (rgd::size_t size, png::bit_depth_e bit_depth) -> rgd::size_t
     {
-        auto const paeth       = alpha + beta - gamma;
-        auto const paeth_alpha = std::abs(paeth - alpha);
-        auto const paeth_beta  = std::abs(paeth - beta );
-        auto const paeth_gamma = std::abs(paeth - gamma);
-
-             if (paeth_alpha <= paeth_beta  && paeth_alpha <= paeth_gamma) return alpha;
-        else if (paeth_beta  <= paeth_gamma                              ) return beta ;
-        else                                                               return gamma;
+        auto const factor = std::to_underlying(bit_depth) / 8.0f;
+        return static_cast<rgd::size_t>(std::ceil(size * factor));
+    }
+    auto paeth_predictor         (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
+    {
+        auto threshold = gamma * 3 - (alpha + beta);
+        auto low       = alpha < beta ? alpha : beta;
+        auto high      = alpha < beta ? beta  : alpha;
+        
+        auto t0        = (high <= threshold) ? low  : gamma;
+        auto t1        = (threshold <= low ) ? high : t0;
+        
+        return t1;
     };
-    auto decode_operation  (png::filter_e operation, std::span<const rgd::byte_t> input, std::span<const rgd::byte_t> previous, std::span<const rgd::byte_t> current, rgd::size_t column_index, rgd::uint8_t image_channels) -> rgd::byte_t
+    
+    template<rgd::size_t SourceChannels, rgd::size_t TargetChannels>
+    auto convert_channels        (rgd::vector_2u const& dimensions, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
     {
-        switch (operation)
-        {
-            using enum png::filter_e;
+        auto const pixels = rgd::size_t{ dimensions.x * dimensions.y };
+        auto       target = std::vector<rgd::byte_t>(pixels * TargetChannels);
 
-            case none    : 
+        for (auto i = rgd::size_t{ 0u }; i < pixels; ++i)
+        {
+            auto const* s = &memory[i * SourceChannels];
+            auto      * d = &target[i * TargetChannels];
+
+            for (auto j = rgd::size_t{ 0u }; j < TargetChannels; ++j)
             {
-                return input[column_index];
+                     if (j < SourceChannels) d[j] = s[j];
+                else if (j < 3u)             d[j] = (SourceChannels == 1u) ? s[0u] : 0u;
+                else                         d[j] = 255u;
             }
-            case subtract: 
+        }
+
+        return target;
+    }
+    auto convert_layout          (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e target_layout, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
+    {
+        switch (source_layout)
+        {
+            using enum rgd::image_layout_e;
+
+            case r   : 
             {
-                auto const left      = column_index >= image_channels ? current[column_index - image_channels] : rgd::byte_t{ 0u };
-                
-                return input[column_index] + left;
+                switch (target_layout)
+                {
+                    using enum rgd::image_layout_e;
+
+                    case r   : return png::convert_channels<1u, 1u>(dimensions, memory);
+                    case rg  : return png::convert_channels<1u, 2u>(dimensions, memory);
+                    case rgb : return png::convert_channels<1u, 3u>(dimensions, memory);
+                    case rgba: return png::convert_channels<1u, 4u>(dimensions, memory);
+
+                    default: throw std::invalid_argument{ "invalid layout" };
+                }
             }
-            case up      : 
+            case rg  : 
             {
-                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
-                
-                return input[column_index] + up;
+                switch (target_layout)
+                {
+                    using enum rgd::image_layout_e;
+
+                    case r   : return png::convert_channels<2u, 1u>(dimensions, memory);
+                    case rg  : return png::convert_channels<2u, 2u>(dimensions, memory);
+                    case rgb : return png::convert_channels<2u, 3u>(dimensions, memory);
+                    case rgba: return png::convert_channels<2u, 4u>(dimensions, memory);
+
+                    default: throw std::invalid_argument{ "invalid layout" };
+                }
             }
-            case average : 
+            case rgb : 
             {
-                auto const left      = column_index >= image_channels ? current[column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty() ? previous[column_index] : rgd::byte_t{ 0u };
-                auto const average   = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                
-                return input[column_index] + average;
+                switch (target_layout)
+                {
+                    using enum rgd::image_layout_e;
+
+                    case r   : return png::convert_channels<3u, 1u>(dimensions, memory);
+                    case rg  : return png::convert_channels<3u, 2u>(dimensions, memory);
+                    case rgb : return png::convert_channels<3u, 3u>(dimensions, memory);
+                    case rgba: return png::convert_channels<3u, 4u>(dimensions, memory);
+
+                    default: throw std::invalid_argument{ "invalid layout" };
+                }
             }
-            case paeth   : 
+            case rgba: 
             {
-                auto const left      = column_index >= image_channels                      ? current [column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const up        = !previous.empty()                                   ? previous[column_index                 ] : rgd::byte_t{ 0u };
-                auto const up_left   = column_index >= image_channels && !previous.empty() ? previous[column_index - image_channels] : rgd::byte_t{ 0u };
-                auto const predictor = paeth_predictor(left, up, up_left);
-                
-                return input[column_index] + predictor;
+                switch (target_layout)
+                {
+                    using enum rgd::image_layout_e;
+
+                    case r   : return png::convert_channels<4u, 1u>(dimensions, memory);
+                    case rg  : return png::convert_channels<4u, 2u>(dimensions, memory);
+                    case rgb : return png::convert_channels<4u, 3u>(dimensions, memory);
+                    case rgba: return png::convert_channels<4u, 4u>(dimensions, memory);
+
+                    default: throw std::invalid_argument{ "invalid layout" };
+                }
             }
-            
-            default      : throw std::invalid_argument{ "invalid operation" };
+
+            default: throw std::invalid_argument{ "invalid layout" };
         }
     }
-
-    auto validate_signature(std::span<const rgd::byte_t> image) -> rgd::bool_t
+    auto expand_bits             (rgd::vector_2u const& dimensions, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
     {
-        return png::memory_compare(image, png::signature);
-    }
-    auto validate_ihdr     (png::chunk::ihdr const& ihdr) -> rgd::bool_t
-    {
-        auto const valid_color_types        = std::array<png::color_type_e, 5u>
-        {
-            png::color_type_e::grayscale       , 
-            png::color_type_e::true_color      , 
-            png::color_type_e::indexed_color   , 
-            png::color_type_e::grayscale_alpha , 
-            png::color_type_e::true_color_alpha, 
-        };
-        auto const valid_color_combinations = std::unordered_map<png::color_type_e, std::initializer_list<rgd::uint32_t>>
-        {
-            { png::color_type_e::grayscale       , { 1u, 2u, 4u, 8u, 16u } }, 
-            { png::color_type_e::true_color      , {             8u, 16u } }, 
-            { png::color_type_e::indexed_color   , { 1u, 2u, 4u, 8u      } }, 
-            { png::color_type_e::grayscale_alpha , {             8u, 16u } }, 
-            { png::color_type_e::true_color_alpha, {             8u, 16u } }, 
-        };
+        auto const bits_per_byte    = std::to_underlying(bit_depth);
+        auto const samples_per_byte = 8u / bits_per_byte;
+        auto const bytes_per_row    = (dimensions.x + samples_per_byte - 1) / samples_per_byte;
         
-        if (ihdr.dimensions.x == 0u || ihdr.dimensions.x == std::numeric_limits<rgd::uint32_t>::max())                return rgd::false_;
-        if (ihdr.dimensions.y == 0u || ihdr.dimensions.y == std::numeric_limits<rgd::uint32_t>::max())                return rgd::false_;
-        if (!bit::is_power_of_2(std::to_underlying(ihdr.bit_depth)))                                                  return rgd::false_;
-        if (!std::ranges::contains(valid_color_types, ihdr.color_type))                                               return rgd::false_;
-        if (!valid_color_combinations.contains(ihdr.color_type))                                                      return rgd::false_;
-        if (!std::ranges::contains(valid_color_combinations.at(ihdr.color_type), std::to_underlying(ihdr.bit_depth))) return rgd::false_;
-        if (ihdr.compression_method != png::compression_method_e::deflate)                                            return rgd::false_;
-        if (ihdr.filter_method      != png::filter_method_e::adaptive)                                                return rgd::false_;
-        if (std::to_underlying(ihdr.interlace_method) > std::to_underlying(png::interlace_method_e::adam7))           return rgd::false_;
-
-        return rgd::true_;
-    }
-    
-    auto parse_chunks      (std::span<const rgd::byte_t> chunk_data) -> png::model
-    {
-        auto decode_state = png::decode_state{};
-        auto cursor       = rgd::cursor_t{};
-        auto model        = png::model{};
-
-        while (cursor < chunk_data.size_bytes())
-        {
-            auto chunk_header = png::chunk_header
+        auto const value_lut        = std::invoke([&]() -> std::array<rgd::byte_t, 16u>
             {
-                .length = png::consume<rgd::uint32_t>(chunk_data, cursor), 
-                .type   = png::consume<png::chunk_e >(chunk_data, cursor), 
+                auto const maximum      = (1u << bits_per_byte) - 1u;
+                auto const scale_factor = 255u / ((1u << bits_per_byte) - 1u);
+                auto       lut          = std::array<rgd::byte_t, 16u>{};
+                
+                for (auto i = rgd::size_t{ 0u }; i <= maximum; ++i)
+                {
+                    lut[i] = static_cast<rgd::byte_t>(i * scale_factor);
+                }
+
+                return lut;
+            });
+
+        auto const mask             = (1u << bits_per_byte) - 1u;
+        auto       output           = std::vector<rgd::byte_t>(dimensions.x * dimensions.y);
+
+        for (auto y = rgd::size_t{ 0u }; y < dimensions.y; ++y)
+        {
+            auto const index_in  = y * bytes_per_row;
+            auto const index_out = y * dimensions.x;
+
+            for (auto x = rgd::size_t{ 0u }; x < dimensions.x; ++x)
+            {
+                auto const byte_index = x / samples_per_byte;
+                auto const bit_index  = x % samples_per_byte;
+                auto const shift      = (samples_per_byte - 1u - bit_index) * bits_per_byte;
+                auto const sample     = static_cast<rgd::byte_t>((memory[index_in + byte_index] >> shift) & mask);
+
+                output[index_out + x] = value_lut[sample];
+            }
+        }
+
+        return output;
+    }
+
+    auto validate_signature      (std::span<const rgd::byte_t> memory) -> rgd::bool_t
+    {
+        return mem::compare(memory, png::signature);
+    }
+    auto parse_chunks            (std::span<const rgd::byte_t> memory) -> png::model
+    {
+        auto model          = png::model{};
+        auto decoding_state = png::decoding_state{};
+        auto stream         = rgd::input_stream<bit::endian_e::big>{ memory };
+
+        while (stream.position() < memory.size_bytes())
+        {
+            auto chunk_header = png::chunk::header
+            {
+                .length = stream.consume<rgd::uint32_t    >(), 
+                .type   = stream.consume<png::chunk_type_e>(), 
             };
 
             switch (chunk_header.type)
             {
-                case png::chunk_e::ihdr:
+                case png::chunk_type_e::ihdr:
                 {
                     model.ihdr = png::chunk::ihdr
                     {
                         .dimensions = rgd::vector_2u
                         {
-                            png::consume<rgd::uint32_t>(chunk_data, cursor), 
-                            png::consume<rgd::uint32_t>(chunk_data, cursor), 
+                            stream.consume<rgd::uint32_t>(), 
+                            stream.consume<rgd::uint32_t>(), 
                         }, 
-                        .bit_depth          = png::consume<png::bit_depth_e         >(chunk_data, cursor), 
-                        .color_type         = png::consume<png::color_type_e        >(chunk_data, cursor), 
-                        .compression_method = png::consume<png::compression_method_e>(chunk_data, cursor), 
-                        .filter_method      = png::consume<png::filter_method_e     >(chunk_data, cursor), 
-                        .interlace_method   = png::consume<png::interlace_method_e  >(chunk_data, cursor), 
+                        .bit_depth          = stream.consume<png::bit_depth_e         >(), 
+                        .pixel_type         = stream.consume<png::pixel_type_e        >(), 
+                        .compression_method = stream.consume<png::compression_method_e>(), 
+                        .filter_method      = stream.consume<png::filter_method_e     >(), 
+                        .interlace_method   = stream.consume<png::interlace_method_e  >(), 
                     };
-
-                    auto const is_valid_ihdr = png::validate_ihdr(model.ihdr);
-                    if (!is_valid_ihdr) throw;
 
                     break;
                 }
-                case png::chunk_e::plte:
+                case png::chunk_type_e::plte:
                 {
-                    if (chunk_header.length % sizeof(png::chunk::plte::entry) != 0u) throw std::invalid_argument{ "palette length must be divisible by size of entry!" };
-                    
                     auto const entry_count = rgd::size_t{ chunk_header.length / sizeof(png::chunk::plte::entry) };
                     model.plte.entries.resize(entry_count);
 
-                    for (auto index = rgd::size_t{ 0u }; index < entry_count; ++index)
+                    for (auto& entry : model.plte.entries)
                     {
-                        auto const entry = png::chunk::plte::entry
+                        entry = png::chunk::plte::entry
                         {
-                            .red   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                            .green = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                            .blue  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                            .red   = stream.consume<rgd::uint8_t>(), 
+                            .green = stream.consume<rgd::uint8_t>(), 
+                            .blue  = stream.consume<rgd::uint8_t>(), 
                         };
-
-                        model.plte.entries.at(index) = std::move(entry);
                     }
 
                     break;
                 }
-                case png::chunk_e::idat:
+                case png::chunk_type_e::idat:
                 {
                     auto const previous_size = model.idat.data.size();
                     auto const new_size      = model.idat.data.size() + chunk_header.length;
                     model.idat.data.resize(new_size);
+
                     std::memcpy(
-                        model.idat.data.data() + previous_size                                                    , 
-                        chunk_data     .data() + cursor                                                           , 
-                        std::min(static_cast<rgd::size_t>(chunk_header.length), chunk_data.size_bytes() - cursor));
+                        model.idat.data.data() + previous_size                                                           , 
+                        memory     .data()     + stream.position()                                                       , 
+                        std::min(static_cast<rgd::size_t>(chunk_header.length), memory.size_bytes() - stream.position()));
 
-                    cursor += chunk_header.length;
-
-                    break;
-                }
-                case png::chunk_e::iend:
-                {
-                    decode_state.iend_reached = rgd::true_;
+                    stream.forward(chunk_header.length);
 
                     break;
                 }
-                case png::chunk_e::trns: 
+                case png::chunk_type_e::iend:
                 {
-                    switch (model.ihdr.color_type)
+                    decoding_state.iend_reached = rgd::true_;
+
+                    break;
+                }
+                case png::chunk_type_e::trns: 
+                {
+                    switch (model.ihdr.pixel_type)
                     {
-                        case png::color_type_e::grayscale      :
+                        case png::pixel_type_e::grayscale      :
                         {
                             model.trns.value = png::chunk::trns::grayscale
                             { 
-                                .level = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .level = stream.consume<rgd::uint16_t>(),
                             };
 
                             break;
                         }
-                        case png::color_type_e::true_color      :
+                        case png::pixel_type_e::true_color      :
                         {
                             model.trns.value = png::chunk::trns::true_color
                             {
-                                .red   = png::consume<rgd::uint16_t>(chunk_data, cursor), 
-                                .green = png::consume<rgd::uint16_t>(chunk_data, cursor), 
-                                .blue  = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .red   = stream.consume<rgd::uint16_t>(), 
+                                .green = stream.consume<rgd::uint16_t>(), 
+                                .blue  = stream.consume<rgd::uint16_t>(), 
                             };
 
                             break;
                         }
-                        case png::color_type_e::indexed_color  :
+                        case png::pixel_type_e::indexed_color  :
                         {
                             auto indexed_color = png::chunk::trns::indexed_color{};
                             for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
                             {
-                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(chunk_data, cursor));
+                                indexed_color.entries.emplace_back(stream.consume<rgd::uint8_t>());
                             }
 
                             model.trns.value = std::move(indexed_color);
@@ -584,186 +679,190 @@ export namespace rgd::png
 
                     break;
                 }
-                case png::chunk_e::gama: 
+                case png::chunk_type_e::gama: 
                 {
                     model.gama = png::chunk::gama
                     { 
-                        .gamma = png::consume<rgd::uint32_t>(chunk_data, cursor), 
+                        .gamma = stream.consume<rgd::uint32_t>(),
                     };
 
                     break;
                 }
-                case png::chunk_e::chrm:
+                case png::chunk_type_e::chrm:
                 {
                     model.chrm = png::chunk::chrm
                     {
-                        .white_point = rgd::vector_2u{ png::consume<std::uint32_t>(chunk_data, cursor), png::consume<std::uint32_t>(chunk_data, cursor) }, 
-                        .red         = rgd::vector_2u{ png::consume<std::uint32_t>(chunk_data, cursor), png::consume<std::uint32_t>(chunk_data, cursor) }, 
-                        .green       = rgd::vector_2u{ png::consume<std::uint32_t>(chunk_data, cursor), png::consume<std::uint32_t>(chunk_data, cursor) }, 
-                        .blue        = rgd::vector_2u{ png::consume<std::uint32_t>(chunk_data, cursor), png::consume<std::uint32_t>(chunk_data, cursor) }, 
+                        .white_point = rgd::vector_2u{ stream.consume<std::uint32_t>(), stream.consume<std::uint32_t>() }, 
+                        .red         = rgd::vector_2u{ stream.consume<std::uint32_t>(), stream.consume<std::uint32_t>() }, 
+                        .green       = rgd::vector_2u{ stream.consume<std::uint32_t>(), stream.consume<std::uint32_t>() }, 
+                        .blue        = rgd::vector_2u{ stream.consume<std::uint32_t>(), stream.consume<std::uint32_t>() }, 
                     };
                         
                     break;
                 }
-                case png::chunk_e::srgb:
+                case png::chunk_type_e::srgb:
                 {
                     model.srgb = png::chunk::srgb
                     {
-                        .rendering_intent = png::consume<png::rendering_intent_e>(chunk_data, cursor),
+                        .rendering_intent = stream.consume<png::rendering_intent_e>(),
                     };
 
                     break;
                 }
-                case png::chunk_e::iccp:
+                case png::chunk_type_e::iccp:
                 {
-                    auto const profile_name       = std::string{ reinterpret_cast<rgd::char_t const*>(chunk_data.data() + cursor) };
-                    cursor += profile_name.length() + 1u;
-                    auto const compression_method = png::consume<png::compression_method_e>(chunk_data, cursor);
-                    auto const compressed_profile = std::string{ reinterpret_cast<rgd::char_t const*>(chunk_data.data() + cursor) };
-                    cursor += compressed_profile.length() + 1u;
+                    //auto const profile_name       = std::string{ reinterpret_cast<rgd::char_t const*>(memory.data() + cursor) };
+                    //cursor += profile_name.length() + 1u;
+                    //auto const compression_method = png::consume<png::compression_method_e>(memory, cursor);
+                    //auto const compressed_profile = std::string{ reinterpret_cast<rgd::char_t const*>(memory.data() + cursor) };
+                    //cursor += compressed_profile.length() + 1u;
 
-                    model.iccp = png::chunk::iccp
+                    //model.iccp = png::chunk::iccp
+                    //{
+                    //    .profile_name       = std::move(profile_name)      , 
+                    //    .compression_method = compression_method           , 
+                    //    .compressed_profile = std::move(compressed_profile), 
+                    //};
+
+                    stream.forward(chunk_header.length);
+                    break;
+                }
+                case png::chunk_type_e::text:
+                {
+                    //auto const text           = png::consume<std::string>(memory, cursor, chunk_header.length);
+                    //auto const null_separator = text.find('\0');
+                    //auto const key            = text.substr(0u, null_separator);
+                    //auto const value          = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
+                    //model.text.map.emplace(std::move(key), std::move(value));
+
+                    stream.forward(chunk_header.length);
+                    break;
+                }
+                case png::chunk_type_e::ztxt:
+                {
+                    //auto const text               = png::consume<std::string>(memory, cursor, chunk_header.length);
+                    //auto const null_separator     = text.find('\0');
+                    //auto const key                = text.substr(0u, null_separator);
+                    //auto const value              = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
+                    //auto const deflate            = zng::inflate(bit::as_bytes(value));
+                    //
+                    //model.ztxt.map.emplace(std::move(key), std::string{ deflate.begin(), deflate.end() });
+                    //model.ztxt.compression_method = png::consume<png::compression_method_e>(memory, cursor);
+
+                    stream.forward(chunk_header.length);
+                    break;
+                }
+                case png::chunk_type_e::itxt:
+                {
+                    stream.forward(chunk_header.length);
+                    break;
+                }
+                case png::chunk_type_e::bkgd: 
+                {
+                    switch (model.ihdr.pixel_type)
                     {
-                        .profile_name       = std::move(profile_name)      , 
-                        .compression_method = compression_method           , 
-                        .compressed_profile = std::move(compressed_profile), 
-                    };
-
-                    break;
-                }
-                case png::chunk_e::text:
-                {
-                    auto const text           = png::consume<std::string>(chunk_data, cursor, chunk_header.length);
-                    auto const null_separator = text.find('\0');
-                    auto const key            = text.substr(0u, null_separator);
-                    auto const value          = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
-                    model.text.map.emplace(std::move(key), std::move(value));
-
-                    break;
-                }
-                case png::chunk_e::ztxt:
-                {
-                    auto const text               = png::consume<std::string>(chunk_data, cursor, chunk_header.length);
-                    auto const null_separator     = text.find('\0');
-                    auto const key                = text.substr(0u, null_separator);
-                    auto const value              = text.substr(null_separator + 1u, chunk_header.length - key.length() - 1u);
-                    auto const deflate            = zng::inflate(bit::as_bytes(value));
-                    
-                    model.ztxt.map.emplace(std::move(key), std::string{ deflate.begin(), deflate.end() });
-                    model.ztxt.compression_method = png::consume<png::compression_method_e>(chunk_data, cursor);
-
-                    break;
-                }
-                case png::chunk_e::itxt:
-                {
-                    cursor += chunk_header.length;
-
-                    break;
-                }
-                case png::chunk_e::bkgd: 
-                {
-                    switch (model.ihdr.color_type)
-                    {
-                        case png::color_type_e::grayscale       :
-                        case png::color_type_e::grayscale_alpha :
+                        case png::pixel_type_e::grayscale       :
+                        case png::pixel_type_e::grayscale_alpha :
                         {
                             model.bkgd.color = png::chunk::bkgd::grayscale
                             { 
-                                .level = png::consume<rgd::uint16_t>(chunk_data, cursor) 
+                                .level = stream.consume<rgd::uint16_t>()
                             };
 
                             break;
                         }
-                        case png::color_type_e::true_color      :
-                        case png::color_type_e::true_color_alpha:
+                        case png::pixel_type_e::true_color      :
+                        case png::pixel_type_e::true_color_alpha:
                         {
                             model.bkgd.color = png::chunk::bkgd::true_color
                             {
-                                .red   = png::consume<rgd::uint16_t>(chunk_data, cursor), 
-                                .green = png::consume<rgd::uint16_t>(chunk_data, cursor), 
-                                .blue  = png::consume<rgd::uint16_t>(chunk_data, cursor), 
+                                .red   = stream.consume<rgd::uint16_t>(), 
+                                .green = stream.consume<rgd::uint16_t>(), 
+                                .blue  = stream.consume<rgd::uint16_t>(), 
                             };
 
                             break;
                         }
-                        case png::color_type_e::indexed_color   :
+                        case png::pixel_type_e::indexed_color   :
                         {
                             auto indexed_color = png::chunk::bkgd::indexed_color{};
                             for (auto index = rgd::size_t{ 0u }; index < model.plte.entries.size(); ++index)
                             {
-                                indexed_color.entries.emplace_back(png::consume<rgd::uint8_t>(chunk_data, cursor));
+                                indexed_color.entries.emplace_back(stream.consume<rgd::uint8_t>());
                             }
 
                             model.bkgd.color = std::move(indexed_color);
                             break;
                         }
+
+                        default: throw std::invalid_argument{ "invalid pixel type" };
                     }
 
                     break;
                 }
-                case png::chunk_e::phys:
+                case png::chunk_type_e::phys:
                 {
                     model.phys = png::chunk::phys
                     {
-                        .pixels_per_unit = rgd::vector_2u{ png::consume<rgd::uint32_t>(chunk_data, cursor), png::consume<rgd::uint32_t>(chunk_data, cursor) }, 
-                        .unit_specifier  = png::consume<png::unit_specifier_e>(chunk_data, cursor)                                                           , 
+                        .pixels_per_unit = rgd::vector_2u{ stream.consume<rgd::uint32_t>(), stream.consume<rgd::uint32_t>() }, 
+                        .unit_specifier  = stream.consume<png::unit_specifier_e>()                                           , 
                     };
 
                     break;
                 }
-                case png::chunk_e::sbit: 
+                case png::chunk_type_e::sbit: 
                 {
-                    switch (model.ihdr.color_type)
+                    switch (model.ihdr.pixel_type)
                     {
-                        case png::color_type_e::grayscale       :
+                        case png::pixel_type_e::grayscale       :
                         {
                             model.sbit.color = png::chunk::sbit::grayscale
                             { 
-                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor) 
+                                .grayscale_significant_bits = stream.consume<rgd::uint8_t>()
                             };
 
                             break;
                         }
-                        case png::color_type_e::true_color      :
+                        case png::pixel_type_e::true_color      :
                         {
                             model.sbit.color = png::chunk::sbit::true_color
                             {
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .red_significant_bits   = stream.consume<rgd::uint8_t>(), 
+                                .green_significant_bits = stream.consume<rgd::uint8_t>(), 
+                                .blue_significant_bits  = stream.consume<rgd::uint8_t>(), 
                             };
 
                             break;
                         }
-                        case png::color_type_e::indexed_color   :
+                        case png::pixel_type_e::indexed_color   :
                         {
                             model.sbit.color = png::chunk::sbit::indexed_color
                             { 
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .red_significant_bits   = stream.consume<rgd::uint8_t>(), 
+                                .green_significant_bits = stream.consume<rgd::uint8_t>(), 
+                                .blue_significant_bits  = stream.consume<rgd::uint8_t>(), 
                             };
 
                             break;
                         }
-                        case png::color_type_e::grayscale_alpha :
+                        case png::pixel_type_e::grayscale_alpha :
                         {
                             model.sbit.color = png::chunk::sbit::grayscale_alpha
                             {
-                                .grayscale_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .alpha_significant_bits     = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .grayscale_significant_bits = stream.consume<rgd::uint8_t>(), 
+                                .alpha_significant_bits     = stream.consume<rgd::uint8_t>(), 
                             };
 
                             break;
                         }
-                        case png::color_type_e::true_color_alpha:
+                        case png::pixel_type_e::true_color_alpha:
                         {
                             model.sbit.color = png::chunk::sbit::true_color_alpha
                             {
-                                .red_significant_bits   = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .green_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .blue_significant_bits  = png::consume<rgd::uint8_t>(chunk_data, cursor), 
-                                .alpha_significant_bits = png::consume<rgd::uint8_t>(chunk_data, cursor), 
+                                .red_significant_bits   = stream.consume<rgd::uint8_t>(), 
+                                .green_significant_bits = stream.consume<rgd::uint8_t>(), 
+                                .blue_significant_bits  = stream.consume<rgd::uint8_t>(), 
+                                .alpha_significant_bits = stream.consume<rgd::uint8_t>(), 
                             };
 
                             break;
@@ -772,27 +871,25 @@ export namespace rgd::png
 
                     break;
                 }
-                case png::chunk_e::hist: 
+                case png::chunk_type_e::hist: 
                 {
-                    if (chunk_header.length % 2u != 0u) throw std::runtime_error{ "invalid histogram chunk length" };
-
                     for (auto index = rgd::size_t{ 0u }; index < chunk_header.length / 2u; ++index)
                     {
-                        model.hist.data.emplace_back(png::consume<rgd::uint16_t>(chunk_data, cursor));
+                        model.hist.data.emplace_back(stream.consume<rgd::uint16_t>());
                     }
 
                     break;
                 }
-                case png::chunk_e::time:
+                case png::chunk_type_e::time:
                 {
                     model.time = png::chunk::time
                     {
-                        .year   = png::consume<rgd::uint16_t>(chunk_data, cursor),
-                        .month  = png::consume<rgd::uint8_t >(chunk_data, cursor), 
-                        .day    = png::consume<rgd::uint8_t >(chunk_data, cursor), 
-                        .hour   = png::consume<rgd::uint8_t >(chunk_data, cursor), 
-                        .minute = png::consume<rgd::uint8_t >(chunk_data, cursor), 
-                        .second = png::consume<rgd::uint8_t >(chunk_data, cursor), 
+                        .year   = stream.consume<rgd::uint16_t>(), 
+                        .month  = stream.consume<rgd::uint8_t >(), 
+                        .day    = stream.consume<rgd::uint8_t >(), 
+                        .hour   = stream.consume<rgd::uint8_t >(), 
+                        .minute = stream.consume<rgd::uint8_t >(), 
+                        .second = stream.consume<rgd::uint8_t >(), 
                     };
 
                     break;
@@ -800,10 +897,10 @@ export namespace rgd::png
 
                 default:
                 {
-                    auto const ancillary_bit    = static_cast<png::ancillary_bit_e   >(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
-                    auto const private_bit      = static_cast<png::private_bit_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
-                    auto const reserved_bit     = static_cast<png::reserved_bit_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
-                    auto const safe_to_copy_bit = static_cast<png::safe_to_copy_bit_e>(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
+                    auto const ancillary_bit    = static_cast<png::chunk_requirement_e>(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
+                    auto const private_bit      = static_cast<png::accessibility_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
+                    auto const reserved_bit     = static_cast<png::reserved_e         >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
+                    auto const safe_to_copy_bit = static_cast<png::safe_to_copy_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
 
                     std::println("Unknown chunk type");
                     std::println("Chunk properties:");
@@ -814,314 +911,181 @@ export namespace rgd::png
                 }
             }
 
-            chunk_header.crc  = png::consume<rgd::uint32_t>(chunk_data, cursor);
+            chunk_header.crc = stream.consume<rgd::uint32_t>();
         };
 
         return model;
     }
-    //auto decode_sub_image  (rgd::vector_2u const& dimensions, png::color_type_e color_type, std::span<const rgd::byte_t> image_data) -> rgd::image
-    //{
-    //    auto const image_channels     = png::map_image_channels(color_type);
-    //    auto const scanline_size      = rgd::size_t{ dimensions.x * image_channels + 1u };
-    //    auto const scanline_data_size = rgd::size_t{ scanline_size                 - 1u };
-    //    auto const total_image_size   = scanline_data_size * dimensions.y;
-
-    //    auto       result_image       = std::vector<rgd::byte_t>(total_image_size);
-    //    auto       input_scanline     = std::span<const rgd::byte_t>{};
-    //    auto       previous_scanline  = std::span<const rgd::byte_t>{};
-    //    auto       output_scanline    = std::span<      rgd::byte_t>{};
-
-    //    for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
-    //    {
-    //        auto const current_scanline  = std::span{ image_data.data() + row_index * scanline_size, scanline_size };
-    //        auto const filter            = static_cast<png::filter_e>(current_scanline[0u]);
-    //        input_scanline               = current_scanline.subspan<1u>();
-    //        output_scanline              = std::span{ result_image.data() + row_index * scanline_data_size, scanline_data_size };
-
-    //        for (auto column_index = rgd::size_t{ 0u }; column_index < input_scanline.size(); ++column_index)
-    //        {
-    //            output_scanline[column_index] = png::decode_operation(filter, input_scanline, previous_scanline, output_scanline, column_index, image_channels);
-    //        }
-
-    //        previous_scanline            = output_scanline;
-    //    }
-
-    //    return rgd::image
-    //    { 
-    //        .layout     = rgd::image::layout_e::rgb, 
-    //        .dimensions = dimensions               , 
-    //        .data       = result_image             , 
-    //    };
-    //}
-
-
-
-    template<rgd::uint8_t SourceChannels, rgd::uint8_t DestinationChannels> 
-        requires (rgd::in_inclusive_range<SourceChannels, 1u, 4u> && rgd::in_inclusive_range<DestinationChannels, 1u, 4u>)
-    void convert_row         (std::span<const rgd::byte_t> input, std::span<rgd::byte_t> output, rgd::size_t width)
+    auto unfilter_scanlines      (rgd::vector_2u const& dimensions, rgd::image_layout_e layout, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
     {
-        if constexpr (SourceChannels == DestinationChannels) 
-        {
-            std::ranges::copy(input, output.begin());
-        }
-        else
-        {
-            auto source_pointer      = input .data();
-            auto destination_pointer = output.data();
-            auto red                 = rgd::byte_t{};
-            auto green               = rgd::byte_t{};
-            auto blue                = rgd::byte_t{};
-            auto alpha               = rgd::byte_t{};
+        auto const bytes_per_pixel   = rgd::size_t{ (std::to_underlying(bit_depth) * std::to_underlying(layout) + 7u) / 8u };
+        auto const scanline_size     = png::calculate_scanline_size(dimensions.x * bytes_per_pixel, bit_depth);
+        auto const scanline_stride   = rgd::size_t{ scanline_size + 1u };
 
-            for (auto pixel_index = rgd::size_t{ 0u }; pixel_index < width; ++pixel_index)
-            {
-                     if constexpr (SourceChannels == 1u)
-                { 
-                    red   = source_pointer[0u]; 
-                    green = red; 
-                    blue  = red; 
-                    alpha = 0xFF;
-                }
-                else if constexpr (SourceChannels == 2u)
-                { 
-                    red   = source_pointer[0u]; 
-                    green = source_pointer[1u];
-                    blue  = red; 
-                    alpha = 0xFF;
-                }
-                else if constexpr (SourceChannels == 3u)
-                { 
-                    red   = source_pointer[0u]; 
-                    green = source_pointer[1u]; 
-                    blue  = source_pointer[2u]; 
-                    alpha = 0xFF;
-                }
-                else
-                { 
-                    red   = source_pointer[0u]; 
-                    green = source_pointer[1u]; 
-                    blue  = source_pointer[2u]; 
-                    alpha = source_pointer[3u];
-                }
-
-                if constexpr (DestinationChannels >= 1u) destination_pointer[0u] = red;
-                if constexpr (DestinationChannels >= 2u) destination_pointer[1u] = green;
-                if constexpr (DestinationChannels >= 3u) destination_pointer[2u] = blue;
-                if constexpr (DestinationChannels >= 4u) destination_pointer[3u] = alpha;
-
-                source_pointer      += SourceChannels;
-                destination_pointer += DestinationChannels;
-            }
-        }
-    }
-    void dispatch_convert_row(rgd::size_t width, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> input, std::span<rgd::byte_t> output)
-    {
-        auto const source_layout_channels      = std::to_underlying(source_layout);
-        auto const destination_layout_channels = std::to_underlying(destination_layout);
-
-        switch (source_layout_channels)
-        {
-            case 1u:
-            {
-                     if (destination_layout_channels == 1u) png::convert_row<1u, 1u>(input, output, width);
-                else if (destination_layout_channels == 2u) png::convert_row<1u, 2u>(input, output, width);
-                else if (destination_layout_channels == 3u) png::convert_row<1u, 3u>(input, output, width);
-                else if (destination_layout_channels == 4u) png::convert_row<1u, 4u>(input, output, width);
-                    
-                break;
-            }
-            case 2u:
-            {
-                     if (destination_layout_channels == 1u) png::convert_row<2u, 1u>(input, output, width);
-                else if (destination_layout_channels == 2u) png::convert_row<2u, 2u>(input, output, width);
-                else if (destination_layout_channels == 3u) png::convert_row<2u, 3u>(input, output, width);
-                else if (destination_layout_channels == 4u) png::convert_row<2u, 4u>(input, output, width);
-                    
-                break;
-
-            }
-            case 3u:
-            {
-                     if (destination_layout_channels == 1u) png::convert_row<3u, 1u>(input, output, width);
-                else if (destination_layout_channels == 2u) png::convert_row<3u, 2u>(input, output, width);
-                else if (destination_layout_channels == 3u) png::convert_row<3u, 3u>(input, output, width);
-                else if (destination_layout_channels == 4u) png::convert_row<3u, 4u>(input, output, width);
-                    
-                break;
-            }
-            case 4u:
-            {
-                     if (destination_layout_channels == 1u) png::convert_row<4u, 1u>(input, output, width);
-                else if (destination_layout_channels == 2u) png::convert_row<4u, 2u>(input, output, width);
-                else if (destination_layout_channels == 3u) png::convert_row<4u, 3u>(input, output, width);
-                else if (destination_layout_channels == 4u) png::convert_row<4u, 4u>(input, output, width);
-
-                break;
-            }
-            
-            default:
-            {
-                throw;
-                break;
-            }
-        }
-    }
-    auto decode_image    (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> source_data) -> rgd::image
-    {
-        auto const source_channels           = std::to_underlying(source_layout);
-        auto const source_scanline_size      = rgd::size_t{ dimensions.x * source_channels };
-        auto const source_scanline_stride    = rgd::size_t{ source_scanline_size + 1u };
-        auto const destination_channels      = std::to_underlying(destination_layout);
-        auto const destination_scanline_size = rgd::size_t{ dimensions.x * destination_channels };
-        auto const destination_image_size    = destination_scanline_size * dimensions.y;
-        auto       destination_data          = std::vector<rgd::byte_t>(destination_image_size);
-
-        auto       scanline_buffers          = std::array<std::vector<rgd::byte_t>, 2u>
-        { 
-            std::vector<rgd::byte_t>(source_scanline_size), 
-            std::vector<rgd::byte_t>(source_scanline_size) 
-        };
-        auto       output_scanline           = std::span<rgd::byte_t>{ scanline_buffers[0u] };
-        auto       previous_scanline         = std::span<rgd::byte_t>{ scanline_buffers[1u] };
+        auto       output_buffer     = std::vector<rgd::byte_t>(scanline_size * dimensions.y);
+        auto       input_scanline    = std::span<const rgd::byte_t>{};
+        auto       output_scanline   = std::span<rgd::byte_t>{};
+        auto       previous_scanline = std::span<rgd::byte_t>{};
 
         for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
         {
-            auto const current_scanline      = std::span{ source_data.data() + row_index * source_scanline_stride, source_scanline_stride };
-            auto const current_scanline_data = current_scanline.subspan<1u>();
-            auto const filter                = static_cast<png::filter_e>(current_scanline[0u]);
-
-            for (auto column_index = rgd::size_t{ 0u }; column_index < source_scanline_size; ++column_index)
-            {
-                switch (filter)
-                {
-                    using enum png::filter_e;
-
-                    case none    : 
-                    {
-                        output_scanline[column_index] = current_scanline_data[column_index];
-
-                        break;
-                    }
-                    case subtract: 
-                    {
-                        auto const left               = column_index >= source_channels ? output_scanline[column_index - source_channels] : rgd::byte_t{ 0u };
-                        output_scanline[column_index] = current_scanline_data[column_index] + left;
-
-                        break;
-                    }
-                    case up      : 
-                    {
-                        auto const up                 = !previous_scanline.empty() ? previous_scanline[column_index] : rgd::byte_t{ 0u };
-                        output_scanline[column_index] = current_scanline_data[column_index] + up;
-
-                        break;
-                    }
-                    case average : 
-                    {
-                        auto const left               = column_index >= source_channels ? output_scanline  [column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const up                 = !previous_scanline.empty()      ? previous_scanline[column_index]                   : rgd::byte_t{ 0u };
-                        auto const average            = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                        output_scanline[column_index] = current_scanline_data[column_index] + average;
-
-                        break;
-                    }
-                    case paeth   : 
-                    {
-                        auto const left               = column_index >= source_channels                               ? output_scanline  [column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const up                 = !previous_scanline.empty()                                    ? previous_scanline[column_index                  ] : rgd::byte_t{ 0u };
-                        auto const up_left            = column_index >= source_channels && !previous_scanline.empty() ? previous_scanline[column_index - source_channels] : rgd::byte_t{ 0u };
-                        auto const predictor          = png::paeth_predictor(left, up, up_left);
-                        output_scanline[column_index] = current_scanline_data[column_index] + predictor;
-
-                        break;
-                    }
+            auto const row_scanline          = memory.subspan(row_index * scanline_stride, scanline_stride);
+            auto const row_filter            = static_cast<png::filter_type_e>(row_scanline[0u]);
+            auto const has_previous_scanline = !previous_scanline.empty();
             
-                    default      : throw std::invalid_argument{ "invalid filter" };
+            input_scanline                   = row_scanline.subspan(1u, scanline_size);
+            output_scanline                  = std::span<rgd::byte_t>{ output_buffer.data() + row_index * scanline_size, scanline_size };
+
+            switch (row_filter)
+            {
+                using enum png::filter_type_e;
+
+                case none    :
+                {
+                    std::ranges::copy(input_scanline, output_scanline.begin());
+
+                    break;
+                }
+                case subtract:
+                {
+                    std::ranges::copy(input_scanline.subspan(0u, bytes_per_pixel), output_scanline.begin());
+                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    {
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                    }
+
+                    break;
+                }
+                case up      :
+                {
+                    if (has_previous_scanline)
+                    {
+                        for (auto index = rgd::size_t{ 0u }; index < scanline_size; ++index)
+                        {
+                            output_scanline[index] = input_scanline[index] + previous_scanline[index];
+                        }
+                    }
+                    else
+                    {
+                        std::ranges::copy(input_scanline, output_scanline.begin());
+                    }
+
+                    break;
+                }
+                case average :
+                {
+                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    {
+                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
+                        auto const average     = static_cast<rgd::byte_t>(up / 2u);
+                        output_scanline[index] = input_scanline[index] + average;
+                    }
+                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    {
+                        auto const left        = output_scanline[index - bytes_per_pixel];
+                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
+                        auto const average     = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
+                        output_scanline[index] = input_scanline[index] + average;
+                    }
+
+                    break;
+                }
+                case paeth   :
+                {
+                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    {
+                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
+                        auto const predictor   = png::paeth_predictor(rgd::byte_t{ 0u }, up, rgd::byte_t{ 0u });
+                        output_scanline[index] = input_scanline[index] + predictor;
+                    }
+                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    {
+                        auto const left        = output_scanline[index - bytes_per_pixel];
+                        auto const up          = has_previous_scanline ? previous_scanline[index                  ] : rgd::byte_t{ 0u };
+                        auto const up_left     = has_previous_scanline ? previous_scanline[index - bytes_per_pixel] : rgd::byte_t{ 0u };
+                        auto const predictor   = png::paeth_predictor(left, up, up_left);
+                        output_scanline[index] = input_scanline[index] + predictor;
+                    }
+
+                    break;
+                }
+
+                default: throw std::invalid_argument{ "invalid filter type" };
+            }
+
+            previous_scanline                = output_scanline;
+        }
+
+        return output_buffer;
+    }
+    auto unfilter_scanlines_adam7(rgd::vector_2u const& dimensions, rgd::image_layout_e layout, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
+    {
+        auto const output_buffer_size = dimensions.x * dimensions.y * std::to_underlying(layout);
+        auto       output_buffer      = std::vector<rgd::byte_t>(output_buffer_size);
+        auto       bytes_processed    = rgd::size_t{ 0u };
+
+        for (auto const& pass : png::adam7_pass_data)
+        {
+            auto const pass_dimensions = rgd::vector_2u
+            {
+                (dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x,
+                (dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y
+            };
+            auto const pass_data       = memory.subspan(bytes_processed);
+            auto const pass_image      = png::unfilter_scanlines(pass_dimensions, layout, bit_depth, pass_data);
+            if (pass_dimensions.x == 0u || pass_dimensions.y == 0u) continue;
+
+            for (auto row_index = rgd::size_t{ 0u }; row_index < pass_dimensions.y; ++row_index)
+            {
+                for (auto column_index = rgd::size_t{ 0u }; column_index < pass_dimensions.x; ++column_index)
+                {
+                    auto const source_pixel_offset     = (row_index * pass_dimensions.x + column_index) * std::to_underlying(layout);
+                    auto const destination_row         = pass.offset.y + row_index     * pass.stride.y;
+                    auto const destination_column      = pass.offset.x + column_index  * pass.stride.x;
+                    auto const destination_pixel_index = destination_row               * dimensions.x + destination_column;
+                    auto const destination_byte_offset = destination_pixel_index       * std::to_underlying(layout);
+                            
+                    std::memcpy(output_buffer.data() + destination_byte_offset, pass_image.data() + source_pixel_offset, std::to_underlying(layout));
                 }
             }
 
-            auto const destination_offset = row_index * destination_scanline_size;
-            auto       destination_span   = std::span{ destination_data.data() + destination_offset, destination_scanline_size };
-
-            png::dispatch_convert_row(dimensions.x, source_layout, destination_layout, output_scanline, destination_span);
-            std::swap                (output_scanline, previous_scanline);
+            bytes_processed += (pass_dimensions.x * pass_dimensions.y * std::to_underlying(layout)) + pass_dimensions.y;
         }
+
+        return output_buffer;
+    }
+
+    auto decode                  (std::optional<rgd::image_layout_e> target_layout, std::span<const rgd::byte_t> memory) -> rgd::image
+    {
+        //1. Validate Signature : Ensure the data is a PNG file
+        //2. Stream Parsing     : Validate file and create image model
+        //3. Decompression      : Inflate the data stream
+        //4. Reconstruction     : Reverse the byte-level filtering
+        //5. Pixel normalization: Normalize sub-byte channels to full bytes.
+        //6. Layout conversion  : Convert image to requested layout
+
+        auto const signature_span   = memory.subspan<0u, png::signature.size()>();
+        auto const valid_signature  = png::validate_signature(memory);
+        if (!valid_signature) throw;
+
+        auto const model_span       = memory.subspan<png::signature.size()>();
+        auto const model            = png::parse_chunks(model_span);
+        auto const color_channels   = png::map_color_channels(model.ihdr.pixel_type);
+        auto const layout           = static_cast<rgd::image_layout_e>(color_channels);
+        
+        auto       result_data      = zng::inflate(model.idat.data);
+
+        if (model.ihdr.interlace_method == png::interlace_method_e::none) result_data = png::unfilter_scanlines      (model.ihdr.dimensions, layout, model.ihdr.bit_depth, result_data);
+        else                                                              result_data = png::unfilter_scanlines_adam7(model.ihdr.dimensions, layout, model.ihdr.bit_depth, result_data);
+                                                          
+        if (model.ihdr.bit_depth != png::bit_depth_e::_8)                 result_data = png::expand_bits             (model.ihdr.dimensions,         model.ihdr.bit_depth , result_data);
+        if (target_layout.has_value() && target_layout.value() != layout) result_data = png::convert_layout          (model.ihdr.dimensions, layout, target_layout.value(), result_data);
 
         return rgd::image
         {
-            .layout     = destination_layout     , 
-            .dimensions = dimensions             , 
-            .data       = std::move(destination_data), 
+            .layout     = target_layout.value_or(layout), 
+            .dimensions = model.ihdr.dimensions         , 
+            .data       = std::move(result_data)        , 
         };
-    }
-
-
-
-    auto decode            (rgd::image_layout_e destination_layout, std::span<const rgd::byte_t> image_data) -> rgd::image
-    {
-        if (!png::validate_signature(image_data)) throw std::invalid_argument{ "invalid png signature" };
-
-        auto const source_model         = png::parse_chunks(image_data.subspan<sizeof(png::signature)>());
-        auto const source_channels      = png::map_image_channels(source_model.ihdr.color_type);
-        auto const source_layout        = static_cast<rgd::image_layout_e>(source_channels);
-        auto const source_data          = zng::inflate(source_model.idat.data);
-        auto const destination_channels = std::to_underlying(destination_layout);
-        auto       destination_image    = rgd::image{};
-        
-        switch (source_model.ihdr.interlace_method)
-        {
-            case png::interlace_method_e::none : 
-            {
-                destination_image = png::decode_image(source_model.ihdr.dimensions, source_layout, destination_layout, source_data);
-                
-                break;
-            }
-            case png::interlace_method_e::adam7:
-            {
-                auto const input_data         = std::span{ source_data };
-                auto const output_buffer_size = source_model.ihdr.dimensions.x * source_model.ihdr.dimensions.y * destination_channels;
-                auto       bytes_processed    = rgd::size_t{ 0u };
-                destination_image             = rgd::image
-                {
-                    .layout     = rgd::image_layout_e::rgb                    , 
-                    .dimensions = source_model.ihdr.dimensions          , 
-                    .data       = std::vector<rgd::byte_t>(output_buffer_size), 
-                };
-
-                for (auto const& pass : png::adam7_image_data)
-                {
-                    auto const pass_dimensions = rgd::vector_2u
-                    {
-                        (source_model.ihdr.dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x,
-                        (source_model.ihdr.dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y
-                    };
-                    auto const pass_data       = input_data.subspan(bytes_processed);
-                    auto const pass_image      = png::decode_image(pass_dimensions, source_layout, destination_layout, pass_data);
-                    if (pass_dimensions.x == 0u || pass_dimensions.y == 0u) continue;
-
-                    for (auto row_index = rgd::size_t{ 0u }; row_index < pass_dimensions.y; ++row_index)
-                    {
-                        for (auto column_index = rgd::size_t{ 0u }; column_index < pass_dimensions.x; ++column_index)
-                        {
-                            auto const source_pixel_offset     = (row_index * pass_dimensions.x + column_index) * destination_channels;
-                            auto const destination_row         = pass.offset.y + row_index     * pass.stride.y;
-                            auto const destination_column      = pass.offset.x + column_index  * pass.stride.x;
-                            auto const destination_pixel_index = destination_row               * source_model.ihdr.dimensions.x + destination_column;
-                            auto const destination_byte_offset = destination_pixel_index       * destination_channels;
-                            
-                            std::memcpy(&destination_image.data[destination_byte_offset], &pass_image.data[source_pixel_offset], destination_channels);
-                        }
-                    }
-
-                    bytes_processed += (pass_dimensions.x * pass_dimensions.y * source_channels) + pass_dimensions.y;
-                }
-
-                break;
-            }
-
-            default                            : throw std::invalid_argument{ "invalid interlace method" };
-        }
-
-        return destination_image;
     }
 }
