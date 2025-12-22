@@ -5,12 +5,6 @@ import rigid.types;
 
 export namespace rgd::mem
 {
-    template<typename T>
-    auto compare(T const& left, T const& right) -> rgd::bool_t
-    {
-        auto constexpr equal_result = rgd::int32_t{ 0 };
-        return std::memcmp(&left, &right, sizeof(T)) == equal_result;
-    }
     auto compare(std::span<const rgd::byte_t> left, std::span<const rgd::byte_t> right) -> rgd::bool_t
     {
         auto constexpr equal_result = rgd::int32_t{ 0 };
