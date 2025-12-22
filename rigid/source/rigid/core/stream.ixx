@@ -6,43 +6,50 @@ import rigid.bitwise;
 
 export namespace rgd
 {
-    template<typename T>
-    auto lift(T value, auto function) -> decltype(std::invoke(function, value))
+    template<bit::endian_e Endian>
+    class input_stream
     {
-        return std::invoke(function, value);
-    }
-    template<typename T> requires (std::is_enum_v<T>)
-    auto lift(T value, auto function) -> decltype(std::invoke(function, std::to_underlying(value)))
-    {
-        return std::invoke(function, std::to_underlying(value));
-    }
+    public:
+        input_stream(std::span<const rgd::byte_t> memory)
+            : stream_{ memory } {}
 
+        template<typename U>
+        auto consume(auto...) -> U
+        {
+            auto value = U{};
+            stream_.read(reinterpret_cast<rgd::byte_t*>(&value), sizeof(U));
+            
+            return bit::swap_bytes_native<Endian>(value);
+        }
+        template<>
+        auto consume<std::string>(rgd::size_t length) -> std::string
+        {
+            auto value = std::string(length);
+            stream_.read(value.data(), length);
+            
+            return value;
+        }
 
+        void forward (rgd::size_t offset)
+        {
+            stream_.seekg(offset, std::ios::cur);
+        }
+        void backward(rgd::size_t offset)
+        {
+            stream_.seekg(-offset, std::ios::cur);
+        }
 
-    template<typename T> requires (std::is_trivially_copyable_v<T>)
-    auto consume(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
-    {
-        if (cursor + sizeof(T) > memory.size_bytes()) throw std::out_of_range{ "invalid memory access" };
+        auto position() -> rgd::size_t
+        {
+            return static_cast<rgd::size_t>(stream_.tellg());
+        }
 
-        auto value = T{};
-        std::memcpy(&value, memory.data() + cursor, sizeof(T));
-        cursor += sizeof(T);
+        operator rgd::bool_t()
+        {
+            return stream_.good();
+        }
 
-        return value;
-    }
-    template<typename T> requires (std::is_trivially_copyable_v<T>)
-    void produce(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor, T value)
-    {
-        if (cursor + sizeof(T) > memory.size_bytes()) throw std::out_of_range{ "invalid memory access" };
-
-        std::memcpy(memory.data() + cursor, &value, sizeof(T));
-        cursor += sizeof(T);
-    }
-
-    template<typename T>
-    auto consume_b(std::span<const rgd::byte_t> memory, rgd::cursor_t& cursor) -> T
-    {
-        auto const value = rgd::consume<T>(memory, cursor);
-        return bit::swap_bytes_native<bit::endian_e::big>(value);
-    }
+    private:
+        std::basic_ispanstream<rgd::byte_t> stream_;
+    };
 }
