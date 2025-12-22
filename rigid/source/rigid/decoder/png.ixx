@@ -4,67 +4,10 @@ import std;
 import rigid.core;
 import zlib_ng;
 
-namespace rgd::mem::adapter
-{
-    //A specialized allocator that bypasses initialization when a vector is resized.
-    //This allows for direct population of the raw, uninitialized memory.
-    //It can significantly improve performance for large allocations by eliminating redundant initialization.
-    //https://stackoverflow.com/a/21028912
-    //https://www.boost.org/doc/libs/1_75_0/boost/core/noinit_adaptor.hpp
-    //template<typename A>
-    //class no_init : public A
-    //{
-    //public:
-    //    template<typename U> 
-    //    struct rebind
-    //    {
-    //        using other = no_init<typename std::allocator_traits<A>::template rebind_alloc<U>>;
-    //    };
-
-    //    template<typename U>
-    //    void construct(U* pointer) noexcept(std::is_nothrow_default_constructible<U>::value)
-    //    {
-    //        ::new(static_cast<void*>(pointer)) U;
-    //    }
-    //    template<typename U, typename...Args>
-    //    void construct(U* pointer, Args&&... args)
-    //    {
-    //        std::allocator_traits<A>::construct(static_cast<A&>(*this), pointer, std::forward<Args>(args)...);
-    //    }
-
-    //    template<class U>
-    //    void destroy(U* pointer)
-    //    {
-    //        pointer->~U();
-    //    }
-
-    //    template<class T, class U>
-    //    friend auto operator==(const no_init<T>& left, const no_init<U>& right) noexcept -> rgd::bool_t
-    //    {
-    //        return static_cast<const T&>(left) == static_cast<const U&>(right);
-    //    }
-    //    template<class T, class U>
-    //    friend auto operator!=(const no_init<T>& left, const no_init<U>& right) noexcept -> rgd::bool_t
-    //    {
-    //        return !(left == right);
-    //    }
-    //};
-
-    template<typename T>
-    class no_init {
-        static_assert(
-            std::is_fundamental<T>::value,
-            "should be a fundamental type");
-    public:
-        no_init() noexcept {}
-        constexpr  no_init(T value) noexcept : v_{ value } {}
-        constexpr  operator T () const noexcept { return v_; }
-    private:
-        T v_;
-    };
-}
 export namespace rgd
 {
+    using dynamic_array = std::vector<rgd::byte_t>;
+
     enum class error_type_e
     {
         runtime         , 
@@ -415,7 +358,7 @@ export namespace rgd::png
             case grayscale_alpha : return 2u;
             case true_color_alpha: return 4u;
 
-            default: throw std::invalid_argument{ "invalid color type" };
+            default: std::unreachable();
         }
     }
     auto calculate_scanline_size (rgd::size_t size, png::bit_depth_e bit_depth) -> rgd::size_t
@@ -473,7 +416,7 @@ export namespace rgd::png
                     case rgb : return png::convert_channels<1u, 3u>(dimensions, memory);
                     case rgba: return png::convert_channels<1u, 4u>(dimensions, memory);
 
-                    default: throw std::invalid_argument{ "invalid layout" };
+                    default: std::unreachable();
                 }
             }
             case rg  : 
@@ -487,7 +430,7 @@ export namespace rgd::png
                     case rgb : return png::convert_channels<2u, 3u>(dimensions, memory);
                     case rgba: return png::convert_channels<2u, 4u>(dimensions, memory);
 
-                    default: throw std::invalid_argument{ "invalid layout" };
+                    default: std::unreachable();
                 }
             }
             case rgb : 
@@ -501,7 +444,7 @@ export namespace rgd::png
                     case rgb : return png::convert_channels<3u, 3u>(dimensions, memory);
                     case rgba: return png::convert_channels<3u, 4u>(dimensions, memory);
 
-                    default: throw std::invalid_argument{ "invalid layout" };
+                    default: std::unreachable();
                 }
             }
             case rgba: 
@@ -515,11 +458,11 @@ export namespace rgd::png
                     case rgb : return png::convert_channels<4u, 3u>(dimensions, memory);
                     case rgba: return png::convert_channels<4u, 4u>(dimensions, memory);
 
-                    default: throw std::invalid_argument{ "invalid layout" };
+                    default: std::unreachable();
                 }
             }
 
-            default: throw std::invalid_argument{ "invalid layout" };
+            default: std::unreachable();
         }
     }
     auto expand_bits             (rgd::vector_2u const& dimensions, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
@@ -795,7 +738,7 @@ export namespace rgd::png
                             break;
                         }
 
-                        default: throw std::invalid_argument{ "invalid pixel type" };
+                        default: std::unreachable();
                     }
 
                     break;
@@ -919,6 +862,7 @@ export namespace rgd::png
     auto unfilter_scanlines      (rgd::vector_2u const& dimensions, rgd::image_layout_e layout, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
     {
         auto const bytes_per_pixel   = rgd::size_t{ (std::to_underlying(bit_depth) * std::to_underlying(layout) + 7u) / 8u };
+        auto const filter_bytes      = rgd::size_t{ bit_depth == png::bit_depth_e::_16 ? 2u : 1u };
         auto const scanline_size     = png::calculate_scanline_size(dimensions.x * bytes_per_pixel, bit_depth);
         auto const scanline_stride   = rgd::size_t{ scanline_size + 1u };
 
@@ -927,14 +871,63 @@ export namespace rgd::png
         auto       output_scanline   = std::span<rgd::byte_t>{};
         auto       previous_scanline = std::span<rgd::byte_t>{};
 
-        for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y; ++row_index)
         {
-            auto const row_scanline          = memory.subspan(row_index * scanline_stride, scanline_stride);
-            auto const row_filter            = static_cast<png::filter_type_e>(row_scanline[0u]);
-            auto const has_previous_scanline = !previous_scanline.empty();
+            auto const row_scanline = memory.subspan(0u, scanline_stride);
+            auto const row_filter   = static_cast<png::filter_type_e>(row_scanline[0u]);
             
-            input_scanline                   = row_scanline.subspan(1u, scanline_size);
-            output_scanline                  = std::span<rgd::byte_t>{ output_buffer.data() + row_index * scanline_size, scanline_size };
+            input_scanline          = row_scanline.subspan(filter_bytes, scanline_size);
+            output_scanline         = std::span<rgd::byte_t>{ output_buffer.data(), scanline_size };
+
+            switch (row_filter)
+            {
+                using enum png::filter_type_e;
+            
+                case none    :
+                {
+                    std::ranges::copy(input_scanline, output_scanline.begin());
+
+                    break;
+                }
+                case subtract:
+                {
+                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    {
+                        output_scanline[index] = input_scanline[index];
+                    }
+                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    {
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                    }
+                
+                    break;
+                }
+                case up      :
+                case average :
+                case paeth   :
+                {
+                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    {
+                        output_scanline[index] = input_scanline[index];
+                    }
+                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    {
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                    }
+                
+                    break;
+                }
+            
+                default: throw std::invalid_argument{ "invalid filter" };
+            }
+        }
+        for (auto row_index = rgd::size_t{ 1u }; row_index < dimensions.y; ++row_index)
+        {
+            auto const row_scanline = memory.subspan(row_index * scanline_stride, scanline_stride);
+            auto const row_filter   = static_cast<png::filter_type_e>(row_scanline[0u]);
+            
+            input_scanline          = row_scanline.subspan(filter_bytes, scanline_size);
+            previous_scanline       = output_scanline;
+            output_scanline         = std::span<rgd::byte_t>{ output_buffer.data() + row_index * scanline_size, scanline_size };
 
             switch (row_filter)
             {
@@ -958,16 +951,9 @@ export namespace rgd::png
                 }
                 case up      :
                 {
-                    if (has_previous_scanline)
+                    for (auto index = rgd::size_t{ 0u }; index < scanline_size; ++index)
                     {
-                        for (auto index = rgd::size_t{ 0u }; index < scanline_size; ++index)
-                        {
-                            output_scanline[index] = input_scanline[index] + previous_scanline[index];
-                        }
-                    }
-                    else
-                    {
-                        std::ranges::copy(input_scanline, output_scanline.begin());
+                        output_scanline[index] = input_scanline[index] + previous_scanline[index];
                     }
 
                     break;
@@ -976,16 +962,15 @@ export namespace rgd::png
                 {
                     for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
                     {
-                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
-                        auto const average     = static_cast<rgd::byte_t>(up / 2u);
+                        auto const average     = static_cast<rgd::byte_t>(previous_scanline[index] / 2u);
                         output_scanline[index] = input_scanline[index] + average;
                     }
                     for (auto index = bytes_per_pixel; index < scanline_size; ++index)
                     {
-                        auto const left        = output_scanline[index - bytes_per_pixel];
-                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
-                        auto const average     = static_cast<rgd::byte_t>((static_cast<rgd::uint32_t>(left) + up) / 2u);
-                        output_scanline[index] = input_scanline[index] + average;
+                        auto const left        = output_scanline  [index - bytes_per_pixel];
+                        auto const up          = previous_scanline[index                  ];
+                        auto const average     = rgd::byte_t{ (left + up) / 2u };
+                        output_scanline[index] = input_scanline   [index                  ] + average;
                     }
 
                     break;
@@ -994,26 +979,23 @@ export namespace rgd::png
                 {
                     for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
                     {
-                        auto const up          = has_previous_scanline ? previous_scanline[index] : rgd::byte_t{ 0u };
-                        auto const predictor   = png::paeth_predictor(rgd::byte_t{ 0u }, up, rgd::byte_t{ 0u });
+                        auto const predictor   = png::paeth_predictor(rgd::byte_t{ 0u }, previous_scanline[index], rgd::byte_t{ 0u });
                         output_scanline[index] = input_scanline[index] + predictor;
                     }
                     for (auto index = bytes_per_pixel; index < scanline_size; ++index)
                     {
-                        auto const left        = output_scanline[index - bytes_per_pixel];
-                        auto const up          = has_previous_scanline ? previous_scanline[index                  ] : rgd::byte_t{ 0u };
-                        auto const up_left     = has_previous_scanline ? previous_scanline[index - bytes_per_pixel] : rgd::byte_t{ 0u };
+                        auto const left        = output_scanline  [index - bytes_per_pixel];
+                        auto const up          = previous_scanline[index                  ];
+                        auto const up_left     = previous_scanline[index - bytes_per_pixel];
                         auto const predictor   = png::paeth_predictor(left, up, up_left);
-                        output_scanline[index] = input_scanline[index] + predictor;
+                        output_scanline[index] = input_scanline   [index                  ] + predictor;
                     }
 
                     break;
                 }
 
-                default: throw std::invalid_argument{ "invalid filter type" };
+                default: throw std::invalid_argument{ "invalid filter" };
             }
-
-            previous_scanline                = output_scanline;
         }
 
         return output_buffer;
