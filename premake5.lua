@@ -1,90 +1,34 @@
-workspace "rigid"
-	startproject "run"
-	architecture "x64"
+project "rigid"
+	location         "rigid"
+	language         "C++"
+	cppdialect       "C++23"
+	kind             "StaticLib"
+	staticruntime    "On"
+	enablemodules    "On"
+	buildstlmodules  "On"
+	warnings         "Extra"
+	externalwarnings "Off"
 	
-	configurations { 
-		"Debug", 
-		"Release", 
+	includedirs {
+		"vendor", 
 	}
 	
-	filter "system:windows"
-		systemversion "latest"
+	files {
+		"rigid/source/**.ixx", 
+		"rigid/vendor/**.ixx", 
+	}
+	
+	links {
+		"zlib-ng", 
+	}
 	
 	filter "configurations:Debug"
-		runtime   "Debug"
-		symbols   "On"
+		defines   "RGD_DEBUG"
 		
-		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
-	
 	filter "configurations:Release"
-		runtime   "Release"
-		optimize  "On"
-		
-		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
-
-
-
-group "Application"
-	project "rigid"
-		location         "rigid"
-		language         "C++"
-		cppdialect       "C++23"
-		kind             "StaticLib"
-		staticruntime    "On"
-		enablemodules    "On"
-		buildstlmodules  "On"
-		warnings         "Extra"
-		externalwarnings "Off"
-		
-		includedirs {
-			"vendor", 
-		}
-		
-		files {
-			"rigid/source/**.ixx", 
-			"rigid/vendor/**.ixx", 
-		}
-		
-		links {
-			"zlib-ng", 
-		}
-		
-		filter "configurations:Debug"
-			defines   "RGD_DEBUG"
-			
-		filter "configurations:Release"
-			defines   "RGD_RELEASE"
-
-
-
-	project "run"
-		location         "run"
-		language         "C++"
-		cppdialect       "C++23"
-		kind             "ConsoleApp"
-		staticruntime    "On"
-		enablemodules    "On"
-		buildstlmodules  "On"
-		warnings         "Extra"
-		externalwarnings "Off"
-		
-		includedirs {
-			"rigid/source", 
-			"vendor/sdl/include", 
-		}
-		files {
-			"run/source/**.hpp", 
-			"run/source/**.cpp", 
-			"run/source/**.ixx", 
-		}
-		links {
-			"rigid", 
-			"sdl", 
-		}
-		
-group "Vendor"
-	include "vendor/sdl"
-	include "vendor/zlib-ng"
-group ""
+		defines   "RGD_RELEASE"
+	
+	group "Vendor"
+		include "vendor/sdl"
+		include "vendor/zlib-ng"
+	group ""
