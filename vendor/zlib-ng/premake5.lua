@@ -99,7 +99,6 @@ project "zlib-ng"
 	defines {
 		"WIN32", 
 		"_WINDOWS", 
-		"ZLIB_DEBUG", 
 		"ZLIBNG_NATIVE_API", 
 		"WITH_GZFILEOP", 
 		"NO_FSEEKO", 
@@ -117,3 +116,8 @@ project "zlib-ng"
 		"X86_AVX512VNNI", 
 		"X86_VPCLMULQDQ_CRC", 
 	}
+	
+	filter "configurations:Debug"
+		defines {
+			"ZLIB_DEBUG", 
+		}
