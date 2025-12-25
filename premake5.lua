@@ -28,7 +28,7 @@ project "rigid"
 	filter "configurations:Release"
 		defines   "RGD_RELEASE"
 	
-	group "Vendor"
+	group "vendor"
 		include "vendor/sdl"
 		include "vendor/zlib-ng"
 	group ""
