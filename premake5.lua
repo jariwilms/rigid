@@ -29,6 +29,5 @@ project "rigid"
 		defines   "RGD_RELEASE"
 	
 	group "vendor"
-		include "vendor/sdl"
 		include "vendor/zlib-ng"
 	group ""
