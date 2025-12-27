@@ -48,7 +48,7 @@ export namespace rgd
         rgd::swizzle_e      swizzle;
     };
 
-    auto find_image_format(std::span<const rgd::byte_t> image) -> rgd::image_format_e
+    auto check_image_format(std::span<const rgd::byte_t> image) -> rgd::image_format_e
     {
         if (mem::compare(image, bmp ::signature)) return rgd::image_format_e::bmp ;
         if (mem::compare(image, jpeg::signature)) return rgd::image_format_e::jpeg;
