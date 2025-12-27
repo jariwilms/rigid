@@ -45,12 +45,12 @@ export namespace zng
         return static_cast<zng::result_e>(::zng_inflateEnd(&stream));
     }
     
-    auto inflate           (std::span<const std::uint8_t> memory) -> std::vector<std::uint8_t>
+    auto inflate           (std::optional<std::size_t> chunk_size, std::span<const std::uint8_t> memory) -> std::vector<std::uint8_t>
     {
         auto       stream        = zng::stream{};
         auto       result        = zng::result_e{};
         auto       inflated_data = std::vector<std::uint8_t>{};
-        auto const chunk_size    = config::chunk_size;
+        auto const avail_out     = chunk_size.value_or(config::chunk_size);
         auto const zng_init      = zng::initialize_inflate(stream);
         if (zng_init != zng::result_e::ok) throw std::runtime_error{ "failed to initialize zlib inflate" };
 
@@ -60,10 +60,10 @@ export namespace zng
         while (result != zng::result_e::stream_end)
         {
             auto const old_size = inflated_data.size();
-            inflated_data.resize(old_size + chunk_size);
+            inflated_data.resize(old_size + avail_out);
 
             stream.next_out     = inflated_data.data() + old_size;
-            stream.avail_out    = chunk_size;
+            stream.avail_out    = static_cast<std::uint32_t>(avail_out);
             result              = zng::inflate_stream(stream, zng::flush_e::no);
             if (result != zng::result_e::ok && result != zng::result_e::stream_end) 
             {
@@ -71,7 +71,7 @@ export namespace zng
                 throw std::runtime_error{ "failed to inflate data" };
             }
 
-            inflated_data.resize(old_size + chunk_size - stream.avail_out);
+            inflated_data.resize(old_size + avail_out - stream.avail_out);
         }
 
         zng::end_inflate(stream);
