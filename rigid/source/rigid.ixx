@@ -48,17 +48,28 @@ export namespace rgd
         rgd::swizzle_e      swizzle;
     };
 
-    auto check_image_format(std::span<const rgd::byte_t> image) -> rgd::image_format_e
+    auto check_image_format(std::span<const rgd::byte_t> memory) -> rgd::image_format_e
     {
-        if (mem::compare(image, bmp ::signature)) return rgd::image_format_e::bmp ;
-        if (mem::compare(image, jpeg::signature)) return rgd::image_format_e::jpeg;
-        if (mem::compare(image, png ::signature)) return rgd::image_format_e::png ;
-        if (mem::compare(image, webp::signature)) return rgd::image_format_e::webp;
+        if (mem::compare(memory, bmp ::signature)) return rgd::image_format_e::bmp ;
+        if (mem::compare(memory, jpeg::signature)) return rgd::image_format_e::jpeg;
+        if (mem::compare(memory, png ::signature)) return rgd::image_format_e::png ;
+        if (mem::compare(memory, webp::signature)) return rgd::image_format_e::webp;
 
         throw std::invalid_argument{ "unsupported image format" };
     }
-    auto decode           (std::optional<rgd::image_layout_e> image_layout, std::span<const rgd::byte_t> image_data) -> rgd::image
+    auto decode            (std::optional<rgd::image_format_e> image_format, std::optional<rgd::image_layout_e> image_layout, std::span<const rgd::byte_t> memory) -> rgd::image
     {
-        return png::decode(image_layout, image_data);
+        auto const target_format = image_format.value_or(rgd::check_image_format(memory));
+        switch (target_format)
+        {
+            using enum rgd::image_format_e;
+
+            case bmp : return {};
+            case jpeg: return {};
+            case png : return png::decode(image_layout, memory);
+            case webp: return {};
+
+            default: throw std::invalid_argument{ "invalid image format" };
+        }
     }
 }
