@@ -6,35 +6,130 @@ import zlib_ng;
 
 export namespace rgd
 {
-    using dynamic_array = std::vector<rgd::byte_t>;
+    template<rgd::image_layout_e input_layout, rgd::image_layout_e output_layout>
+    void convert_layout(rgd::vector_2u dimensions, std::span<const rgd::byte_t> input, std::span<rgd::byte_t> output)
+    {
+        auto constexpr input_channels  = std::to_underlying(input_layout);
+        auto constexpr output_channels = std::to_underlying(output_layout);
+        auto const     pixel_count     = dimensions.x * dimensions.y;
 
-    enum class error_type_e
+        if constexpr (output_channels > input_channels)
+        {
+            for (auto index = pixel_count; index-- > 0u;)
+            {
+                auto const input_index  = index * input_channels;
+                auto const output_index = index * output_channels;
+
+                for (auto channel_index =       0u; channel_index < input_channels       ; ++channel_index)
+                {
+                    output[output_index + channel_index] = input[input_index + channel_index];
+                }
+                for (auto channel_index = input_channels; channel_index < output_channels; ++channel_index)
+                {
+                    output[output_index + channel_index] = 0u;
+                }
+                if constexpr (output_channels == 4 && input_channels < 4)
+                {
+                    output[output_index + 3u] = 255u;
+                }
+            }
+        }
+        else
+        {
+            auto const copy_count = std::min(input_channels, output_channels);
+
+            for (auto index = 0u; index < pixel_count; ++index)
+            {
+                auto const input_index  = index * input_channels;
+                auto const output_index = index * output_channels;
+
+                for (auto channel_index = 0u; channel_index < copy_count; ++channel_index)
+                {
+                    output[output_index + channel_index] = input[input_index + channel_index];
+                }
+            }
+        }
+    }
+    void convert_layout(rgd::vector_2u dimensions, rgd::image_layout_e input_layout, rgd::image_layout_e output_layout, std::span<const rgd::byte_t> input, std::span<rgd::byte_t> output)
     {
-        runtime         , 
-        overflow        , 
-        invalid_argument, 
-        out_of_range    , 
-    };
-    struct error_result
+        auto invoke = [&]<rgd::image_layout_e input_layout>(rgd::image_layout_e output_layout) -> void
+        {
+            if (input_layout == output_layout) return;
+
+            switch (output_layout)
+            {
+                case rgd::image_layout_e::r   : return convert_layout<input_layout, rgd::image_layout_e::r   >(dimensions, input, output);
+                case rgd::image_layout_e::rg  : return convert_layout<input_layout, rgd::image_layout_e::rg  >(dimensions, input, output);
+                case rgd::image_layout_e::rgb : return convert_layout<input_layout, rgd::image_layout_e::rgb >(dimensions, input, output);
+                case rgd::image_layout_e::rgba: return convert_layout<input_layout, rgd::image_layout_e::rgba>(dimensions, input, output);
+
+                default: throw std::invalid_argument{ "invalid layout" };
+            }
+        };
+
+        switch (input_layout)
+        {
+            case rgd::image_layout_e::r   : return invoke.template operator()<rgd::image_layout_e::r   >(output_layout);
+            case rgd::image_layout_e::rg  : return invoke.template operator()<rgd::image_layout_e::rg  >(output_layout);
+            case rgd::image_layout_e::rgb : return invoke.template operator()<rgd::image_layout_e::rgb >(output_layout);
+            case rgd::image_layout_e::rgba: return invoke.template operator()<rgd::image_layout_e::rgba>(output_layout);
+            
+            default: throw std::invalid_argument{ "invalid layout" };
+        }
+    }
+
+    template<rgd::uint8_t bit_depth>
+    auto constexpr make_scale_table()
     {
-        rgd::error_type_e type;
-        std::string_view  message;
-    };
+        auto constexpr enumerations = (1u << bit_depth) - 1u;
+        auto           table        = std::array<rgd::byte_t, enumerations + 1u>{};
+
+        for (auto index = rgd::size_t{ 0u }; index <= enumerations; ++index)
+        {
+            table[index] = static_cast<rgd::uint8_t>((index * 255u) / enumerations);
+        }
+
+        return table;
+    }
+    template<rgd::uint8_t bit_depth>
+    void expand_bits(rgd::size_t pixel_count, std::span<rgd::byte_t> input, std::span<rgd::byte_t> output)
+    {
+        if constexpr (bit_depth != rgd::uint8_t{ 16u })
+        {
+            auto constexpr pixels_per_byte = 8u / bit_depth;
+            auto constexpr mask            = rgd::byte_t{ (1u << bit_depth) - 1u };
+            auto constexpr scale_table     = rgd::make_scale_table<bit_depth>();
+
+            for (auto index = pixel_count - 1u; index < std::numeric_limits<rgd::size_t>::max(); --index)
+            {
+                auto const byte_index = index / pixels_per_byte;
+                auto const bit_index  = index % pixels_per_byte;
+                auto const shift      = (pixels_per_byte - 1u - bit_index) * bit_depth;
+                auto const sample     = (input[byte_index] >> shift) & mask;
+
+                output[index]         = scale_table[sample];
+            }
+        }
+        else
+        {
+            for (auto index = rgd::size_t{ 0u }; index < pixel_count; ++index)
+            {
+                auto const high_byte = input[index * 2u];
+                output[index]        = high_byte;
+            }
+        }
+    }
 }
 export namespace rgd::png
 {
+    using bit_depth   = rgd::uint8_t;
+    using bit_depth_t = rgd::uint8_t;
+    using channels_t  = rgd::uint8_t;
+
     enum class accessibility_e : rgd::uint8_t
     {
         public_  = 0u, 
         private_ = 1u, 
-    };
-    enum class bit_depth_e : rgd::uint8_t
-    {
-        _1  =  1u, 
-        _2  =  2u, 
-        _4  =  4u, 
-        _8  =  8u, 
-        _16 = 16u, 
     };
     enum class chunk_type_e : rgd::uint32_t
     {
@@ -130,7 +225,7 @@ export namespace rgd::png
         struct ihdr
         {
             rgd::vector_2u            dimensions;
-            png::bit_depth_e          bit_depth;
+            png::bit_depth            bit_depth;
             png::pixel_type_e         pixel_type;
             png::compression_method_e compression_method;
             png::filter_method_e      filter_method;
@@ -346,172 +441,80 @@ export namespace rgd::png
 }
 export namespace rgd::png
 {
-    auto map_color_channels      (png::pixel_type_e pixel_type) -> rgd::size_t
+    auto map_image_layout          (png::pixel_type_e pixel_type) -> rgd::image_layout_e
     {
         switch (pixel_type)
         {
             using enum png::pixel_type_e;
 
-            case grayscale       : return 1u;
-            case true_color      : return 3u;
-            case indexed_color   : return 1u;
-            case grayscale_alpha : return 2u;
-            case true_color_alpha: return 4u;
+            case grayscale       : return rgd::image_layout_e::r   ;
+            case true_color      : return rgd::image_layout_e::rgb ;
+            case indexed_color   : return rgd::image_layout_e::r   ;
+            case grayscale_alpha : return rgd::image_layout_e::rg  ;
+            case true_color_alpha: return rgd::image_layout_e::rgba;
 
-            default: std::unreachable();
+            default: throw std::invalid_argument{ "invalid pixel type" };
         }
     }
-    auto calculate_scanline_size (rgd::size_t size, png::bit_depth_e bit_depth) -> rgd::size_t
+    
+    auto calculate_pixel_size      (rgd::image_layout_e image_layout, png::bit_depth bit_depth) -> rgd::size_t
     {
-        auto const factor = std::to_underlying(bit_depth) / 8.0f;
-        return static_cast<rgd::size_t>(std::ceil(size * factor));
+        return (std::to_underlying(image_layout) * bit_depth + 7u) / 8u;
     }
-    auto paeth_predictor         (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
+    auto calculate_scanline_size   (rgd::size_t pixels, png::bit_depth bit_depth) -> rgd::size_t
     {
-        auto threshold = gamma * 3 - (alpha + beta);
-        auto low       = alpha < beta ? alpha : beta;
-        auto high      = alpha < beta ? beta  : alpha;
+        auto const factor = bit_depth / 8.0f;
+        return static_cast<rgd::size_t>(std::ceil(pixels * factor));
+    }
+    auto calculate_filter_size     (png::bit_depth bit_depth) -> rgd::size_t
+    {
+        return (bit_depth == 16u) ? 2u : 1u;
+    }
+    auto calculate_total_image_size(rgd::vector_2u const& dimensions, rgd::image_layout_e image_layout, png::bit_depth bit_depth) -> rgd::size_t
+    {
+        auto const multiplier = (bit_depth == 16u) ? 2u : 1u;
+        return dimensions.x * dimensions.y * std::to_underlying(image_layout) * multiplier;
+    }
+    auto calculate_pass_dimensions (rgd::vector_2u const& dimensions, png::adam7_pass const& pass) -> rgd::vector_2u
+    {
+        return rgd::vector_2u
+        {
+            (dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x, 
+            (dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y, 
+        };
+    }
+    
+    auto paeth_predictor           (rgd::byte_t alpha, rgd::byte_t beta, rgd::byte_t gamma) -> rgd::byte_t
+    {
+        auto const threshold = gamma * 3 - (alpha + beta);
+        auto const low       = alpha < beta ? alpha : beta;
+        auto const high      = alpha < beta ? beta  : alpha;
         
-        auto t0        = (high <= threshold) ? low  : gamma;
-        auto t1        = (threshold <= low ) ? high : t0;
+        auto const t0        = (high <= threshold) ? low  : gamma;
+        auto const t1        = (threshold <= low ) ? high : t0;
         
         return t1;
     };
-    
-    template<rgd::size_t SourceChannels, rgd::size_t TargetChannels>
-    auto convert_channels        (rgd::vector_2u const& dimensions, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
+    auto print_chunk_info          (png::chunk::header chunk_header)
     {
-        auto const pixels = rgd::size_t{ dimensions.x * dimensions.y };
-        auto       target = std::vector<rgd::byte_t>(pixels * TargetChannels);
+        auto const ancillary_bit    = static_cast<png::chunk_requirement_e>(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
+        auto const private_bit      = static_cast<png::accessibility_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
+        auto const reserved_bit     = static_cast<png::reserved_e         >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
+        auto const safe_to_copy_bit = static_cast<png::safe_to_copy_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
 
-        for (auto i = rgd::size_t{ 0u }; i < pixels; ++i)
-        {
-            auto const* s = &memory[i * SourceChannels];
-            auto      * d = &target[i * TargetChannels];
-
-            for (auto j = rgd::size_t{ 0u }; j < TargetChannels; ++j)
-            {
-                     if (j < SourceChannels) d[j] = s[j];
-                else if (j < 3u)             d[j] = (SourceChannels == 1u) ? s[0u] : 0u;
-                else                         d[j] = 255u;
-            }
-        }
-
-        return target;
-    }
-    auto convert_layout          (rgd::vector_2u const& dimensions, rgd::image_layout_e source_layout, rgd::image_layout_e target_layout, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
-    {
-        switch (source_layout)
-        {
-            using enum rgd::image_layout_e;
-
-            case r   : 
-            {
-                switch (target_layout)
-                {
-                    using enum rgd::image_layout_e;
-
-                    case r   : return png::convert_channels<1u, 1u>(dimensions, memory);
-                    case rg  : return png::convert_channels<1u, 2u>(dimensions, memory);
-                    case rgb : return png::convert_channels<1u, 3u>(dimensions, memory);
-                    case rgba: return png::convert_channels<1u, 4u>(dimensions, memory);
-
-                    default: std::unreachable();
-                }
-            }
-            case rg  : 
-            {
-                switch (target_layout)
-                {
-                    using enum rgd::image_layout_e;
-
-                    case r   : return png::convert_channels<2u, 1u>(dimensions, memory);
-                    case rg  : return png::convert_channels<2u, 2u>(dimensions, memory);
-                    case rgb : return png::convert_channels<2u, 3u>(dimensions, memory);
-                    case rgba: return png::convert_channels<2u, 4u>(dimensions, memory);
-
-                    default: std::unreachable();
-                }
-            }
-            case rgb : 
-            {
-                switch (target_layout)
-                {
-                    using enum rgd::image_layout_e;
-
-                    case r   : return png::convert_channels<3u, 1u>(dimensions, memory);
-                    case rg  : return png::convert_channels<3u, 2u>(dimensions, memory);
-                    case rgb : return png::convert_channels<3u, 3u>(dimensions, memory);
-                    case rgba: return png::convert_channels<3u, 4u>(dimensions, memory);
-
-                    default: std::unreachable();
-                }
-            }
-            case rgba: 
-            {
-                switch (target_layout)
-                {
-                    using enum rgd::image_layout_e;
-
-                    case r   : return png::convert_channels<4u, 1u>(dimensions, memory);
-                    case rg  : return png::convert_channels<4u, 2u>(dimensions, memory);
-                    case rgb : return png::convert_channels<4u, 3u>(dimensions, memory);
-                    case rgba: return png::convert_channels<4u, 4u>(dimensions, memory);
-
-                    default: std::unreachable();
-                }
-            }
-
-            default: std::unreachable();
-        }
-    }
-    auto expand_bits             (rgd::vector_2u const& dimensions, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
-    {
-        auto const bits_per_byte    = std::to_underlying(bit_depth);
-        auto const samples_per_byte = 8u / bits_per_byte;
-        auto const bytes_per_row    = (dimensions.x + samples_per_byte - 1) / samples_per_byte;
-        
-        auto const value_lut        = std::invoke([&]() -> std::array<rgd::byte_t, 16u>
-            {
-                auto const maximum      = (1u << bits_per_byte) - 1u;
-                auto const scale_factor = 255u / ((1u << bits_per_byte) - 1u);
-                auto       lut          = std::array<rgd::byte_t, 16u>{};
-                
-                for (auto i = rgd::size_t{ 0u }; i <= maximum; ++i)
-                {
-                    lut[i] = static_cast<rgd::byte_t>(i * scale_factor);
-                }
-
-                return lut;
-            });
-
-        auto const mask             = (1u << bits_per_byte) - 1u;
-        auto       output           = std::vector<rgd::byte_t>(dimensions.x * dimensions.y);
-
-        for (auto y = rgd::size_t{ 0u }; y < dimensions.y; ++y)
-        {
-            auto const index_in  = y * bytes_per_row;
-            auto const index_out = y * dimensions.x;
-
-            for (auto x = rgd::size_t{ 0u }; x < dimensions.x; ++x)
-            {
-                auto const byte_index = x / samples_per_byte;
-                auto const bit_index  = x % samples_per_byte;
-                auto const shift      = (samples_per_byte - 1u - bit_index) * bits_per_byte;
-                auto const sample     = static_cast<rgd::byte_t>((memory[index_in + byte_index] >> shift) & mask);
-
-                output[index_out + x] = value_lut[sample];
-            }
-        }
-
-        return output;
+        std::println("Unknown chunk type");
+        std::println("Chunk properties:");
+        std::println("\t{:16}: {}", "Ancillary bit"   , std::to_underlying(ancillary_bit   ));
+        std::println("\t{:16}: {}", "Private bit"     , std::to_underlying(private_bit     ));
+        std::println("\t{:16}: {}", "Reserved bit"    , std::to_underlying(reserved_bit    ));
+        std::println("\t{:16}: {}", "Safe To Copy bit", std::to_underlying(safe_to_copy_bit));
     }
 
-    auto validate_signature      (std::span<const rgd::byte_t> memory) -> rgd::bool_t
+    auto validate_signature        (std::span<const rgd::byte_t> memory) -> rgd::bool_t
     {
         return mem::compare(memory, png::signature);
     }
-    auto parse_chunks            (std::span<const rgd::byte_t> memory) -> png::model
+    auto parse_chunks              (std::span<const rgd::byte_t> memory) -> png::model
     {
         auto model          = png::model{};
         auto decoding_state = png::decoding_state{};
@@ -536,7 +539,7 @@ export namespace rgd::png
                             stream.consume<rgd::uint32_t>(), 
                             stream.consume<rgd::uint32_t>(), 
                         }, 
-                        .bit_depth          = stream.consume<png::bit_depth_e         >(), 
+                        .bit_depth          = stream.consume<png::bit_depth           >(), 
                         .pixel_type         = stream.consume<png::pixel_type_e        >(), 
                         .compression_method = stream.consume<png::compression_method_e>(), 
                         .filter_method      = stream.consume<png::filter_method_e     >(), 
@@ -570,7 +573,7 @@ export namespace rgd::png
 
                     std::memcpy(
                         model.idat.data.data() + previous_size                                                           , 
-                        memory     .data()     + stream.position()                                                       , 
+                        memory         .data() + stream.position()                                                       , 
                         std::min(static_cast<rgd::size_t>(chunk_header.length), memory.size_bytes() - stream.position()));
 
                     stream.forward(chunk_header.length);
@@ -583,6 +586,7 @@ export namespace rgd::png
 
                     break;
                 }
+                
                 case png::chunk_type_e::trns: 
                 {
                     switch (model.ihdr.pixel_type)
@@ -840,17 +844,7 @@ export namespace rgd::png
 
                 default:
                 {
-                    auto const ancillary_bit    = static_cast<png::chunk_requirement_e>(rgd::bit::test(std::to_underlying(chunk_header.type),  5u));
-                    auto const private_bit      = static_cast<png::accessibility_e    >(rgd::bit::test(std::to_underlying(chunk_header.type), 13u));
-                    auto const reserved_bit     = static_cast<png::reserved_e         >(rgd::bit::test(std::to_underlying(chunk_header.type), 21u));
-                    auto const safe_to_copy_bit = static_cast<png::safe_to_copy_e     >(rgd::bit::test(std::to_underlying(chunk_header.type), 29u));
-
-                    std::println("Unknown chunk type");
-                    std::println("Chunk properties:");
-                    std::println("\t{:16}: {}", "Ancillary bit"   , std::to_underlying(ancillary_bit   ));
-                    std::println("\t{:16}: {}", "Private bit"     , std::to_underlying(private_bit     ));
-                    std::println("\t{:16}: {}", "Reserved bit"    , std::to_underlying(reserved_bit    ));
-                    std::println("\t{:16}: {}", "Safe To Copy bit", std::to_underlying(safe_to_copy_bit));
+                    stream.forward(chunk_header.length);
                 }
             }
 
@@ -859,24 +853,22 @@ export namespace rgd::png
 
         return model;
     }
-    auto unfilter_scanlines      (rgd::vector_2u const& dimensions, rgd::image_layout_e layout, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
+    void unfilter_scanlines        (rgd::vector_2u const& dimensions, rgd::image_layout_e image_layout, png::bit_depth bit_depth, std::span<rgd::byte_t> memory)
     {
-        auto const bytes_per_pixel   = rgd::size_t{ (std::to_underlying(bit_depth) * std::to_underlying(layout) + 7u) / 8u };
-        auto const filter_bytes      = rgd::size_t{ bit_depth == png::bit_depth_e::_16 ? 2u : 1u };
-        auto const scanline_size     = png::calculate_scanline_size(dimensions.x * bytes_per_pixel, bit_depth);
-        auto const scanline_stride   = rgd::size_t{ scanline_size + 1u };
+        auto const pixel_size        = png::calculate_pixel_size   (image_layout, bit_depth);
+        auto const scanline_size     = png::calculate_scanline_size(dimensions.x * pixel_size, bit_depth);
+        auto const filter_size       = png::calculate_filter_size  (bit_depth);
+        auto const scanline_stride   = scanline_size + filter_size;
 
-        auto       output_buffer     = std::vector<rgd::byte_t>(scanline_size * dimensions.y);
         auto       input_scanline    = std::span<const rgd::byte_t>{};
         auto       output_scanline   = std::span<rgd::byte_t>{};
         auto       previous_scanline = std::span<rgd::byte_t>{};
 
         {
-            auto const row_scanline = memory.subspan(0u, scanline_stride);
-            auto const row_filter   = static_cast<png::filter_type_e>(row_scanline[0u]);
+            auto const row_filter = static_cast<png::filter_type_e>(memory[0u]);
             
-            input_scanline          = row_scanline.subspan(filter_bytes, scanline_size);
-            output_scanline         = std::span<rgd::byte_t>{ output_buffer.data(), scanline_size };
+            input_scanline        = std::span<rgd::byte_t>{ memory.data() + filter_size, scanline_size };
+            output_scanline       = std::span<rgd::byte_t>{ memory.data()              , scanline_size };
 
             switch (row_filter)
             {
@@ -890,13 +882,10 @@ export namespace rgd::png
                 }
                 case subtract:
                 {
-                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    std::ranges::copy(input_scanline.subspan(0u, pixel_size), output_scanline.begin());
+                    for (auto index = pixel_size; index < scanline_size; ++index)
                     {
-                        output_scanline[index] = input_scanline[index];
-                    }
-                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
-                    {
-                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - pixel_size];
                     }
                 
                     break;
@@ -905,13 +894,13 @@ export namespace rgd::png
                 case average :
                 case paeth   :
                 {
-                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    for (auto index = rgd::size_t{ 0u }; index < pixel_size; ++index)
                     {
                         output_scanline[index] = input_scanline[index];
                     }
-                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    for (auto index = pixel_size; index < scanline_size; ++index)
                     {
-                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - pixel_size];
                     }
                 
                     break;
@@ -922,12 +911,11 @@ export namespace rgd::png
         }
         for (auto row_index = rgd::size_t{ 1u }; row_index < dimensions.y; ++row_index)
         {
-            auto const row_scanline = memory.subspan(row_index * scanline_stride, scanline_stride);
-            auto const row_filter   = static_cast<png::filter_type_e>(row_scanline[0u]);
-            
-            input_scanline          = row_scanline.subspan(filter_bytes, scanline_size);
-            previous_scanline       = output_scanline;
-            output_scanline         = std::span<rgd::byte_t>{ output_buffer.data() + row_index * scanline_size, scanline_size };
+            auto const row_filter = static_cast<png::filter_type_e>(memory[row_index * scanline_stride]);
+
+            previous_scanline     = output_scanline;
+            input_scanline        = std::span<rgd::byte_t>{ memory.data() + row_index * scanline_stride + filter_size, scanline_size };
+            output_scanline       = std::span<rgd::byte_t>{ memory.data() + row_index * scanline_size                , scanline_size };
 
             switch (row_filter)
             {
@@ -941,10 +929,10 @@ export namespace rgd::png
                 }
                 case subtract:
                 {
-                    std::ranges::copy(input_scanline.subspan(0u, bytes_per_pixel), output_scanline.begin());
-                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    std::ranges::copy(input_scanline.subspan(0u, pixel_size), output_scanline.begin());
+                    for (auto index = pixel_size; index < scanline_size; ++index)
                     {
-                        output_scanline[index] = input_scanline[index] + output_scanline[index - bytes_per_pixel];
+                        output_scanline[index] = input_scanline[index] + output_scanline[index - pixel_size];
                     }
 
                     break;
@@ -960,14 +948,14 @@ export namespace rgd::png
                 }
                 case average :
                 {
-                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    for (auto index = rgd::size_t{ 0u }; index < pixel_size; ++index)
                     {
                         auto const average     = static_cast<rgd::byte_t>(previous_scanline[index] / 2u);
                         output_scanline[index] = input_scanline[index] + average;
                     }
-                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    for (auto index = pixel_size; index < scanline_size; ++index)
                     {
-                        auto const left        = output_scanline  [index - bytes_per_pixel];
+                        auto const left        = output_scanline  [index - pixel_size];
                         auto const up          = previous_scanline[index                  ];
                         auto const average     = rgd::byte_t{ (left + up) / 2u };
                         output_scanline[index] = input_scanline   [index                  ] + average;
@@ -977,16 +965,16 @@ export namespace rgd::png
                 }
                 case paeth   :
                 {
-                    for (auto index = rgd::size_t{ 0u }; index < bytes_per_pixel; ++index)
+                    for (auto index = rgd::size_t{ 0u }; index < pixel_size; ++index)
                     {
                         auto const predictor   = png::paeth_predictor(rgd::byte_t{ 0u }, previous_scanline[index], rgd::byte_t{ 0u });
                         output_scanline[index] = input_scanline[index] + predictor;
                     }
-                    for (auto index = bytes_per_pixel; index < scanline_size; ++index)
+                    for (auto index = pixel_size; index < scanline_size; ++index)
                     {
-                        auto const left        = output_scanline  [index - bytes_per_pixel];
+                        auto const left        = output_scanline  [index - pixel_size];
                         auto const up          = previous_scanline[index                  ];
-                        auto const up_left     = previous_scanline[index - bytes_per_pixel];
+                        auto const up_left     = previous_scanline[index - pixel_size];
                         auto const predictor   = png::paeth_predictor(left, up, up_left);
                         output_scanline[index] = input_scanline   [index                  ] + predictor;
                     }
@@ -997,77 +985,99 @@ export namespace rgd::png
                 default: throw std::invalid_argument{ "invalid filter" };
             }
         }
-
-        return output_buffer;
     }
-    auto unfilter_scanlines_adam7(rgd::vector_2u const& dimensions, rgd::image_layout_e layout, png::bit_depth_e bit_depth, std::span<const rgd::byte_t> memory) -> std::vector<rgd::byte_t>
+    void unfilter_scanlines_adam7  (rgd::vector_2u const& dimensions, rgd::image_layout_e image_layout, png::bit_depth bit_depth, std::span<rgd::byte_t> memory)
     {
-        auto const output_buffer_size = dimensions.x * dimensions.y * std::to_underlying(layout);
-        auto       output_buffer      = std::vector<rgd::byte_t>(output_buffer_size);
-        auto       bytes_processed    = rgd::size_t{ 0u };
+        auto const pixel_size   = png::calculate_pixel_size (image_layout, bit_depth);
+        auto const filter_size  = png::calculate_filter_size(bit_depth);
+        auto const output_size  = static_cast<size_t>(dimensions.y) * dimensions.x * pixel_size;
+        auto       output       = std::vector<rgd::byte_t>(output_size);
+        auto       input_offset = rgd::size_t{ 0u };
 
         for (auto const& pass : png::adam7_pass_data)
         {
-            auto const pass_dimensions = rgd::vector_2u
-            {
-                (dimensions.x - pass.offset.x + pass.stride.x - 1u) / pass.stride.x,
-                (dimensions.y - pass.offset.y + pass.stride.y - 1u) / pass.stride.y
-            };
-            auto const pass_data       = memory.subspan(bytes_processed);
-            auto const pass_image      = png::unfilter_scanlines(pass_dimensions, layout, bit_depth, pass_data);
+            auto const pass_dimensions = png::calculate_pass_dimensions(dimensions, pass);
             if (pass_dimensions.x == 0u || pass_dimensions.y == 0u) continue;
 
-            for (auto row_index = rgd::size_t{ 0u }; row_index < pass_dimensions.y; ++row_index)
+            auto const scanline_size   = pass_dimensions.x * pixel_size;
+            auto const scanline_stride = scanline_size + filter_size;
+            auto const pass_input_size = pass_dimensions.y * scanline_stride;
+            auto       pass_data       = std::vector<rgd::byte_t>(pass_input_size);
+            auto       target_position = rgd::vector_2u{};
+
+            std::memcpy            (pass_data.data(), memory.data() + input_offset, pass_input_size);
+            png::unfilter_scanlines(pass_dimensions, image_layout, bit_depth, pass_data);
+            input_offset += pass_input_size;
+
+            for (auto y = rgd::size_t{ 0u }; y < pass_dimensions.y; ++y)
             {
-                for (auto column_index = rgd::size_t{ 0u }; column_index < pass_dimensions.x; ++column_index)
+                target_position.y               = static_cast<rgd::uint32_t>(pass.offset.y + y * pass.stride.y);
+                auto const pass_scanline_offset = y * scanline_size;
+
+                for (auto x = rgd::size_t{ 0u }; x < pass_dimensions.x; ++x)
                 {
-                    auto const source_pixel_offset     = (row_index * pass_dimensions.x + column_index) * std::to_underlying(layout);
-                    auto const destination_row         = pass.offset.y + row_index     * pass.stride.y;
-                    auto const destination_column      = pass.offset.x + column_index  * pass.stride.x;
-                    auto const destination_pixel_index = destination_row               * dimensions.x + destination_column;
-                    auto const destination_byte_offset = destination_pixel_index       * std::to_underlying(layout);
-                            
-                    std::memcpy(output_buffer.data() + destination_byte_offset, pass_image.data() + source_pixel_offset, std::to_underlying(layout));
+                    target_position.x             = static_cast<rgd::uint32_t>(pass.offset.x + x * pass.stride.x);
+                    auto const output_offset      = (target_position.y * dimensions.x + target_position.x) * pixel_size;
+                    auto const input_pixel_offset = pass_scanline_offset + x * pixel_size;
+
+                    std::memcpy(output.data() + output_offset, pass_data.data() + input_pixel_offset, pixel_size);
                 }
             }
-
-            bytes_processed += (pass_dimensions.x * pass_dimensions.y * std::to_underlying(layout)) + pass_dimensions.y;
         }
 
-        return output_buffer;
+        std::memcpy(memory.data(), output.data(), output.size());
     }
 
-    auto decode                  (std::optional<rgd::image_layout_e> target_layout, std::span<const rgd::byte_t> memory) -> rgd::image
+    void flip_image_vertical       (rgd::vector_2u const& dimensions, rgd::image_layout_e layout, std::span<rgd::byte_t> memory)
+    {
+        auto const channels = std::to_underlying(layout);
+        auto const row_size = dimensions.x * channels;
+
+        for (auto row_index = rgd::size_t{ 0u }; row_index < dimensions.y / 2u; ++row_index)
+        {
+            auto const top_index    = row_index * row_size;
+            auto const bottom_index = (dimensions.y - 1u - row_index) * row_size;
+
+            std::ranges::swap_ranges(memory.subspan(top_index, row_size), memory.subspan(bottom_index, row_size));
+        }
+    }
+
+    auto decode                    (std::optional<rgd::image_layout_e> target_layout, std::span<const rgd::byte_t> memory) -> rgd::image
     {
         //1. Validate Signature : Ensure the data is a PNG file
-        //2. Stream Parsing     : Validate file and create image model
+        //2. Chunk Parsing      : Validate file and create image model
         //3. Decompression      : Inflate the data stream
         //4. Reconstruction     : Reverse the byte-level filtering
-        //5. Pixel normalization: Normalize sub-byte channels to full bytes.
-        //6. Layout conversion  : Convert image to requested layout
-
-        auto const signature_span   = memory.subspan<0u, png::signature.size()>();
-        auto const valid_signature  = png::validate_signature(memory);
-        if (!valid_signature) throw;
-
-        auto const model_span       = memory.subspan<png::signature.size()>();
-        auto const model            = png::parse_chunks(model_span);
-        auto const color_channels   = png::map_color_channels(model.ihdr.pixel_type);
-        auto const layout           = static_cast<rgd::image_layout_e>(color_channels);
+        //5. Post Processing    : Mirror, expand, and/or convert the image
         
-        auto       result_data      = zng::inflate(model.idat.data);
-
-        if (model.ihdr.interlace_method == png::interlace_method_e::none) result_data = png::unfilter_scanlines      (model.ihdr.dimensions, layout, model.ihdr.bit_depth, result_data);
-        else                                                              result_data = png::unfilter_scanlines_adam7(model.ihdr.dimensions, layout, model.ihdr.bit_depth, result_data);
-                                                          
-        if (model.ihdr.bit_depth != png::bit_depth_e::_8)                 result_data = png::expand_bits             (model.ihdr.dimensions,         model.ihdr.bit_depth , result_data);
-        if (target_layout.has_value() && target_layout.value() != layout) result_data = png::convert_layout          (model.ihdr.dimensions, layout, target_layout.value(), result_data);
-
+        auto const signature_span    = memory.subspan<0u, png::signature.size()>();
+        auto const valid_signature   = png::validate_signature(memory);
+        if (!valid_signature) throw std::invalid_argument{ "invalid png signature" };
+        
+        auto const model             = png::parse_chunks(memory.subspan<png::signature.size()>());
+        auto const layout            = png::map_image_layout(model.ihdr.pixel_type);
+        target_layout                = target_layout.value_or(layout);
+        
+        auto       data              = zng::inflate(model.idat.data.size(), model.idat.data);
+        auto const maximum_size      = png::calculate_total_image_size(model.ihdr.dimensions, std::max(layout, target_layout.value()), model.ihdr.bit_depth);
+        data.resize(maximum_size);
+        
+        auto const is_interlaced     = model.ihdr.interlace_method == png::interlace_method_e::adam7;
+        if   (is_interlaced) png::unfilter_scanlines_adam7(model.ihdr.dimensions, layout, model.ihdr.bit_depth, data);
+        else                 png::unfilter_scanlines      (model.ihdr.dimensions, layout, model.ihdr.bit_depth, data);
+        
+        if (model.ihdr.bit_depth  !=     8u) rgd::expand_bits<1u>(model.ihdr.dimensions.x * model.ihdr.dimensions.y, data, data);
+        if (target_layout.value() != layout) rgd::convert_layout(model.ihdr.dimensions, layout, target_layout.value(), data, data);
+        //if (rgd::true_                     ) png::flip_image_vertical(model.ihdr.dimensions, layout, data);
+        
+        auto const final_size        = model.ihdr.dimensions.x * model.ihdr.dimensions.y * std::to_underlying(target_layout.value());
+        data.resize(final_size);
+        
         return rgd::image
         {
-            .layout     = target_layout.value_or(layout), 
-            .dimensions = model.ihdr.dimensions         , 
-            .data       = std::move(result_data)        , 
+            .layout     = target_layout.value(), 
+            .dimensions = model.ihdr.dimensions, 
+            .data       = std::move(data)      , 
         };
     }
 }
