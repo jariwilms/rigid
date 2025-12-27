@@ -57,8 +57,19 @@ export namespace rgd
 
         throw std::invalid_argument{ "unsupported image format" };
     }
-    auto decode           (std::optional<rgd::image_layout_e> image_layout, std::span<const rgd::byte_t> image_data) -> rgd::image
+    auto decode            (std::optional<rgd::image_format_e> image_format, std::optional<rgd::image_layout_e> image_layout, std::span<const rgd::byte_t> memory) -> rgd::image
     {
-        return png::decode(image_layout, image_data);
+        auto const target_format = image_format.value_or(rgd::check_image_format(memory));
+        switch (target_format)
+        {
+            using enum rgd::image_format_e;
+
+            case bmp : return {};
+            case jpeg: return {};
+            case png : return png::decode(image_layout, memory);
+            case webp: return {};
+
+            default: throw std::invalid_argument{ "invalid image format" };
+        }
     }
 }
